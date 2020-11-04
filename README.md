@@ -6,16 +6,3 @@
 2. Copy your `sql.env` file: `cp ~/environment/lect11-starter/sql.env ~/environment/lect12 `  
 :warning: `sql.env` should contain a value for DATABASE_URL
 
-# Set up DB  
-0. `sudo service postgresql start` and `cd ~/environment/lect12 && python`  
-1. In the python interactive shell, run:  
-	`import models`  
-	`models.db.create_all()`  
-	`models.db.session.commit()`  
-
-# Run your app  
-0. Start psql: `sudo service postgresql start`  
-1. Run `npm run watch`  
-2. Run `python app.py`  
-3. Preview your application  
-4. Make a note of your URL when you run the app - you're going to need it soon!  
