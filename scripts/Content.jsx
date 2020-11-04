@@ -6,7 +6,7 @@ export function Content() {
    
     return (
         <div>
-            { StatusBar }
+            <StatusBar />
         </div>
     );
 }
