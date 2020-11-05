@@ -27,7 +27,10 @@ export default function Timeline() {
                 <li key={index} className="post">
                     <span className="username"> { post.username } </span> <br />
                     <span className="text"> { post.text } </span> <br />
+                    
+                    <span className="time"> { post.time } </span> 
                     <span className="likes"> &hearts; { post.num_likes } </span> <br />
+                
                 </li>
                 ))
             }

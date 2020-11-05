@@ -1,6 +1,7 @@
 from os.path import join, dirname
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 import flask
 import flask_socketio
 import flask_sqlalchemy
@@ -31,7 +32,8 @@ def on_post_receive(data):
     emit_posts(data)
 
 def emit_posts(data):
-    post = {'username':'jan3apples', 'text':data, 'num_likes':'3'}
+    time = str( datetime.now() );
+    post = {'username':'jan3apples', 'text':data, 'num_likes':'3', 'time':time}
     socketio.emit('emit posts channel', post)
     
 @app.route('/')

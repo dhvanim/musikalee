@@ -36,3 +36,7 @@
 .post .likes {
     float:right;
 }
+
+.post .time {
+    opacity:0.7;
+}
