@@ -1,0 +1,18 @@
+.statusbar input[type=submit] {
+    background-color:#222;
+    color:#fff;
+    border:none;
+    margin:5px;
+    padding:5px 10px;
+}
+
+.statusbar input[type=text] {
+    margin:5px;
+    padding:5px;
+    width:40%;
+}
+
+.statusbar {
+    margin:auto;
+    width:100%;
+}

@@ -19,6 +19,21 @@ DB = flask_sqlalchemy.SQLAlchemy(app)
 DB.init_app(app)
 DB.app = app
 
+app.static_folder = 'static'
+
+
+@socketio.on('user post channel')
+def on_post_receive(data):
+    
+    # save to db first but other info isnt established yet
+    
+    # argument is temporary until it's in the database
+    emit_posts(data)
+
+def emit_posts(data):
+    post = {'username':'jan3apples', 'text':data, 'num_likes':3}
+    socketio.emit('emit posts channel', post)
+    
 @app.route('/')
 def hello():
     return flask.render_template('index.html')
