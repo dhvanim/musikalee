@@ -1,0 +1,42 @@
+.statusbar {
+    margin:auto;
+    width:100%;
+}
+
+.statusbar input[type=submit] {
+    background-color:#222;
+    color:#fff;
+    border:none;
+    margin:5px;
+    padding:5px 10px;
+}
+
+.statusbar input[type=text] {
+    margin:5px;
+    padding:5px;
+    width:40%;
+}
+
+.timeline {
+    list-style:none;
+    padding-left:0px;
+    width:40%;
+}
+
+.timeline li {
+    padding:5px;
+    margin-bottom:20px;
+    background-color:#f1f1f1;
+}
+
+.post .username {
+    font-weight:bold;
+}
+
+.post .likes {
+    float:right;
+}
+
+.post .time {
+    opacity:0.7;
+}
