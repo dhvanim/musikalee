@@ -31,7 +31,7 @@ def on_post_receive(data):
     emit_posts(data)
 
 def emit_posts(data):
-    post = {'username':'jan3apples', 'text':data, 'num_likes':3}
+    post = {'username':'jan3apples', 'text':data, 'num_likes':'3'}
     socketio.emit('emit posts channel', post)
     
 @app.route('/')
