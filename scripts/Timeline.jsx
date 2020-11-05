@@ -21,15 +21,17 @@ export default function Timeline() {
     getPosts();
     
     return (
+        <div>
         <ul className="timeline">
             { posts.map( (post, index) => (
                 <li key={index} className="post">
                     <span className="username"> { post.username } </span> <br />
                     <span className="text"> { post.text } </span> <br />
-                    <span className="likes"> { post.num_likes } </span> <br />
+                    <span className="likes"> &hearts; { post.num_likes } </span> <br />
                 </li>
                 ))
             }
         </ul>
+        </div>
     );
 }
