@@ -6,7 +6,7 @@ import Timeline from './Timeline'
 export default function Home() {
     
     return (
-        <div>
+        <div className="home">
             <StatusBar />
             
             <Timeline />
