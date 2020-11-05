@@ -1,12 +1,12 @@
 import * as React from 'react';
-
 import { Socket } from './Socket';
+import Home from './Home'
 
 export function Content() {
    
     return (
         <div>
-            <h1>Hello World</h1>
+            <Home />
         </div>
     );
 }
