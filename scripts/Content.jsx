@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { Socket } from './Socket';
-import StatusBar from './StatusBar';
-import Timeline from './Timeline'
+import Home from './Home'
 
 export function Content() {
    
     return (
         <div>
-            <StatusBar />
-            
-            <Timeline />
+            <Home />
         </div>
     );
 }
