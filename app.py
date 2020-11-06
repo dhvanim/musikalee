@@ -31,10 +31,21 @@ def on_post_receive(data):
     # argument is temporary until it's in the database
     emit_posts(data)
 
+# temp mock
 def emit_posts(data):
     time = str( datetime.now() );
     post = {'username':'jan3apples', 'text':data, 'num_likes':'3', 'time':time}
     socketio.emit('emit posts channel', post)
+    
+# temp mock
+def emit_trending():
+    data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
+    socketio.emit('trending channel', data)
+
+# temp mock
+def emit_recommended():
+    data = [{'artist': 'Clairo', 'song': 'Sofia'}, {'artist': 'Frank Ocean', 'song': 'Sweet Life'}, {'artist': 'Billie Eilish', 'song': 'bellyache'}]
+    socketio.emit('recommended channel', data)
     
 @app.route('/')
 def hello():
@@ -46,6 +57,10 @@ def on_connect():
     socketio.emit('connected', {
         'test': 'Connected'
     })
+    
+    emit_trending()
+    emit_recommended()
+    
 
 @socketio.on('disconnect')
 def on_disconnect():
