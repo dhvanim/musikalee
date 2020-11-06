@@ -8,11 +8,12 @@ export default function Home() {
     
     return (
         <div className="home">
+            <RightSideBar />
             <StatusBar />
             
             <Timeline />
             
-            <RightSideBar />
+            
         </div>
     );
 }

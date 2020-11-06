@@ -39,6 +39,7 @@ export default function RightSideBar() {
     
     return (
         <div className="rightsidebar">
+            <div className="inner">
             <div className="trending">
                 <h2> Trending </h2>
                 
@@ -65,6 +66,7 @@ export default function RightSideBar() {
                         ))
                     }
                 </ul>
+            </div>
             </div>
         </div>
     );
