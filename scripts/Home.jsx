@@ -8,8 +8,12 @@ export default function Home() {
     
     return (
         <div className="home">
-            <RightSideBar />
+            
             <StatusBar />
+            
+            
+            
+            <RightSideBar />
             
             <Timeline />
             
