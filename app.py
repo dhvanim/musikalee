@@ -5,6 +5,7 @@ from datetime import datetime
 import flask
 import flask_socketio
 import flask_sqlalchemy
+import models
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -19,6 +20,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
 DB = flask_sqlalchemy.SQLAlchemy(app)
 DB.init_app(app)
 DB.app = app
+
 
 app.static_folder = 'static'
 
@@ -57,6 +59,10 @@ def on_connect():
     socketio.emit('connected', {
         'test': 'Connected'
     })
+    
+    # temp example add/commit DELETE
+    DB.session.add(models.Comments("jan3apples", "yess", 423, datetime.now()))
+    DB.session.commit()
     
     emit_trending()
     emit_recommended()

@@ -62,3 +62,6 @@ class Users(DB.Model):
     def __repr__(self):
         return "<Users name: {}".format(self.username)
 
+
+DB.create_all()
+DB.session.commit()
