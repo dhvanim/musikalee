@@ -1,5 +1,5 @@
 # models.py
-from enum import Enum
+from enum import Enum #unused import
 from app import DB
 from sqlalchemy.dialects import postgresql
 
