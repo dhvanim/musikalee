@@ -5,6 +5,7 @@ from datetime import datetime
 import flask
 import flask_socketio
 import flask_sqlalchemy
+from spotify_login import get_user, get_artists
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -17,11 +18,12 @@ DATABASE_URI = os.environ["DATABASE_URL"]
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
 
 DB = flask_sqlalchemy.SQLAlchemy(app)
+
+import models
+
 DB.init_app(app)
 DB.app = app
-
 app.static_folder = 'static'
-
 
 @socketio.on('user post channel')
 def on_post_receive(data):
@@ -51,6 +53,26 @@ def on_connect():
 def on_disconnect():
     print ('Someone disconnected!')
 
+@socketio.on('new spotify user')
+def on_spotlogin(data):
+    """
+    Runs the code in spotify_login and adds it to the db
+    """
+    user=get_user(data['token'])
+    artists=get_artists(data['token'])
+    try:
+        db_user=models.Users(
+                        username=user['username'],
+                        profile_picture=user['profile-picture'],
+                        user_type=user['user-type'],
+                        top_artists=artists,
+                        following=[]
+                        )
+        DB.session.add(db_user)
+        DB.session.commit()
+    except:
+        print("TODO SKIP IF ALREADY HAS ACCT ALSO FIX DBCALLS IF ACTUALLY BROKEN")
+
 if __name__ == '__main__': 
     socketio.run(
         app,
@@ -58,3 +80,4 @@ if __name__ == '__main__':
         port=int(os.getenv('PORT', 8080)),
         debug=True
     )
+
