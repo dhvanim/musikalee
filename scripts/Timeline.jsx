@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Socket } from './Socket';
 
+import PostItem from "./PostItem"
+
 export default function Timeline() {
     
     const [posts, setPosts] = React.useState([]); 
@@ -16,6 +18,7 @@ export default function Timeline() {
     
     function updatePosts(data) {
         setPosts( [data].concat(posts) );
+         console.log( [data].concat(posts) );
     }
     
     getPosts();
@@ -24,15 +27,8 @@ export default function Timeline() {
         <div>
         <ul className="timeline">
             { posts.map( (post, index) => (
-                <li key={index} className="post">
-                    <span className="username"> { post.username } </span> <br />
-                    <span className="text"> { post.text } </span> <br />
-                    
-                    <span className="time"> { post.time } </span> 
-                    <span className="likes"> &hearts; { post.num_likes } </span> <br />
-                
-                </li>
-                ))
+                <PostItem id={post.id} username={post.username} text={post.text} time={post.time} likes={post.num_likes} />
+                ))    
             }
         </ul>
         </div>
