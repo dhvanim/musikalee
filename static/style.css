@@ -1,0 +1,76 @@
+.statusbar input[type=submit] {
+    background-color:#222;
+    color:#fff;
+    border:none;
+    margin:5px;
+    padding:5px 10px;
+}
+
+.statusbar input[type=text] {
+    margin:5px;
+    padding:5px;
+    width:50%;
+}
+
+.timeline {
+    position:relative;
+}
+
+.timeline ul {
+    list-style:none;
+    padding-left:0;
+    width:50%;
+    margin-left:25%;
+}
+
+.timeline li {
+    padding:5px;
+    margin-bottom:20px;
+    background-color:#f1f1f1;
+    list-style-type:none
+}
+
+.post .username {
+    font-weight:bold;
+}
+
+.post .likes {
+    float:right;
+}
+
+.post .time {
+    opacity:0.7;
+}
+
+.page {
+    padding-left: 50px;
+}
+
+.rightsidebar {
+    float:right;
+    width:20%;
+}
+
+.innerrightsidebar {
+    position: fixed;
+    height:100%;
+    right:25px;
+    top:25px;
+}
+
+.innernavigation {
+    position: fixed;
+    height:100%;
+    left:25px;
+    top:25%;
+}
+
+.rightsidebar ul {
+    list-style:none;
+    padding-left:10px;
+}
+
+.rightsidebar li {
+    margin-bottom: 10px;
+} 
+
