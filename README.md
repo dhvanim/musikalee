@@ -44,5 +44,5 @@
       `models.DB.create_all()`
       `models.DB.session.commit()`
 
-# Set up React-Router-Dom
-1. Run `npm install --save react-router-dom` 
+# Set up React Libraries
+1. Run `npm install --save react-router-dom && npm install react-spotify-login` 
