@@ -90,6 +90,7 @@ def emit_trending():
         
         DB.session.commit()
     
+    # TODO fix same randint issue
     rand_ids = [random.randint(1,50), random.randint(1,50), random.randint(1,50)]
     trending = []
     
@@ -97,13 +98,13 @@ def emit_trending():
         track = {}
         query = models.Trending.query.filter_by(id = str(randid)).first()
 
-        track['artist'] = query.artists
+        track['artist'] = " ".join(query.artists)
         track['song'] = query.track
         
         trending.append( track )
 
-    #print( trending )
-    #socketio.emit('trending channel', trending)
+    print( trending )
+    socketio.emit('trending channel', trending)
     
   
 
