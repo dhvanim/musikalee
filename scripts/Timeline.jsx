@@ -22,8 +22,8 @@ export default function Timeline() {
     getPosts();
     
     return (
-        <div>
-        <ul className="timeline">
+        <div className="timeline">
+        <ul>
             { posts.map( (post, index) => (
                 <li key={index} className="post">
                     <span className="username"> { post.username } </span> <br />

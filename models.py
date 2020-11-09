@@ -1,5 +1,5 @@
 # models.py
-from enum import Enum
+from enum import Enum #unused import
 from app import DB
 from sqlalchemy.dialects import postgresql
 
@@ -62,3 +62,6 @@ class Users(DB.Model):
     def __repr__(self):
         return "<Users name: {}".format(self.username)
 
+
+DB.create_all()
+DB.session.commit()
