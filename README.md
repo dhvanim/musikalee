@@ -1,7 +1,7 @@
 # Set up React  
 0. `cd ~/environment && git clone https://github.com/NJIT-CS490/musikalee && cd musikalee`    
 1. Install your stuff!    
-  a) `npm install && npm install -g webpack && npm install --save-dev webpack && npm install socket.io-client --save`    
+  a) `npm install && npm install -g webpack && npm install --save-dev webpack && npm install socket.io-client --save && sudo pip install requests`    
 :warning: :warning: :warning: If you see any error messages, make sure you use `sudo pip` or `sudo npm`. If it says "pip cannot be found", run `which pip` and use `sudo [path to pip from which pip] install` :warning: :warning: :warning:    
 
 # Set up PSQL
