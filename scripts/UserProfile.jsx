@@ -4,42 +4,24 @@ import { Socket } from './Socket';
 
 
 export default function UserProfile(){
-    const [userData, setUserData] = React.useState({}); 
+    const [userData, setUserData] = React.useState([]); 
     
     
      function newItem() {
-        var newitem;
+         
          React.useEffect(() => {
             Socket.on('emit user data', (data) => {
-                 console.log(data['username'])
-                 setUserData(data);
+                 console.log(data);
+                 return setUserData(() => 
+                 {return [data['username'], data['profileType'],  data['topArtists'], data['following']];
+                     
+                 });
+                 
             });
         });
        
 }
-
-    // function getUserData() {
-    //     React.useEffect( () => {
-    //         Socket.on('emit user data', {
-    //     console.log(data['username']);
-    //     setUserData(data);
-    // });
-    //         return () => {
-    //             Socket.off('emit user data', {
-    //     console.log(data['username'])
-    //     setUserData(data);
-    // });
-    //         };
-    //     });
-    // }
-    
-    // function updateUserData(data) {
-    //     //console.log("Got user data");
-    //     console.log(data['username'])
-    //     setUserData(data);
-    // }
-    
-   //getUserData();   
+    newItem();
     return (
        <div className="page">
           <div style={{
@@ -52,13 +34,16 @@ export default function UserProfile(){
                 <img style={{width:"120px",height:"120px",borderRadius:"60px"}} src="./static/defaultPfp.png"/>
             </div>
             <div>
-                <h1>@jan3apples</h1>
+                <h1>{userData[0]}</h1>
                 <div>
-                    <h4>@jan3apples  (profile type goes here)</h4>
+                    <h4>{userData[0]} {userData[1]}</h4>
                 </div>
             </div>
           </div>
-          <h1> Posts go here </h1>
+          <h1> Top artists here:</h1>
+          <p>{userData[2]}</p>
+          <h1>following:</h1>
+          <p>{userData[3]}</p>
        </div>
     );
     
