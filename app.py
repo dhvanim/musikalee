@@ -36,6 +36,19 @@ def emit_posts(data):
     post = {'username':'jan3apples', 'text':data, 'num_likes':'3', 'time':time}
     socketio.emit('emit posts channel', post)
     
+@socketio.on('user data')    
+def on_user_data_recieve():
+    print("going to user")
+    #database stuff happens here
+    
+    emit_user_data()
+    
+def emit_user_data():
+    print("giving user data")
+    #userdata = {'username':'jan3apples','profileYype':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']}
+    socketio.emit('emit user data', {'username':'jan3apples','profileYype':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']})
+    print("emiting user data")
+    
 @app.route('/')
 def hello():
     return flask.render_template('index.html')
@@ -43,6 +56,7 @@ def hello():
 @socketio.on('connect')
 def on_connect():
     print('Someone connected!')
+    emit_user_data()
     socketio.emit('connected', {
         'test': 'Connected'
     })
