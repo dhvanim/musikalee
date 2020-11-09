@@ -38,7 +38,7 @@ def on_post_receive(data):
 # temp mock
 def emit_posts(data):
     time = str( datetime.now() );
-    post = {'username':'jan3apples', 'text':data, 'num_likes':'3', 'time':time}
+    post = {'id':'1', 'username':'jan3apples', 'text':data, 'num_likes':'3', 'time':time}
     socketio.emit('emit posts channel', post)
     
 # temp mock
