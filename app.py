@@ -5,8 +5,9 @@ from datetime import datetime
 import flask
 import flask_socketio
 import flask_sqlalchemy
-import models
+import random
 from spotify_login import get_user, get_artists
+from spotify_trending import spotify_get_trending
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -41,8 +42,8 @@ def emit_posts(data):
     post = {'username':'jan3apples', 'text':data, 'num_likes':'3', 'time':time}
     socketio.emit('emit posts channel', post)
     
-# temp mock
-def emit_trending():
+
+    
     data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
     socketio.emit('trending channel', data)
 
@@ -68,7 +69,43 @@ def on_connect():
     
     emit_trending()
     emit_recommended()
+ 
+# temp mock
+def emit_trending():
     
+    # if DB empty, get trending
+    # TODO later add timestamp and check daily
+    # print( models.Trending.query.all() )
+    
+    if (models.Trending.query.all() == []):
+        data = spotify_get_trending()
+    
+        for item in data:
+            track = item['track']['name']
+            artist = []
+            for item_artist in item['track']['artists']:
+                artist.append(item_artist['name'])
+        
+            DB.session.add(models.Trending(track, artist))
+        
+        DB.session.commit()
+    
+    rand_ids = [random.randint(1,50), random.randint(1,50), random.randint(1,50)]
+    trending = []
+    
+    for randid in rand_ids:
+        track = {}
+        query = models.Trending.query.filter_by(id = str(randid)).first()
+
+        track['artist'] = query.artists
+        track['song'] = query.track
+        
+        trending.append( track )
+
+    #print( trending )
+    #socketio.emit('trending channel', trending)
+    
+  
 
 @socketio.on('disconnect')
 def on_disconnect():

@@ -63,5 +63,19 @@ class Users(DB.Model):
         return "<Users name: {}".format(self.username)
 
 
+class Trending(DB.Model):
+    id = DB.Column(DB.Integer, primary_key=True)
+    track = DB.Column(DB.String(500))
+    artists = DB.Column(postgresql.ARRAY(DB.String))
+    
+    def __init__(self, track, artists):
+        self.track = track
+        self.artists = artists
+        
+    def __repr__(self):
+        return "<Trending track: {} artists: {}>".format(self.track, self.artists)
+        
+    
+
 DB.create_all()
 DB.session.commit()
