@@ -1,5 +1,4 @@
 # models.py
-from enum import Enum #unused import
 from app import DB
 from sqlalchemy.dialects import postgresql
 
@@ -9,7 +8,7 @@ class Posts(DB.Model):
     username = DB.Column(DB.String(256))
     music = DB.Column(DB.String(120))
     message = DB.Column(DB.String(256))
-    tite = DB.Column(DB.String(120))
+    title = DB.Column(DB.String(120))
     num_likes = DB.Column(DB.Integer)
     datetime = DB.Column(DB.DateTime)
     
@@ -23,7 +22,7 @@ class Posts(DB.Model):
         self.datetime = datetime
 
     def __repr__(self):
-        return "<Posts: %s>" % self.title
+        return "<Posts: %s>" % self.message
 
 
 class Comments(DB.Model):
@@ -51,17 +50,15 @@ class Users(DB.Model):
     user_type = DB.Column(DB.Integer)
     top_artists = DB.Column(postgresql.ARRAY(DB.String))
     following = DB.Column(postgresql.ARRAY(DB.String))
+    my_likes = DB.Column(postgresql.ARRAY(DB.Integer))
 
-    def __init__(self, username, profile_picture, user_type, top_artists, following):
+    def __init__(self, username, profile_picture, user_type, top_artists, following, my_likes):
         self.username = username
         self.profile_picture = profile_picture
         self.user_type = user_type
         self.top_artists = top_artists
         self.following = following
+        self.my_likes = my_likes
 
     def __repr__(self):
         return "<Users name: {}".format(self.username)
-
-
-DB.create_all()
-DB.session.commit()
