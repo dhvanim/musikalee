@@ -73,13 +73,16 @@ def on_connect():
 # temp mock
 def emit_trending():
     
+    trending = get_trending()
+    
+    socketio.emit('trending channel', trending)
+    
+def get_trending():
+    
     # if DB empty, get trending
     # TODO later add timestamp and check daily
-    # print( models.Trending.query.all() )
-    
     if (models.Trending.query.all() == []):
         data = spotify_get_trending()
-    
         for item in data:
             track = item['track']['name']
             artist = []
@@ -90,6 +93,7 @@ def emit_trending():
         
         DB.session.commit()
     
+    
     # TODO fix same randint issue
     rand_ids = [random.randint(1,50), random.randint(1,50), random.randint(1,50)]
     trending = []
@@ -98,15 +102,12 @@ def emit_trending():
         track = {}
         query = models.Trending.query.filter_by(id = str(randid)).first()
 
-        track['artist'] = " ".join(query.artists)
+        track['artist'] = ", ".join(query.artists)
         track['song'] = query.track
         
         trending.append( track )
-
-    print( trending )
-    socketio.emit('trending channel', trending)
     
-  
+    return trending
 
 @socketio.on('disconnect')
 def on_disconnect():
