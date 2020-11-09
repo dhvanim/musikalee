@@ -5,7 +5,9 @@ from datetime import datetime
 import flask
 import flask_socketio
 import flask_sqlalchemy
+from sqlalchemy import desc
 import models
+import random
 from spotify_login import get_user, get_artists
 
 app = flask.Flask(__name__)
@@ -31,17 +33,45 @@ app.static_folder = 'static'
 def on_post_receive(data):
     
     # save to db first but other info isnt established yet
-    
-    # argument is temporary until it's in the database
-    emit_posts(data)
-
-# temp mock
-def emit_posts(data):
     time = str( datetime.now() );
-    post = {'id':1, 'username':'jan3apples', 'text':data, 'num_likes':3, 'time':time}
-    socketio.emit('emit posts channel', post)
+    DB.session.add(models.Posts("catdematos98", [], data, "New Post", 0, time));
+    DB.session.commit()
+    # argument is temporary until it's in the database
+    emit_posts()
+
+def emit_posts():
+    posts = [
+        {
+            "id": post.id,
+            "username": post.username,
+            "music": post.music,
+            "text": post.message,
+            "title": post.title,
+            "num_likes": post.num_likes,
+            "time": post.datetime.strftime("%m/%d/%Y, %H:%M:%S")
+        }
+        for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
+    ]
+    socketio.emit('emit posts channel', posts)
+    print(posts)
     
 
+@socketio.on('like post')    
+def update_num_likes(data):
+    num_likes = data["num_likes"]
+    post_id = data["id"]
+    print("Post_id: {}".format(post_id))
+    DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
+    DB.session.commit()
+    
+    #TODO 
+    #get my username
+    #add post_id to Users table where username is mine
+    #myUsername = getMyUsername() 
+    #DB.session.query(models.Users).filter(models.Users.username == myUsername).update({models.Users.my_likes: models.Users.my_likes.append(post_id)}, synchronize_session = False) 
+    
+    emit_posts()
+    
 @socketio.on('user data')    
 def on_user_data_recieve():
     print("going to user")
@@ -83,6 +113,7 @@ def on_connect():
     DB.session.add(models.Comments("jan3apples", "yess", 423, datetime.now()))
     DB.session.commit()
     
+    emit_posts()
     emit_trending()
     emit_recommended()
     
@@ -104,7 +135,8 @@ def on_spotlogin(data):
                         profile_picture=user['profile-picture'],
                         user_type=user['user-type'],
                         top_artists=artists,
-                        following=[]
+                        following=[],
+                        my_likes=[]
                         )
         DB.session.add(db_user)
         DB.session.commit()
