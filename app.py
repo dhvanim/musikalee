@@ -41,6 +41,21 @@ def emit_posts(data):
     post = {'username':'jan3apples', 'text':data, 'num_likes':'3', 'time':time}
     socketio.emit('emit posts channel', post)
     
+
+@socketio.on('user data')    
+def on_user_data_recieve():
+    print("going to user")
+    #database stuff happens here
+    
+    
+def emit_user_data():
+    print("giving user data")
+    #userdata = {'username':'jan3apples','profileYype':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']}
+    socketio.emit('emit user data', {'username':'jan3apples','profileType':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']})
+    print("emiting user data")
+
+
+
 # temp mock
 def emit_trending():
     data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
@@ -50,6 +65,7 @@ def emit_trending():
 def emit_recommended():
     data = [{'artist': 'Clairo', 'song': 'Sofia'}, {'artist': 'Frank Ocean', 'song': 'Sweet Life'}, {'artist': 'Billie Eilish', 'song': 'bellyache'}]
     socketio.emit('recommended channel', data)
+
     
 @app.route('/')
 def hello():
@@ -58,6 +74,7 @@ def hello():
 @socketio.on('connect')
 def on_connect():
     print('Someone connected!')
+    emit_user_data()
     socketio.emit('connected', {
         'test': 'Connected'
     })
