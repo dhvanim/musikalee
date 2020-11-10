@@ -44,8 +44,8 @@ def emit_posts(data):
     
 
     
-    data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
-    socketio.emit('trending channel', data)
+    #data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
+    #socketio.emit('trending channel', data)
 
 # temp mock
 def emit_recommended():
@@ -132,6 +132,9 @@ def on_spotlogin(data):
         DB.session.commit()
     except:
         print("TODO SKIP IF ALREADY HAS ACCT ALSO FIX DBCALLS IF ACTUALLY BROKEN")
+        
+    
+    socketio.emit('login success', True)
 
 if __name__ == '__main__': 
     socketio.run(

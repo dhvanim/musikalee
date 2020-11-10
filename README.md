@@ -47,6 +47,9 @@
 # Set up React-Router-Dom
 1. Run `npm install --save react-router-dom` 
 
+# Set up Spotify Login
+npm i react-spotify-login
+
 # Set Up Spotify
 1. Navigate to https://developer.spotify.com/dashboard/login and sign up or login <br />
 2. Go to your dashboard and create a project (any appropriate title/description is fine) <br />
