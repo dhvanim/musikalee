@@ -74,7 +74,7 @@ def on_connect():
 def emit_trending():
     
     trending = get_trending()
-    
+    print(trending)
     socketio.emit('trending channel', trending)
     
 def get_trending():
