@@ -10,11 +10,14 @@ const onSuccess = (response) => {
 
 export default function SpotifyButton() {
   return (
-    <SpotifyLogin
-      clientId="803918090e2d4726a922c0f05862e6e7"
-      redirectUri={process.env.uri}
-      onSuccess={onSuccess}
-      scope="user-read-email user-top-read user-follow-read"
-    />
+    <div class="loginpage">
+      <SpotifyLogin
+        clientId="803918090e2d4726a922c0f05862e6e7"
+        redirectUri={process.env.uri}
+        onSuccess={onSuccess}
+        scope="user-read-email user-top-read user-follow-read"
+        className="spotifybutton"
+      />
+    </div>
   );
 }

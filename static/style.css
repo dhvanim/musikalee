@@ -72,3 +72,18 @@
 .rightsidebar li {
     margin-bottom: 10px;
 } 
+
+.loginpage {
+    margin:auto;
+    width:100%;
+}
+
+.spotifybutton {
+    margin:auto;
+    padding:20px;
+    background-color:green;
+    border-radius:15px;
+    border:2px solid #111;
+    color:#fff;
+    cursor:pointer;
+}
