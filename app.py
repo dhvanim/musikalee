@@ -48,7 +48,13 @@ def emit_posts():
             "text": post.message,
             "title": post.title,
             "num_likes": post.num_likes,
-            "time": post.datetime.strftime("%m/%d/%Y, %H:%M:%S")
+            "time": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
+            "comments": [
+                            { 
+                                "text": comment.text
+                            }
+                        for comment in DB.session.query(models.Comments).filter(models.Comments.post_id == post.id).order_by(desc(models.Comments.datetime)).all()
+                        ]
         }
         for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
     ]

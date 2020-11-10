@@ -45,4 +45,4 @@
       `models.DB.session.commit()`
 
 # Set up React Libraries
-1. Run `npm install --save react-router-dom && npm install react-spotify-login` 
+1. Run `npm install --save react-router-dom && npm install react-spotify-login && npm install react-collapsible --save` 

@@ -1,7 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import Collapsible from 'react-collapsible';
 
 import { Socket } from './Socket';
+import CommentsSection from './CommentsSection';
+
 
 export default function PostItem(props) {
     const id= props.id;
@@ -26,11 +29,6 @@ export default function PostItem(props) {
         
     }
     
-    function handleComments() {
-        console.log("Comments")
-        
-    }
-
     var likeIcon = (likeState? "./static/heart-filled.png" : "./static/heart-outline.png")
     return (
         
@@ -40,7 +38,11 @@ export default function PostItem(props) {
                 <span className="text"> { props.text } </span> <br />
                 <span className="time"> { props.time } </span> 
                 <div className="iconsContainer">
-                    <span className="comments" onClick={handleComments}> <img style={icon} src={"./static/comments.png"}/> { 0 } </span>
+                    <div className="comments">
+                        <Collapsible trigger={<span> <img style={icon} src={"./static/comments.png"}/> { 0 } </span>}>
+                            <CommentsSection comments={props.comments}/>
+                        </Collapsible>
+                    </div>
                     <span className="likes" onClick={handleToggle}> <img style={icon} src={likeIcon}/> { num_likes } </span> <br />
                 </div>
             </li>

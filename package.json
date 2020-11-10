@@ -17,7 +17,7 @@
     "file-loader": "^0.11.2",
     "jquery": "^3.2.1",
     "react": "^16.12.0",
-    "react-bootstrap": "^0.31.0",
+    "react-bootstrap": "^0.31.5",
     "react-dom": "^16.12.0",
     "style-loader": "^0.18.2",
     "webpack": "^4.44.2",
@@ -30,6 +30,8 @@
     ]
   },
   "dependencies": {
+    "bootstrap": "^4.5.3",
+    "react-collapsible": "^2.8.1",
     "react-router-dom": "^5.2.0",
     "react-spotify-login": "^0.9.1",
     "socket.io-client": "^2.3.1"
