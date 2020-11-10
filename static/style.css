@@ -34,7 +34,15 @@
     font-weight:bold;
 }
 
-.post .likes {
+.post  .iconsContainer.likes {
+    display: inline-block;
+}
+
+.post .iconsContainer .comments {
+    display: inline-block;
+}
+
+.post .iconsContainer {
     float:right;
 }
 

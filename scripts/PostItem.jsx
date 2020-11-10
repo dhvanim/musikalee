@@ -9,7 +9,7 @@ export default function PostItem(props) {
 
     const [likeState, toggleLiked] = React.useState(false);
 
-    const likeIcon = {
+    const icon = {
         height: "20px",
         width: "20px"
     }
@@ -25,8 +25,13 @@ export default function PostItem(props) {
         });
         
     }
+    
+    function handleComments() {
+        console.log("Comments")
+        
+    }
 
-    var icon = (likeState? "./static/heart-filled.png" : "./static/heart-outline.png")
+    var likeIcon = (likeState? "./static/heart-filled.png" : "./static/heart-outline.png")
     return (
         
         <div>
@@ -34,7 +39,10 @@ export default function PostItem(props) {
                 <span className="username"> { props.username } </span> <br />
                 <span className="text"> { props.text } </span> <br />
                 <span className="time"> { props.time } </span> 
-                <span className="likes" onClick={handleToggle}> <img style={likeIcon} src={icon}/> { num_likes } </span> <br />
+                <div className="iconsContainer">
+                    <span className="comments" onClick={handleComments}> <img style={icon} src={"./static/comments.png"}/> { 0 } </span>
+                    <span className="likes" onClick={handleToggle}> <img style={icon} src={likeIcon}/> { num_likes } </span> <br />
+                </div>
             </li>
         </div>
     );
