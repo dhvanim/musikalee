@@ -31,19 +31,34 @@ app.static_folder = 'static'
 
 @socketio.on('user post channel')
 def on_post_receive(data):
+    query = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
+    username = query.user
     
-    # save to db first but other info isnt established yet
+    # TEMP MOCK
+    music = "TEMP Misery Business by Paramore"
+    title = "Post Title"
     
+    message = data
+    num_likes = 0
+    time = datetime.now()
+    
+    post = models.Posts(username, music, message, title, num_likes, time)
+    DB.session.add( post )
+    DB.session.commit()
+    
+    post_emitdata = {'username': post.username,
+                    'music': post.music,
+                    'text': post.message,
+                    'title': post.title,
+                    'num_likes': post.num_likes,
+                    'time' : str( post.datetime )
+                    }
     # argument is temporary until it's in the database
-    emit_posts(data)
+    emit_posts(post_emitdata)
 
 # temp mock
 def emit_posts(data):
-    time = str( datetime.now() );
-    post = {'username':'jan3apples', 'text':data, 'num_likes':'3', 'time':time}
-    socketio.emit('emit posts channel', post)
-    
-
+    socketio.emit('emit posts channel', data)
     
     #data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
     #socketio.emit('trending channel', data)
@@ -119,6 +134,7 @@ def on_spotlogin(data):
     user=get_user(data['token'])
     artists=get_artists(data['token'])
     
+    # add to users if not already
     usersquery = models.Users.query.filter_by(username = user['username']).first()
     if (usersquery == []):
         db_user=models.Users(
@@ -128,9 +144,12 @@ def on_spotlogin(data):
                         artists,
                         []
                     )
-                    
         DB.session.add(db_user)
-        DB.session.commit()
+    
+    # add to active users table
+    DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
+    
+    DB.session.commit()
        
     
     socketio.emit('login success', True, room=flask.request.sid)

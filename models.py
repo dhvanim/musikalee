@@ -9,7 +9,7 @@ class Posts(DB.Model):
     username = DB.Column(DB.String(256))
     music = DB.Column(DB.String(120))
     message = DB.Column(DB.String(256))
-    tite = DB.Column(DB.String(120))
+    title = DB.Column(DB.String(120))
     num_likes = DB.Column(DB.Integer)
     datetime = DB.Column(DB.DateTime)
     
@@ -75,7 +75,19 @@ class Trending(DB.Model):
     def __repr__(self):
         return "<Trending track: {} artists: {}>".format(self.track, self.artists)
         
+ 
+class ActiveUsers(DB.Model):
+    id = DB.Column(DB.Integer, primary_key=True)
+    user = DB.Column(DB.String(500))
+    serverid = DB.Column(DB.String(500))
     
+    def __init__(self, user, serverid):
+        self.user = user
+        self.serverid = serverid
+        
+    def __repr__(self):
+        return "<ActiveUsers user: {} id: {}>".format(self.user, self.serverid)
+        
 
 DB.create_all()
 DB.session.commit()
