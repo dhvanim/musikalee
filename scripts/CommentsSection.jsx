@@ -2,10 +2,17 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import { Socket } from './Socket';
+import  Comment  from './Comment';
 
 export default function CommentsSection(props) {
     const comments= props.comments;
     const post_id= props.post_id;
+
+    const commentsEndRef = React.useRef(null);
+
+    React.useEffect(() => {
+       commentsEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    });
 
     function postComment() {
         let comment = document.getElementById(post_id);
@@ -21,14 +28,15 @@ export default function CommentsSection(props) {
     return (
         
         <div className="commentsSection">
-            { comments.map( (comment, index) => (
-                <p key = {index}> {comment.text} </p>
-                ))    
-            }
             <form onSubmit={postComment}>
                 <input type="text" id={post_id}  maxLength="256"/>
                 <input type="submit" name="Comment" />
             </form>
+            { comments.map( (comment, index) => (
+                <Comment key = {index} comment={comment}> </Comment>
+                ))   
+            }
+            <div ref={commentsEndRef} />
         </div>
     );
 }

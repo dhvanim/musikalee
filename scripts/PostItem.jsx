@@ -10,12 +10,12 @@ export default function PostItem(props) {
     const id= props.id;
     const num_likes = props.likes
     
-    const triggerSiblingExample = () => <div className="Collapsible__custom-sibling">This is a sibling to the trigger which wont cause the Collapsible to open!</div>;
+    
+    const triggerSiblingExample = () => <span style={{float:"right"}}onClick={handleToggle}> <img style={icon} src={likeIcon}/> { num_likes } </span>;
 
     
     const triggerStyle={
         float:"right",
-        background: '#6821f3'
     }
 
     const [likeState, toggleLiked] = React.useState(false);
@@ -48,12 +48,11 @@ export default function PostItem(props) {
                 <span className="time"> { props.time } </span> 
                 <div className="iconsContainer">
                 
-                    <Collapsible trigger={<span> <img style={icon} src={"./static/comments.png"}/> { 0 } </span>} triggerStyle={triggerStyle} overflowWhenOpen="scroll">
+                    <Collapsible trigger={<span> <img style={icon} src={"./static/comments.png"}/> { props.comments.length } </span>} triggerStyle={triggerStyle} overflowWhenOpen="auto" triggerSibling={triggerSiblingExample}>
                         <CommentsSection post_id={id} comments={props.comments}/>
                     </Collapsible>
-                
-                    <span onClick={handleToggle}> <img style={icon} src={likeIcon}/> { num_likes } </span> <br />
-                </div>
+                        
+                    </div>
                 <br />
             </li>
         </div>

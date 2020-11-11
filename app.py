@@ -9,6 +9,7 @@ from sqlalchemy import asc, desc
 import models
 import random
 from spotify_login import get_user, get_artists
+import timeago
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -51,9 +52,11 @@ def emit_posts():
             "time": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
             "comments": [
                             { 
-                                "text": comment.text
+                                "text": comment.text,
+                                "username": comment.username,
+                                "datetime": timeago.format(comment.datetime, datetime.now())
                             }
-                        for comment in DB.session.query(models.Comments).filter(models.Comments.post_id == post.id).order_by(asc(models.Comments.datetime)).all()
+                        for comment in DB.session.query(models.Comments).filter(models.Comments.post_id == post.id).order_by(desc(models.Comments.datetime)).all()
                         ]
         }
         for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()

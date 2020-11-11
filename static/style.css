@@ -74,6 +74,10 @@
     max-height: 200px;
     float: left;
     min-width: 500px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    background: white;
 }
 
 .iconsContainer {
@@ -81,4 +85,8 @@
     flex-direction: row; 
     justify-content: center; 
     align-items: center
+}
+
+.comment {
+    border-bottom: 1px solid gray;
 }
