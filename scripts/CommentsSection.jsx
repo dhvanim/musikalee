@@ -5,9 +5,10 @@ import { Socket } from './Socket';
 
 export default function CommentsSection(props) {
     const comments= props.comments;
+    const post_id= props.post_id;
 
     function postComment() {
-        let comment = document.getElementById("comment");
+        let comment = document.getElementById(post_id);
         
         Socket.emit('post comment', {
             comment: comment.value,
@@ -25,7 +26,7 @@ export default function CommentsSection(props) {
                 ))    
             }
             <form onSubmit={postComment}>
-                <input type="text" id="comment"  maxLength="256"/>
+                <input type="text" id={post_id}  maxLength="256"/>
                 <input type="submit" name="Comment" />
             </form>
         </div>
