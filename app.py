@@ -10,6 +10,9 @@ import models
 import random
 from spotify_login import get_user, get_artists
 import timeago
+from flask_socketio import join_room, leave_room
+from spotify_login import get_user, get_artists
+from spotify_trending import spotify_get_trending
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -32,12 +35,26 @@ app.static_folder = 'static'
 
 @socketio.on('user post channel')
 def on_post_receive(data):
+    print("got post", data)
+    query_username = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
+    username = query_username.user
     
-    # save to db first but other info isnt established yet
-    time = str( datetime.now() );
-    DB.session.add(models.Posts("catdematos98", [], data, "New Post", 0, time));
+    query_pfp = models.Users.query.filter_by(username = username).first()
+    pfp = query_pfp.profile_picture
+    
+    # TEMP MOCK
+    music = "TEMP Misery Business by Paramore"
+    title = "TEMP Post Title"
+    
+    message = data
+    num_likes = 0
+    time = datetime.now()
+    
+    post = models.Posts(username, pfp, music, message, title, num_likes, time)
+    DB.session.add( post )
     DB.session.commit()
-    # argument is temporary until it's in the database
+    print("added post", post)
+
     emit_posts()
 
 def emit_posts():
@@ -50,6 +67,7 @@ def emit_posts():
             "title": post.title,
             "num_likes": post.num_likes,
             "time": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
+            "pfp": post.pfp,
             "comments": [
                             { 
                                 "text": comment.text,
@@ -63,7 +81,6 @@ def emit_posts():
     ]
     socketio.emit('emit posts channel', posts)
     print(posts)
-    
 
 @socketio.on('like post')    
 def update_num_likes(data):
@@ -96,14 +113,9 @@ def emit_user_data():
 
 
 # temp mock
-def emit_trending():
-    data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
-    socketio.emit('trending channel', data)
-
-# temp mock
 def emit_recommended():
     data = [{'artist': 'Clairo', 'song': 'Sofia'}, {'artist': 'Frank Ocean', 'song': 'Sweet Life'}, {'artist': 'Billie Eilish', 'song': 'bellyache'}]
-    socketio.emit('recommended channel', data)
+    socketio.emit('recommended channel', data, room=flask.request.sid)
 
     
 @app.route('/')
@@ -112,20 +124,52 @@ def hello():
 
 @socketio.on('connect')
 def on_connect():
+    join_room( flask.request.sid )
+    
     print('Someone connected!')
     emit_user_data()
     socketio.emit('connected', {
         'test': 'Connected'
     })
+ 
     
-    # temp example add/commit DELETE
-    DB.session.add(models.Comments("jan3apples", "yess", 423, datetime.now()))
-    DB.session.commit()
+# temp mock
+def emit_trending():
     
-    emit_posts()
-    emit_trending()
-    emit_recommended()
+    trending = get_trending()
+    socketio.emit('trending channel', trending, room=flask.request.sid)
     
+def get_trending():
+    
+    # if DB empty, get trending
+    # TODO later add timestamp and check daily
+    if (models.Trending.query.all() == []):
+        data = spotify_get_trending()
+        for item in data:
+            track = item['track']['name']
+            artist = []
+            for item_artist in item['track']['artists']:
+                artist.append(item_artist['name'])
+        
+            DB.session.add(models.Trending(track, artist))
+        
+        DB.session.commit()
+    
+    
+    # TODO fix same randint issue
+    rand_ids = [random.randint(1,50), random.randint(1,50), random.randint(1,50)]
+    trending = []
+    
+    for randid in rand_ids:
+        track = {}
+        query = models.Trending.query.filter_by(id = str(randid)).first()
+
+        track['artist'] = ", ".join(query.artists)
+        track['song'] = query.track
+        
+        trending.append( track )
+    
+    return trending
 
 @socketio.on('disconnect')
 def on_disconnect():
@@ -138,7 +182,11 @@ def on_spotlogin(data):
     """
     user=get_user(data['token'])
     artists=get_artists(data['token'])
-    try:
+    
+    # add to users if not already
+    usersquery = models.Users.query.filter_by(username = user['username']).first()
+    print ( usersquery )
+    if (usersquery == [] or usersquery == None):
         db_user=models.Users(
                         username=user['username'],
                         profile_picture=user['profile-picture'],
@@ -148,14 +196,26 @@ def on_spotlogin(data):
                         my_likes=[]
                         )
         DB.session.add(db_user)
-        DB.session.commit()
-    except:
-        print("TODO SKIP IF ALREADY HAS ACCT ALSO FIX DBCALLS IF ACTUALLY BROKEN")
+        print( db_user )
+        
+    socketio.emit('login success', True, room=flask.request.sid)
+    
+    # add to active users table
+    DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
+    DB.session.commit()
+    
+    # emit trending and reccomended
+    emit_trending()
+    emit_recommended()
+    emit_posts()
 
 
 @socketio.on('post comment')
 def save_comment(data):
-    DB.session.add(models.Comments("jan3apples", data['comment'], data['post_id'], datetime.now()))
+    query_username = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
+    username = query_username.user
+    
+    DB.session.add(models.Comments(username, data['comment'], data['post_id'], datetime.now()))
     DB.session.commit()
     emit_posts()
      

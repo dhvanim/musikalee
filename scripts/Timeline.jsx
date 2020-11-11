@@ -27,7 +27,7 @@ export default function Timeline() {
         <ul className="timeline">
             { 
                 posts.map( (post, index) => (
-                    <PostItem key={index} id={post.id} username={post.username} text={post.text} time={post.time} likes={post.num_likes} comments={post.comments} />
+                    <PostItem key={index} id={post.id} username={post.username} text={post.text} time={post.time} likes={post.num_likes} comments={post.comments} pfp={post.pfp} />
                 ))    
             }
         </ul>

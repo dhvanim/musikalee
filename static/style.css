@@ -9,18 +9,19 @@
 .statusbar input[type=text] {
     margin:5px;
     padding:5px;
-    width:50%;
+    width:40%;
 }
 
 .timeline {
     position:relative;
+    width:50%;
+    margin-left:20%;
 }
 
 .timeline ul {
     list-style:none;
     padding-left:0;
-    width:50%;
-    margin-left:25%;
+    
 }
 
 .timeline li {
@@ -48,6 +49,7 @@
 }
 
 .innerrightsidebar {
+    max-width:100%;
     position: fixed;
     height:100%;
     right:25px;
@@ -64,6 +66,7 @@
 .rightsidebar ul {
     list-style:none;
     padding-left:10px;
+    max-width:100%;
 }
 
 .rightsidebar li {
@@ -90,4 +93,25 @@
 .comment {
     border-bottom: 1px solid gray;
     padding-left: 10px;
+}
+
+.loginpage {
+    margin:auto;
+    width:100%;
+}
+
+.spotifybutton {
+    margin:auto;
+    padding:20px;
+    background-color:green;
+    border-radius:15px;
+    border:2px solid #111;
+    color:#fff;
+    cursor:pointer;
+}
+
+.pfp img {
+    width:50px;
+    float:left;
+    padding-right:5px;
 }
