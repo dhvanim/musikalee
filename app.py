@@ -155,7 +155,8 @@ def on_spotlogin(data):
     
     # add to users if not already
     usersquery = models.Users.query.filter_by(username = user['username']).first()
-    if (usersquery == []):
+    print ( usersquery )
+    if (usersquery == [] or usersquery == None):
         db_user=models.Users(
                         user['username'],
                         user['profile-picture'],
@@ -165,6 +166,7 @@ def on_spotlogin(data):
                         []
                     )
         DB.session.add(db_user)
+        print( db_user )
     
     # add to active users table
     DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
