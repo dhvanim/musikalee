@@ -35,10 +35,6 @@
     font-weight:bold;
 }
 
-.post .likes {
-    float:right;
-}
-
 .post .time {
     opacity:0.7;
 }
@@ -77,6 +73,27 @@
     margin-bottom: 10px;
 } 
 
+.commentsSection {
+    max-height: 200px;
+    float: left;
+    min-width: 500px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    background: white;
+}
+
+.iconsContainer {
+    display:flex; 
+    flex-direction: row; 
+    justify-content: center; 
+    align-items: center
+}
+
+.comment {
+    border-bottom: 1px solid gray;
+    padding-left: 10px;
+}
 
 .loginpage {
     margin:auto;

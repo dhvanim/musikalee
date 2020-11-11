@@ -11,7 +11,10 @@ def get_user(auth):
     header = {"Authorization": "Bearer "+auth}
     response=requests.get(url,headers=header)
     unam=response.json()['display_name']
-    pfp= response.json()['images'][0]['url']
+    try:
+        pfp= response.json()['images'][0]['url']
+    except:
+        pfp = "./static/defaultPfp.png"
     utype=response.json()['type']
     return{
         'username': unam,

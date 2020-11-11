@@ -45,12 +45,11 @@
       `models.DB.session.commit()`
 
 # Set up React Libraries
-1. Run `npm install --save react-router-dom && npm install react-spotify-login` 
-# Set up React-Router-Dom
-1. Run `npm install --save react-router-dom` 
+1. Run `npm install --save react-router-dom && npm install react-spotify-login && npm install react-collapsible --save` 
+2. Run `pip install timeago`
 
 # Set up Spotify Login
-npm i react-spotify-login
+1. `npm i react-spotify-login`
 
 # Set Up Spotify
 1. Navigate to https://developer.spotify.com/dashboard/login and sign up or login <br />
