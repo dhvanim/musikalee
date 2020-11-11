@@ -5,3 +5,5 @@ sql.env
 spotify.env
 static/script.js
 process.env
+linkedin.env
+script.js

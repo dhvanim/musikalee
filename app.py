@@ -66,10 +66,25 @@ def emit_posts(data):
     #data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
     #socketio.emit('trending channel', data)
 
+@socketio.on('user data')    
+def on_user_data_recieve():
+    print("going to user")
+    #database stuff happens here
+    
+    
+def emit_user_data():
+    print("giving user data")
+    #userdata = {'username':'jan3apples','profileYype':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']}
+    socketio.emit('emit user data', {'username':'jan3apples','profileType':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']})
+    print("emiting user data")
+
+
+
 # temp mock
 def emit_recommended():
     data = [{'artist': 'Clairo', 'song': 'Sofia'}, {'artist': 'Frank Ocean', 'song': 'Sweet Life'}, {'artist': 'Billie Eilish', 'song': 'bellyache'}]
     socketio.emit('recommended channel', data)
+
     
 @app.route('/')
 def hello():
@@ -80,6 +95,7 @@ def on_connect():
     join_room( flask.request.sid )
     
     print('Someone connected!')
+    emit_user_data()
     socketio.emit('connected', {
         'test': 'Connected'
     })
@@ -145,6 +161,7 @@ def on_spotlogin(data):
                         user['profile-picture'],
                         user['user-type'],
                         artists,
+                        [],
                         []
                     )
         DB.session.add(db_user)
