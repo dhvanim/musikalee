@@ -31,8 +31,8 @@ app.static_folder = 'static'
 
 @socketio.on('user post channel')
 def on_post_receive(data):
-    query = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
-    username = query.user
+    query_username = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
+    username = query_username.user
     
     # TEMP MOCK
     music = "TEMP Misery Business by Paramore"
@@ -46,14 +46,17 @@ def on_post_receive(data):
     DB.session.add( post )
     DB.session.commit()
     
+    query_pfp = models.Users.query.filter_by(username = username).first()
+    
     post_emitdata = {'username': post.username,
+                    'pfp': query_pfp.profile_picture,
                     'music': post.music,
                     'text': post.message,
                     'title': post.title,
                     'num_likes': post.num_likes,
                     'time' : str( post.datetime )
                     }
-    # argument is temporary until it's in the database
+
     emit_posts(post_emitdata)
 
 # temp mock
