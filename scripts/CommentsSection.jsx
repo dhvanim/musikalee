@@ -8,12 +8,6 @@ export default function CommentsSection(props) {
     const comments= props.comments;
     const post_id= props.post_id;
 
-    const commentsEndRef = React.useRef(null);
-
-    React.useEffect(() => {
-       commentsEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    });
-
     function postComment() {
         let comment = document.getElementById(post_id);
         
@@ -32,11 +26,11 @@ export default function CommentsSection(props) {
                 <input type="text" id={post_id}  maxLength="256"/>
                 <input type="submit" name="Comment" />
             </form>
-            { comments.map( (comment, index) => (
-                <Comment key = {index} comment={comment}> </Comment>
+            { 
+                comments.map( (comment, index) => (
+                    <Comment key = {index} comment={comment}> </Comment>
                 ))   
             }
-            <div ref={commentsEndRef} />
         </div>
     );
 }

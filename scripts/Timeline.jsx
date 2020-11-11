@@ -18,7 +18,6 @@ export default function Timeline() {
     
     function updatePosts(data) {
         setPosts( data );
-         console.log( data );
     }
     
     getPosts();
@@ -26,8 +25,9 @@ export default function Timeline() {
     return (
         <div>
         <ul className="timeline">
-            { posts.map( (post, index) => (
-                <PostItem key={index} id={post.id} username={post.username} text={post.text} time={post.time} likes={post.num_likes} comments={post.comments} />
+            { 
+                posts.map( (post, index) => (
+                    <PostItem key={index} id={post.id} username={post.username} text={post.text} time={post.time} likes={post.num_likes} comments={post.comments} />
                 ))    
             }
         </ul>
