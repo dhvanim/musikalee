@@ -31,25 +31,29 @@ app.static_folder = 'static'
 
 @socketio.on('user post channel')
 def on_post_receive(data):
+    print("got post", data)
     query_username = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
     username = query_username.user
     
+    query_pfp = models.Users.query.filter_by(username = username).first()
+    pfp = query_pfp.profile_picture
+    
     # TEMP MOCK
     music = "TEMP Misery Business by Paramore"
-    title = "Post Title"
+    title = "TEMP Post Title"
     
     message = data
     num_likes = 0
     time = datetime.now()
     
-    post = models.Posts(username, music, message, title, num_likes, time)
+    post = models.Posts(username, pfp, music, message, title, num_likes, time)
     DB.session.add( post )
     DB.session.commit()
+    print("added post", post)
     
-    query_pfp = models.Users.query.filter_by(username = username).first()
     
     post_emitdata = {'username': post.username,
-                    'pfp': query_pfp.profile_picture,
+                    'pfp': post.pfp,
                     'music': post.music,
                     'text': post.message,
                     'title': post.title,
@@ -62,6 +66,7 @@ def on_post_receive(data):
 # temp mock
 def emit_posts(data):
     socketio.emit('emit posts channel', data)
+    print("emitted post: ", data)
     
     #data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
     #socketio.emit('trending channel', data)

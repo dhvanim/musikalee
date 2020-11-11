@@ -6,6 +6,7 @@ from sqlalchemy.dialects import postgresql
 class Posts(DB.Model):
     id = DB.Column(DB.Integer, primary_key=True)
     username = DB.Column(DB.String(256))
+    pfp = DB.Column(DB.String(256))
     music = DB.Column(DB.String(120))
     message = DB.Column(DB.String(256))
     title = DB.Column(DB.String(120))
@@ -13,8 +14,9 @@ class Posts(DB.Model):
     datetime = DB.Column(DB.DateTime)
     
 
-    def __init__(self, username, music, message, title, num_likes, datetime):
+    def __init__(self, username, pfp, music, message, title, num_likes, datetime):
         self.username = username
+        self.pfp = pfp
         self.music = music
         self.message = message
         self.title = title

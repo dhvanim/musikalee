@@ -11,7 +11,7 @@ const onSuccess = (response) => {
 
 export default function SpotifyButton() {
   return (
-    <div class="loginpage">
+    <div className="loginpage">
       <SpotifyLogin
         clientId="803918090e2d4726a922c0f05862e6e7"
         /* redirectUri={process.env.uri} */
