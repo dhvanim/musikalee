@@ -9,7 +9,7 @@
 .statusbar input[type=text] {
     margin:5px;
     padding:5px;
-    width:50%;
+    width:40%;
 }
 
 .timeline {
@@ -19,7 +19,7 @@
 .timeline ul {
     list-style:none;
     padding-left:0;
-    width:50%;
+    width:40%;
     margin-left:25%;
 }
 
@@ -51,6 +51,7 @@
 }
 
 .innerrightsidebar {
+    max-width:100%;
     position: fixed;
     height:100%;
     right:25px;
@@ -67,6 +68,7 @@
 .rightsidebar ul {
     list-style:none;
     padding-left:10px;
+    max-width:100%;
 }
 
 .rightsidebar li {

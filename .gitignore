@@ -4,3 +4,4 @@ __pycache__
 sql.env
 spotify.env
 static/script.js
+process.env
