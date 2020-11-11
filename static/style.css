@@ -14,13 +14,14 @@
 
 .timeline {
     position:relative;
+    width:50%;
+    margin-left:20%;
 }
 
 .timeline ul {
     list-style:none;
     padding-left:0;
-    width:40%;
-    margin-left:25%;
+    
 }
 
 .timeline li {
@@ -94,4 +95,6 @@
 
 .pfp img {
     width:50px;
+    float:left;
+    padding-right:5px;
 }

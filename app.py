@@ -88,7 +88,7 @@ def emit_user_data():
 # temp mock
 def emit_recommended():
     data = [{'artist': 'Clairo', 'song': 'Sofia'}, {'artist': 'Frank Ocean', 'song': 'Sweet Life'}, {'artist': 'Billie Eilish', 'song': 'bellyache'}]
-    socketio.emit('recommended channel', data)
+    socketio.emit('recommended channel', data, room=flask.request.sid)
 
     
 @app.route('/')
@@ -104,9 +104,6 @@ def on_connect():
     socketio.emit('connected', {
         'test': 'Connected'
     })
-
-    emit_trending()
-    emit_recommended()
  
 # temp mock
 def emit_trending():
@@ -172,13 +169,16 @@ def on_spotlogin(data):
                     )
         DB.session.add(db_user)
         print( db_user )
+        
+    socketio.emit('login success', True, room=flask.request.sid)
     
     # add to active users table
     DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
-    
     DB.session.commit()
     
-    socketio.emit('login success', True, room=flask.request.sid)
+    # emit trending and reccomended
+    emit_trending()
+    emit_recommended()
 
 if __name__ == '__main__': 
     socketio.run(
