@@ -65,8 +65,8 @@ def on_post_receive(data):
 
 # temp mock
 def emit_posts(data):
-    socketio.emit('emit posts channel', data)
-    print("emitted post: ", data)
+    socketio.emit('emit posts channel', [data])
+    print("emitted post: ", [data])
     
     #data = [{'artist': 'Omar Apollo', 'song': 'Ugotme'}, {'artist': 'Ariana Grande', 'song': 'Positions'}, {'artist': 'Paramore', 'song': 'Misery Business'}]
     #socketio.emit('trending channel', data)
@@ -105,6 +105,25 @@ def on_connect():
         'test': 'Connected'
     })
  
+def emit_allposts():
+    
+    query = models.Posts.query.all()
+    
+    data = []
+    for post in query:
+        d = {}
+        d['username'] = post.username
+        d['pfp'] = post.pfp
+        d['music'] = post.music
+        d['text'] = post.message
+        d['title'] = post.title
+        d['num_likes'] = post.num_likes
+        d['time'] = str( post.datetime )
+        data.append( d )
+    
+    socketio.emit('emit posts channel', data, room=flask.request.sid)
+    
+    
 # temp mock
 def emit_trending():
     
@@ -179,6 +198,7 @@ def on_spotlogin(data):
     # emit trending and reccomended
     emit_trending()
     emit_recommended()
+    emit_allposts()
 
 if __name__ == '__main__': 
     socketio.run(

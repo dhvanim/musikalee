@@ -17,8 +17,8 @@ export default function Timeline() {
     }
     
     function updatePosts(data) {
-        setPosts( [data].concat(posts) );
-        console.log( [data].concat(posts) );
+        setPosts( data.concat(posts) );
+        console.log( data.concat(posts) );
     }
     
     getPosts();
