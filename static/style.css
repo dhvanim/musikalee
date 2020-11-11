@@ -34,18 +34,6 @@
     font-weight:bold;
 }
 
-.post  .iconsContainer.likes {
-    display: inline-block;
-}
-
-.post .iconsContainer .comments {
-    display: inline-block;
-}
-
-.post .iconsContainer {
-    float:right;
-}
-
 .post .time {
     opacity:0.7;
 }
@@ -81,3 +69,16 @@
 .rightsidebar li {
     margin-bottom: 10px;
 } 
+
+.commentsSection {
+    max-height: 200px;
+    float: left;
+    min-width: 500px;
+}
+
+.iconsContainer {
+    display:flex; 
+    flex-direction: row; 
+    justify-content: center; 
+    align-items: center
+}

@@ -5,7 +5,7 @@ from datetime import datetime
 import flask
 import flask_socketio
 import flask_sqlalchemy
-from sqlalchemy import desc
+from sqlalchemy import asc, desc
 import models
 import random
 from spotify_login import get_user, get_artists
@@ -53,7 +53,7 @@ def emit_posts():
                             { 
                                 "text": comment.text
                             }
-                        for comment in DB.session.query(models.Comments).filter(models.Comments.post_id == post.id).order_by(desc(models.Comments.datetime)).all()
+                        for comment in DB.session.query(models.Comments).filter(models.Comments.post_id == post.id).order_by(asc(models.Comments.datetime)).all()
                         ]
         }
         for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
@@ -149,6 +149,14 @@ def on_spotlogin(data):
     except:
         print("TODO SKIP IF ALREADY HAS ACCT ALSO FIX DBCALLS IF ACTUALLY BROKEN")
 
+
+@socketio.on('post comment')
+def save_comment(data):
+    DB.session.add(models.Comments("jan3apples", data['comment'], data['post_id'], datetime.now()))
+    DB.session.commit()
+    emit_posts()
+     
+    
 if __name__ == '__main__': 
     socketio.run(
         app,
