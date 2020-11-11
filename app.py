@@ -153,7 +153,6 @@ def on_spotlogin(data):
     DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
     
     DB.session.commit()
-       
     
     socketio.emit('login success', True, room=flask.request.sid)
 
