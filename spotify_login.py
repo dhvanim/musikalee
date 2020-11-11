@@ -29,7 +29,7 @@ def get_artists(auth):
     'Authorization': 'Bearer '+auth,
     }
     response = requests.get('https://api.spotify.com/v1/me/top/artists', headers=headers)
-    print(response.json())
+    # print(response.json())
     uris=[]
     for item in response.json()['items']:
         uris.append(item['uri'])

@@ -6,6 +6,7 @@ from sqlalchemy.dialects import postgresql
 class Posts(DB.Model):
     id = DB.Column(DB.Integer, primary_key=True)
     username = DB.Column(DB.String(256))
+    pfp = DB.Column(DB.String(256))
     music = DB.Column(DB.String(120))
     message = DB.Column(DB.String(256))
     title = DB.Column(DB.String(120))
@@ -13,8 +14,9 @@ class Posts(DB.Model):
     datetime = DB.Column(DB.DateTime)
     
 
-    def __init__(self, username, music, message, title, num_likes, datetime):
+    def __init__(self, username, pfp, music, message, title, num_likes, datetime):
         self.username = username
+        self.pfp = pfp
         self.music = music
         self.message = message
         self.title = title
@@ -47,7 +49,7 @@ class Comments(DB.Model):
 class Users(DB.Model):
     username = DB.Column(DB.String(256), primary_key=True)
     profile_picture = DB.Column(DB.String(256))
-    user_type = DB.Column(DB.Integer)
+    user_type = DB.Column(DB.String(256))
     top_artists = DB.Column(postgresql.ARRAY(DB.String))
     following = DB.Column(postgresql.ARRAY(DB.String))
     my_likes = DB.Column(postgresql.ARRAY(DB.Integer))
@@ -62,3 +64,32 @@ class Users(DB.Model):
 
     def __repr__(self):
         return "<Users name: {}".format(self.username)
+
+class Trending(DB.Model):
+    id = DB.Column(DB.Integer, primary_key=True)
+    track = DB.Column(DB.String(500))
+    artists = DB.Column(postgresql.ARRAY(DB.String))
+    
+    def __init__(self, track, artists):
+        self.track = track
+        self.artists = artists
+        
+    def __repr__(self):
+        return "<Trending track: {} artists: {}>".format(self.track, self.artists)
+        
+ 
+class ActiveUsers(DB.Model):
+    id = DB.Column(DB.Integer, primary_key=True)
+    user = DB.Column(DB.String(500))
+    serverid = DB.Column(DB.String(500))
+    
+    def __init__(self, user, serverid):
+        self.user = user
+        self.serverid = serverid
+        
+    def __repr__(self):
+        return "<ActiveUsers user: {} id: {}>".format(self.user, self.serverid)
+        
+
+DB.create_all()
+DB.session.commit()

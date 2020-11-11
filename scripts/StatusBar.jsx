@@ -5,9 +5,9 @@ export default function StatusBar() {
     
     function submitPost(event) {
         let status = document.getElementById("text_status");
-        
+    
         Socket.emit('user post channel', status.value);
-        
+        console.log("emitted user post:", status.value);
         status.value = '';
         event.preventDefault();
     }

@@ -7,6 +7,7 @@ export default function PostItem(props) {
     return (
         <div>
             <li key={props.id} className="post">
+                <span className="pfp"> <img src={ props.pfp } /> </span> <br />
                 <span className="username"> { props.username } </span> <br />
                 <span className="text"> { props.text } </span> <br />
                 <span className="time"> { props.time } </span> 

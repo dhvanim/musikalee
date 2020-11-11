@@ -46,3 +46,20 @@
 
 # Set up React Libraries
 1. Run `npm install --save react-router-dom && npm install react-spotify-login` 
+# Set up React-Router-Dom
+1. Run `npm install --save react-router-dom` 
+
+# Set up Spotify Login
+npm i react-spotify-login
+
+# Set Up Spotify
+1. Navigate to https://developer.spotify.com/dashboard/login and sign up or login <br />
+2. Go to your dashboard and create a project (any appropriate title/description is fine) <br />
+3. Click on the project to see your Client ID and Client Secret <br />
+4. Under your main directory create a file called `spotify.env` and populate it as follows:
+```
+SPOTIFY_CLIENT_ID={your client id here}
+SPOTIFY_CLIENT_SECRET={your client secret here}
+```
+*\*note the lack of quotes*
+<br />
