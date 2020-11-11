@@ -48,7 +48,7 @@ class Comments(DB.Model):
 class Users(DB.Model):
     username = DB.Column(DB.String(256), primary_key=True)
     profile_picture = DB.Column(DB.String(256))
-    user_type = DB.Column(DB.Integer)
+    user_type = DB.Column(DB.String(256))
     top_artists = DB.Column(postgresql.ARRAY(DB.String))
     following = DB.Column(postgresql.ARRAY(DB.String))
 
