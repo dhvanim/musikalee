@@ -5,6 +5,7 @@ from datetime import datetime
 import flask
 import flask_socketio
 import flask_sqlalchemy
+from flask_socketio import join_room, leave_room
 import random
 from spotify_login import get_user, get_artists
 from spotify_trending import spotify_get_trending
@@ -58,6 +59,8 @@ def hello():
 
 @socketio.on('connect')
 def on_connect():
+    join_room( flask.request.sid )
+    
     print('Someone connected!')
     socketio.emit('connected', {
         'test': 'Connected'
@@ -70,8 +73,7 @@ def on_connect():
 def emit_trending():
     
     trending = get_trending()
-    print(trending)
-    socketio.emit('trending channel', trending)
+    socketio.emit('trending channel', trending, room=flask.request.sid)
     
 def get_trending():
     
@@ -116,21 +118,22 @@ def on_spotlogin(data):
     """
     user=get_user(data['token'])
     artists=get_artists(data['token'])
-    try:
+    
+    usersquery = models.Users.query.filter_by(username = user['username']).first()
+    if (usersquery == []):
         db_user=models.Users(
-                        username=user['username'],
-                        profile_picture=user['profile-picture'],
-                        user_type=user['user-type'],
-                        top_artists=artists,
-                        following=[]
-                        )
+                        user['username'],
+                        user['profile-picture'],
+                        user['user-type'],
+                        artists,
+                        []
+                    )
+                    
         DB.session.add(db_user)
         DB.session.commit()
-    except:
-        print("TODO SKIP IF ALREADY HAS ACCT ALSO FIX DBCALLS IF ACTUALLY BROKEN")
-        
+       
     
-    socketio.emit('login success', True)
+    socketio.emit('login success', True, room=flask.request.sid)
 
 if __name__ == '__main__': 
     socketio.run(
