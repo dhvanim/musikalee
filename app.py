@@ -62,11 +62,7 @@ def on_connect():
     socketio.emit('connected', {
         'test': 'Connected'
     })
-    
-    # temp example add/commit DELETE
-    DB.session.add(models.Comments("jan3apples", "yess", 423, datetime.now()))
-    DB.session.commit()
-    
+
     emit_trending()
     emit_recommended()
  

@@ -46,8 +46,8 @@ export default function RightSideBar() {
                 <ul>
                     { trending.map( (trend, index) => (
                         <li key={index} className="trend">
-                            <span className="artist"> { trend.artist } </span> <br />
                             <span className="song"> { trend.song } </span> <br />
+                            <span className="artist"> { trend.artist } </span> <br />
                         </li>
                         ))
                     }
@@ -60,8 +60,8 @@ export default function RightSideBar() {
                 <ul>
                     { recommended.map( (rec, index) => (
                         <li key={index} className="trend">
-                            <span className="artist"> { rec.artist } </span> <br />
                             <span className="song"> { rec.song } </span> <br />
+                            <span className="artist"> { rec.artist } </span> <br />
                         </li>
                         ))
                     }
