@@ -118,9 +118,12 @@ def emit_user_data():
     print("emiting user data")
 
 
-def emit_recommended(user_top_artists):
+def emit_recommended():
     
-    recommended = get_recommended(user_top_artists)
+    query_activeusers = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
+    query_users = models.Users.query.filter_by(username = query_activeusers.user).first()
+    
+    recommended = get_recommended( query_users.top_artists )
     print( recommended )
     socketio.emit('recommended channel', recommended, room=flask.request.sid)
 
@@ -204,11 +207,15 @@ def on_spotlogin(data):
     
     # commit all db changes
     DB.session.commit()
+
+# emit trending and recommended and posts
+@socketio.on('user logged in')
+def user_logged_in(data):
+    if data:
+        emit_posts()
+        emit_recommended()
+        emit_trending()
     
-    # emit trending and recommended and posts
-    emit_recommended( artists )
-    emit_trending()
-    emit_posts()
     
 
 
