@@ -12,7 +12,7 @@ from spotify_login import get_user, get_artists
 import timeago
 from flask_socketio import join_room, leave_room
 from spotify_login import get_user, get_artists
-from spotify_trending import spotify_get_trending
+from spotify_music import spotify_get_trending, spotify_get_recommended
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -81,7 +81,7 @@ def emit_posts():
         for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
     ]
     socketio.emit('emit posts channel', posts)
-    print(posts)
+    # print(posts)
 
 def add_or_remove_like_from_db(user, liked_post_id):
     exists = DB.session.query(models.Likes.id).filter_by(username=user, post_id=liked_post_id).scalar() is not None
@@ -118,29 +118,27 @@ def emit_user_data():
     print("emiting user data")
 
 
-
-# temp mock
 def emit_recommended():
-    data = [{'artist': 'Clairo', 'song': 'Sofia'}, {'artist': 'Frank Ocean', 'song': 'Sweet Life'}, {'artist': 'Billie Eilish', 'song': 'bellyache'}]
-    socketio.emit('recommended channel', data, room=flask.request.sid)
+    
+    query_activeusers = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
+    query_users = models.Users.query.filter_by(username = query_activeusers.user).first()
+    
+    recommended = get_recommended( query_users.top_artists )
+    print( recommended )
+    socketio.emit('recommended channel', recommended, room=flask.request.sid)
 
+def get_recommended( user_top_artists ):
     
-@app.route('/')
-def hello():
-    return flask.render_template('index.html')
+    # keep only spotify ID
+    for i in range(len(user_top_artists)):
+        user_top_artists[i] = user_top_artists[i].split(":")[2]
 
-@socketio.on('connect')
-def on_connect():
-    join_room( flask.request.sid )
-    
-    print('Someone connected!')
-    emit_user_data()
-    socketio.emit('connected', {
-        'test': 'Connected'
-    })
- 
-    
-# temp mock
+    sample_artists = random.sample( user_top_artists, 3 )
+
+    recommended = spotify_get_recommended(sample_artists)
+    return recommended
+
+
 def emit_trending():
     
     trending = get_trending()
@@ -162,25 +160,21 @@ def get_trending():
         
         DB.session.commit()
     
+    trending_query = models.Trending.query.all()
+    sample = random.sample(trending_query, 3)
     
-    # TODO fix same randint issue
-    rand_ids = [random.randint(1,50), random.randint(1,50), random.randint(1,50)]
     trending = []
-    
-    for randid in rand_ids:
+    for song in sample:
         track = {}
-        query = models.Trending.query.filter_by(id = str(randid)).first()
 
-        track['artist'] = ", ".join(query.artists)
-        track['song'] = query.track
+        track['artist'] = ", ".join(song.artists)
+        track['song'] = song.track
         
         trending.append( track )
     
     return trending
 
-@socketio.on('disconnect')
-def on_disconnect():
-    print ('Someone disconnected!')
+
 
 @socketio.on('new spotify user')
 def on_spotlogin(data):
@@ -190,9 +184,8 @@ def on_spotlogin(data):
     user=get_user(data['token'])
     artists=get_artists(data['token'])
     
-    # add to users if not already
+    # add to users if not already, update top artists
     usersquery = models.Users.query.filter_by(username = user['username']).first()
-    print ( usersquery )
     if (usersquery == [] or usersquery == None):
         db_user=models.Users(
                         username=user['username'],
@@ -203,18 +196,27 @@ def on_spotlogin(data):
                         my_likes=[]
                         )
         DB.session.add(db_user)
-        print( db_user )
-        
+    else:
+        usersquery.top_artists = artists
+
+    # emit success to user, so they can access timeline
     socketio.emit('login success', True, room=flask.request.sid)
     
     # add to active users table
     DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
-    DB.session.commit()
     
-    # emit trending and reccomended
-    emit_trending()
-    emit_recommended()
-    emit_posts()
+    # commit all db changes
+    DB.session.commit()
+
+# emit trending and recommended and posts
+@socketio.on('user logged in')
+def user_logged_in(data):
+    if data:
+        emit_posts()
+        emit_recommended()
+        emit_trending()
+    
+    
 
 
 @socketio.on('post comment')
@@ -225,8 +227,26 @@ def save_comment(data):
     DB.session.add(models.Comments(username, data['comment'], data['post_id'], datetime.now()))
     DB.session.commit()
     emit_posts()
-     
+
+
+@app.route('/')
+def hello():
+    return flask.render_template('index.html')
+
+@socketio.on('connect')
+def on_connect():
+    join_room( flask.request.sid )
     
+    print('Someone connected!')
+    emit_user_data()
+    socketio.emit('connected', {
+        'test': 'Connected'
+    })
+
+@socketio.on('disconnect')
+def on_disconnect():
+    print ('Someone disconnected!')
+
 if __name__ == '__main__': 
     socketio.run(
         app,
