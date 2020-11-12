@@ -13,9 +13,9 @@ export default function SpotifyButton() {
   return (
     <div className="loginpage">
       <SpotifyLogin
-        clientId="803918090e2d4726a922c0f05862e6e7"
+        clientId="d1252102702f4ae4bbadc59e907a87da"
         /* redirectUri={process.env.uri} */
-        redirectUri="https://37baa11411bc449598a28599488f841f.vfs.cloud9.us-east-1.amazonaws.com/"
+        redirectUri="https://63493edfefe54691b206383fc43f796b.vfs.cloud9.us-east-1.amazonaws.com/"
         onSuccess={onSuccess}
         scope="user-read-email user-top-read user-follow-read"
         className="spotifybutton"

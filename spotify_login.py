@@ -37,3 +37,35 @@ def get_artists(auth):
     for item in response.json()['items']:
         uris.append(item['uri'])
     return uris
+
+def get_top_artists(auth):
+    """
+    Aquire the name of favorite artists
+    """
+    headers = {
+   'Accept': 'application/json',
+   'Content-Type': 'application/json',
+    'Authorization': 'Bearer '+auth,
+    }
+    response = requests.get('https://api.spotify.com/v1/me/top/artists', headers=headers)
+    # print(response.json())
+    uris=[]
+    for item in response.json()['items']:
+        uris.append(item['name'])
+    return uris
+
+
+def get_current_song(auth):
+    """
+    Getting what's currently being played by user
+    """
+    url = 'https://api.spotify.com/v1/me/player/currently-playing'
+    header = {"Authorization": "Bearer "+auth}
+    response=requests.get(url,headers=header)
+    
+    #if str(response) == "<Response [200]>":
+    return response.json()
+        
+    #else:
+        #return "nothing is playing"
+    

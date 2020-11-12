@@ -5,7 +5,8 @@ import { Socket } from './Socket';
 
 export default function UserProfile(){
     const [userData, setUserData] = React.useState([]);
-    const [isCreator, setIsCreator] = React.useState(false); 
+    const [isCreator, setIsCreator] = React.useState(false);
+    const [isUser, setIsUser] = React.useState(false);
     
     
      function newItem() {
@@ -15,12 +16,17 @@ export default function UserProfile(){
                 if(data['profileType'] == "Artist")
                 {
                     setIsCreator(prevState => true);
-                    console.log(data);
+                    //console.log(data);
+                }
+                
+                else
+                {
+                    setIsUser(prevState => true);
                 }
                  //console.log(data);
                  console.log(isCreator);
                  return setUserData(() => 
-                 {return [data['username'], data['profileType'],  data['topArtists'], data['following']];
+                 {return [data['username'], data['profileType'],  data['topArtists'], data['following'], data['currSong']];
                      
                  });
                  
