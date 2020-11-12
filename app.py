@@ -75,26 +75,33 @@ def emit_posts():
                                 "datetime": timeago.format(comment.datetime, datetime.now())
                             }
                         for comment in DB.session.query(models.Comments).filter(models.Comments.post_id == post.id).order_by(desc(models.Comments.datetime)).all()
-                        ]
+                        ],
+            "is_liked": DB.session.query(models.Likes).filter(models.Likes.username == post.username,models.Likes.post_id == post.id).scalar() is not None
         }
         for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
     ]
     socketio.emit('emit posts channel', posts)
     print(posts)
 
+def add_or_remove_like_from_db(user, liked_post_id):
+    exists = DB.session.query(models.Likes.id).filter_by(username=user, post_id=liked_post_id).scalar() is not None
+    if (exists):
+        DB.session.query(models.Likes).filter_by(username=user, post_id=liked_post_id).delete()
+    else:
+        DB.session.add(models.Likes(user, liked_post_id))
+    DB.session.commit()
+    
 @socketio.on('like post')    
 def update_num_likes(data):
     num_likes = data["num_likes"]
     post_id = data["id"]
     print("Post_id: {}".format(post_id))
     DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
-    DB.session.commit()
+    DB.session.commit
     
-    #TODO 
-    #get my username
-    #add post_id to Users table where username is mine
-    #myUsername = getMyUsername() 
-    #DB.session.query(models.Users).filter(models.Users.username == myUsername).update({models.Users.my_likes: models.Users.my_likes.append(post_id)}, synchronize_session = False) 
+    query_username = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
+    username = query_username.user
+    add_or_remove_like_from_db(username, post_id)
     
     emit_posts()
     

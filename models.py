@@ -89,7 +89,18 @@ class ActiveUsers(DB.Model):
         
     def __repr__(self):
         return "<ActiveUsers user: {} id: {}>".format(self.user, self.serverid)
+
+class Likes(DB.Model):
+    id = DB.Column(DB.Integer, primary_key=True)
+    username = DB.Column(DB.String(256))
+    post_id = DB.Column(DB.Integer())
+    
+    def __init__(self, username, post_id):
+        self.username = username
+        self.post_id = post_id
         
+    def __repr__(self):
+        return "<Likes username: {} post_id: {}>".format(self.username, self.post_id)        
 
 DB.create_all()
 DB.session.commit()
