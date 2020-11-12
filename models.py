@@ -102,5 +102,23 @@ class Likes(DB.Model):
     def __repr__(self):
         return "<Likes username: {} post_id: {}>".format(self.username, self.post_id)        
 
+class Music(DB.Model):
+    id = DB.Column(DB.Integer, primary_key=True)
+    song = DB.Column(DB.String(500))
+    artist = DB.Column(postgresql.ARRAY(DB.String))
+    album = DB.Column(DB.String(500))
+    preview_url = DB.Column(DB.String(500))
+    uri = DB.Column(DB.String(500))
+    
+    def __init__(self, song, artist, album, preview_url, uri):
+        self.song = song
+        self.artist = artist
+        self.album = album
+        self.preview_url = preview_url
+        self.uri = uri
+        
+    def __repr__(self):
+        return "<Music song: {} artist: {}>".format(self.song, self.artist)  
+        
 DB.create_all()
 DB.session.commit()
