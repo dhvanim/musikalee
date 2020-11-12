@@ -51,6 +51,7 @@ def on_post_receive(data):
     time = datetime.now()
     
     post = models.Posts(username, pfp, music, message, title, num_likes, time)
+
     DB.session.add( post )
     DB.session.commit()
     print("added post", post)
@@ -98,17 +99,18 @@ def update_num_likes(data):
     
     emit_posts()
     
-@socketio.on('user data')    
-def on_user_data_recieve():
-    print("going to user")
-    #database stuff happens here
+  
+# def on_user_data_recieve():
+#     #userInfo = models.Users(username, profile_picture, user_type, top_artists, following, my_likes)
+#     print(userInfo)
     
     
-def emit_user_data():
+def emit_user_data(userInfo):
     print("giving user data")
+    print(userInfo['profile-picture'])
     #userdata = {'username':'jan3apples','profileYype':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']}
-    socketio.emit('emit user data', {'username':'jan3apples','profileType':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']})
-    print("emiting user data")
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user-type'], 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']})
+    #print("emiting user data")
 
 
 
@@ -127,7 +129,6 @@ def on_connect():
     join_room( flask.request.sid )
     
     print('Someone connected!')
-    emit_user_data()
     socketio.emit('connected', {
         'test': 'Connected'
     })
@@ -199,15 +200,18 @@ def on_spotlogin(data):
         print( db_user )
         
     socketio.emit('login success', True, room=flask.request.sid)
+    print("here are a list of artists", artists[0], artists[1], artists[2])
     
     # add to active users table
     DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
     DB.session.commit()
     
+    print(artists)
     # emit trending and reccomended
     emit_trending()
     emit_recommended()
     emit_posts()
+    emit_user_data(user)
 
 
 @socketio.on('post comment')
