@@ -89,13 +89,3 @@ def spotify_get_recommended(artists):
         recs.append(track)
     
     return recs
-        
-        
-artist_uris = ["06HL4z0CvFAxyc27GXpf02",
-                "74XFHRwlV6OrjEM0A2NCMF",
-                "5FxD8fkQZ6KcsSYupDVoSO",
-                "0AsThoR4KZSVktALiNcQwW",
-                "66CXWjxzNUsdJxJ2JdwvnR"]
-
-print (spotify_get_recommended( artist_uris ))
-    

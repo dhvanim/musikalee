@@ -183,9 +183,8 @@ def on_spotlogin(data):
     user=get_user(data['token'])
     artists=get_artists(data['token'])
     
-    # add to users if not already
+    # add to users if not already, update top artists
     usersquery = models.Users.query.filter_by(username = user['username']).first()
-    print ( usersquery )
     if (usersquery == [] or usersquery == None):
         db_user=models.Users(
                         username=user['username'],
@@ -196,15 +195,18 @@ def on_spotlogin(data):
                         my_likes=[]
                         )
         DB.session.add(db_user)
-        print( db_user )
-        
+    else:
+        usersquery.top_artists = artists
+
     socketio.emit('login success', True, room=flask.request.sid)
     
     # add to active users table
     DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
+    
+    # commit all db changes
     DB.session.commit()
     
-    # emit trending and reccomended
+    # emit trending and recommended and posts
     emit_trending()
     emit_recommended()
     emit_posts()
@@ -218,7 +220,7 @@ def save_comment(data):
     DB.session.add(models.Comments(username, data['comment'], data['post_id'], datetime.now()))
     DB.session.commit()
     emit_posts()
-     
+
     
 if __name__ == '__main__': 
     socketio.run(
