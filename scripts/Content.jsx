@@ -20,6 +20,7 @@ export function Content() {
     
     function updateLoggedStatus(data) {
         setLoggedIn( data );
+        Socket.emit("user logged in", true);
     }
     
     getLoggedStatus();

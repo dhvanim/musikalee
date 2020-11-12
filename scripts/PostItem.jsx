@@ -33,7 +33,8 @@ export default function PostItem(props) {
         
     }
     
-    var likeIcon = (likeState? "./static/heart-filled.png" : "./static/heart-outline.png")
+    
+    var likeIcon = (props.is_liked? "./static/heart-filled.png" : "./static/heart-outline.png")
 
     const likeButton = () => <span style={{float:"right"}}onClick={handleToggle}> <img style={icon} src={likeIcon}/> { num_likes } </span>;
     

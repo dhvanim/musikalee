@@ -57,3 +57,35 @@ def spotify_get_trending():
     
     return tracks_data['items']
     
+# returns recc songs
+def spotify_get_recommended(artists):
+    
+    access_token = spotify_get_access_token()
+    
+    header = { 'Authorization': 'Bearer {token}'.format(token=access_token) }
+
+    # get tracks API endpoint URL
+    rec_url = "https://api.spotify.com/v1/recommendations"
+    rec_body_params = { 'seed_artists': artists, 'limit':3 }
+    rec_response = requests.get(rec_url, headers=header, params=rec_body_params)
+
+    # if api response error
+    if rec_response.status_code != 200:
+        return None
+        
+    rec_data = rec_response.json()
+    
+    recs = []
+    for tracks in rec_data["tracks"]:
+        track = {}
+        
+        track["song"] = tracks["name"]
+        
+        artists_list = []
+        for artists in tracks["artists"]:
+            artists_list.append( artists["name"] )
+        track["artist"] = ", ".join(artists_list)
+        
+        recs.append(track)
+    
+    return recs
