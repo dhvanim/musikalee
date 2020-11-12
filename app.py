@@ -150,17 +150,15 @@ def get_trending():
         
         DB.session.commit()
     
+    trending_query = models.Trending.query.all()
+    sample = random.sample(trending_query, 3)
     
-    # TODO fix same randint issue
-    rand_ids = [random.randint(1,50), random.randint(1,50), random.randint(1,50)]
     trending = []
-    
-    for randid in rand_ids:
+    for song in sample:
         track = {}
-        query = models.Trending.query.filter_by(id = str(randid)).first()
 
-        track['artist'] = ", ".join(query.artists)
-        track['song'] = query.track
+        track['artist'] = ", ".join(song.artists)
+        track['song'] = song.track
         
         trending.append( track )
     
@@ -191,6 +189,7 @@ def on_spotlogin(data):
     else:
         usersquery.top_artists = artists
 
+    # emit success to user, so they can access timeline
     socketio.emit('login success', True, room=flask.request.sid)
     
     # add to active users table
@@ -200,9 +199,10 @@ def on_spotlogin(data):
     DB.session.commit()
     
     # emit trending and recommended and posts
-    emit_trending()
     emit_recommended( usersquery.top_artists )
+    emit_trending()
     emit_posts()
+    
 
 
 @socketio.on('post comment')
