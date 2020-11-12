@@ -116,9 +116,9 @@ class Music(DB.Model):
         self.album = album
         self.preview_url = preview_url
         self.uri = uri
-        
+
     def __repr__(self):
         return "<Music song: {} artist: {}>".format(self.song, self.artist)  
-        
+
 DB.create_all()
 DB.session.commit()

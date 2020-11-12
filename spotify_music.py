@@ -91,6 +91,8 @@ def spotify_get_recommended(artists):
     return recs
 
 def spotify_search_track(song, artist):
+    print( song )
+    print( artist )
     
     query = "track:" + song + " artist:" + artist
 
@@ -108,7 +110,11 @@ def spotify_search_track(song, artist):
         return None
         
     search_data = search_response.json()
-
+    
+    # if no results
+    if search_data['tracks']['total'] == 0:
+        return None
+        
     track = search_data['tracks']['items'][0]['name']
     artists = []
     for a in search_data['tracks']['items'][0]['artists']:
