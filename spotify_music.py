@@ -89,3 +89,37 @@ def spotify_get_recommended(artists):
         recs.append(track)
     
     return recs
+
+def spotify_search_track(song, artist):
+    
+    query = "track:" + song + " artist:" + artist
+
+    access_token = spotify_get_access_token()
+    
+    header = { 'Authorization': 'Bearer {token}'.format(token=access_token) }
+
+    # get tracks API endpoint URL
+    search_url = "https://api.spotify.com/v1/search"
+    search_body_params = { 'q': query, 'type':'track', 'limit':1 }
+    search_response = requests.get(search_url, headers=header, params=search_body_params)
+
+    # if api response error
+    if search_response.status_code != 200:
+        return None
+        
+    search_data = search_response.json()
+
+    track = search_data['tracks']['items'][0]['name']
+    artists = []
+    for a in search_data['tracks']['items'][0]['artists']:
+        artists.append( a['name']) 
+    album = search_data['tracks']['items'][0]['album']['name']
+    preview_url = search_data['tracks']['items'][0]['preview_url']
+    uri = search_data['tracks']['items'][0]['uri']
+    
+    return { 'song': track,
+            'artist': artists,
+            'album': album,
+            'preview_url': preview_url,
+            'uri': uri
+            }
