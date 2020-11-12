@@ -206,7 +206,7 @@ def on_spotlogin(data):
     DB.session.commit()
     
     # emit trending and recommended and posts
-    emit_recommended( usersquery.top_artists )
+    emit_recommended( artists )
     emit_trending()
     emit_posts()
     
