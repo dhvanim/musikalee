@@ -16,6 +16,7 @@ export default function RightSideBar() {
     }
     
     function updateTrending(data) {
+        console.log("trending", data);
         setTrending( data );
     }
     
@@ -29,6 +30,7 @@ export default function RightSideBar() {
     }
     
     function updateRecommended(data) {
+        console.log("rec", data);
         setRecommended( data );
     }
     

@@ -79,12 +79,12 @@ def spotify_get_recommended(artists):
     for tracks in rec_data["tracks"]:
         track = {}
         
-        track["title"] = tracks["name"]
+        track["song"] = tracks["name"]
         
         artists_list = []
         for artists in tracks["artists"]:
             artists_list.append( artists["name"] )
-        track["artists"] = ", ".join(artists_list)
+        track["artist"] = ", ".join(artists_list)
         
         recs.append(track)
     
