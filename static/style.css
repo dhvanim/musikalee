@@ -115,3 +115,16 @@
     float:left;
     padding-right:5px;
 }
+
+.postmusic {
+    background-color:#aaa;
+    width:90%;
+    margin:auto;
+    padding:10px;
+    border-radius: 5px;
+}
+
+audio {
+    width:90%;
+    margin:auto;
+}
