@@ -107,13 +107,17 @@ class Music(DB.Model):
     song = DB.Column(DB.String(500))
     artist = DB.Column(postgresql.ARRAY(DB.String))
     album = DB.Column(DB.String(500))
+    album_art = DB.Column(DB.String(500))
+    external_link = DB.Column(DB.String(500))
     preview_url = DB.Column(DB.String(500))
     uri = DB.Column(DB.String(500))
     
-    def __init__(self, song, artist, album, preview_url, uri):
+    def __init__(self, song, artist, album, art, link, preview_url, uri):
         self.song = song
         self.artist = artist
         self.album = album
+        self.album_art = art
+        self.external_link = link
         self.preview_url = preview_url
         self.uri = uri
 

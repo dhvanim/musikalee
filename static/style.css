@@ -111,9 +111,17 @@
 }
 
 .pfp img {
-    width:50px;
+    width:40px;
     float:left;
+    margin-right:5px;
+    border-radius:50%;
+}
+
+.album_art {
+    float:left;
+    width:75px;
     padding-right:5px;
+    padding-bottom:5px;
 }
 
 .postmusic {

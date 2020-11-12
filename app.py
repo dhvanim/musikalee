@@ -40,7 +40,7 @@ def get_post_track(song, artist):
         return ""
     
     if models.Music.query.filter_by(uri = info['uri']).first() == None:
-        music_entry = models.Music(info['song'], info['artist'], info['album'], info['preview_url'], info['uri'])
+        music_entry = models.Music(info['song'], info['artist'], info['album'], info['album_art'], info['external_link'], info['preview_url'], info['uri'])
         DB.session.add( music_entry )
         DB.session.commit()
     
@@ -108,6 +108,8 @@ def emit_posts():
                                 'song': track.song,
                                 'artist': ", ".join(track.artist),
                                 'album': track.album,
+                                'album_art': track.album_art,
+                                'external_link': track.external_link,
                                 'preview_url': track.preview_url
                             }
         else:

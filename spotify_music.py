@@ -120,12 +120,16 @@ def spotify_search_track(song, artist):
     for a in search_data['tracks']['items'][0]['artists']:
         artists.append( a['name']) 
     album = search_data['tracks']['items'][0]['album']['name']
+    album_art = search_data['tracks']['items'][0]['album']['images'][0]['url']
+    external_link = search_data['tracks']['items'][0]['external_urls']['spotify']
     preview_url = search_data['tracks']['items'][0]['preview_url']
     uri = search_data['tracks']['items'][0]['uri']
     
     return { 'song': track,
             'artist': artists,
             'album': album,
+            'album_art': album_art,
+            'external_link': external_link,
             'preview_url': preview_url,
             'uri': uri
             }

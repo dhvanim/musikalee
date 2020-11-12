@@ -14,10 +14,13 @@ export default function PostItem(props) {
         <div className="postmusic">
 
                <span> 
+                    <a href={music.external_link} target="_blank">
+                        <img src={music.album_art} className="album_art" />
+                    </a>
                     { music.song } <br />
                     { music.album } <br />
                     { music.artist } <br /> <br />
-                    { music.preview_url != "null" ?
+                    { music.preview_url != null ?
                     <audio controls name="media">
                             <source src={ music.preview_url } type="audio/mpeg" />
                     </audio>
@@ -25,6 +28,7 @@ export default function PostItem(props) {
                     <br />
                     }
                 </span>
+                
 
             </div>
         );
