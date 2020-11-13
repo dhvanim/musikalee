@@ -81,9 +81,6 @@ def on_post_receive(data):
 
 def emit_posts():
     
-    if models.Posts.query.all() == None or models.Posts.query.all() == []:
-        return None
-    
     posts = []
     for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all():
         entry = {
