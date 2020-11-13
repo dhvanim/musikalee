@@ -30,6 +30,8 @@ import models
 
 DB.init_app(app)
 DB.app = app
+DB.create_all()
+DB.session.commit()
 
 app.static_folder = 'static'
 

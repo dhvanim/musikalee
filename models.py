@@ -125,6 +125,3 @@ class Music(DB.Model):
 
     def __repr__(self):
         return "<Music song: {} artist: {}>".format(self.song, self.artist)  
-
-DB.create_all()
-DB.session.commit()
