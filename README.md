@@ -81,5 +81,13 @@ _________________
 Incompleted: 
 1. I should be able to visit other people's profile pages by clicking their username on their post. 
 ```
-
+3. Dhvani Mistry
+```
+1. Got Recommended and Trending songs from Spotify and displayed on right side bar.
+2. Created status bar to input text and song & artist (saves input to db and displays on timeline with username and pfp).
+3. Get song information from spotify to display album art and audio preview.
+_________________
+Incompleted:
+1. Better styling for timeline (sometimes song overlaps with posts)
+```
 <br />
