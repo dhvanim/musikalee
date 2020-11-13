@@ -89,3 +89,47 @@ def spotify_get_recommended(artists):
         recs.append(track)
     
     return recs
+
+def spotify_search_track(song, artist):
+    print( song )
+    print( artist )
+    
+    query = "track:" + song + " artist:" + artist
+
+    access_token = spotify_get_access_token()
+    
+    header = { 'Authorization': 'Bearer {token}'.format(token=access_token) }
+
+    # get tracks API endpoint URL
+    search_url = "https://api.spotify.com/v1/search"
+    search_body_params = { 'q': query, 'type':'track', 'limit':1 }
+    search_response = requests.get(search_url, headers=header, params=search_body_params)
+
+    # if api response error
+    if search_response.status_code != 200:
+        return None
+        
+    search_data = search_response.json()
+    
+    # if no results
+    if search_data['tracks']['total'] == 0:
+        return None
+        
+    track = search_data['tracks']['items'][0]['name']
+    artists = []
+    for a in search_data['tracks']['items'][0]['artists']:
+        artists.append( a['name']) 
+    album = search_data['tracks']['items'][0]['album']['name']
+    album_art = search_data['tracks']['items'][0]['album']['images'][0]['url']
+    external_link = search_data['tracks']['items'][0]['external_urls']['spotify']
+    preview_url = search_data['tracks']['items'][0]['preview_url']
+    uri = search_data['tracks']['items'][0]['uri']
+    
+    return { 'song': track,
+            'artist': artists,
+            'album': album,
+            'album_art': album_art,
+            'external_link': external_link,
+            'preview_url': preview_url,
+            'uri': uri
+            }

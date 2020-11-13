@@ -12,7 +12,7 @@ from spotify_login import get_user, get_artists
 import timeago
 from flask_socketio import join_room, leave_room
 from spotify_login import get_user, get_artists
-from spotify_music import spotify_get_trending, spotify_get_recommended
+from spotify_music import spotify_get_trending, spotify_get_recommended, spotify_search_track
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -33,6 +33,19 @@ DB.app = app
 
 app.static_folder = 'static'
 
+def get_post_track(song, artist):
+    info = spotify_search_track(song, artist)
+    
+    if info == None:
+        return ""
+    
+    if models.Music.query.filter_by(uri = info['uri']).first() == None:
+        music_entry = models.Music(info['song'], info['artist'], info['album'], info['album_art'], info['external_link'], info['preview_url'], info['uri'])
+        DB.session.add( music_entry )
+        DB.session.commit()
+    
+    return info['uri']
+
 @socketio.on('user post channel')
 def on_post_receive(data):
     print("got post", data)
@@ -42,11 +55,17 @@ def on_post_receive(data):
     query_pfp = models.Users.query.filter_by(username = username).first()
     pfp = query_pfp.profile_picture
     
-    # TEMP MOCK
-    music = "TEMP Misery Business by Paramore"
+    song = data['song'].strip()
+    artist = data['artist'].strip()
+    
+    if song == "" and artist == "":
+        music = ""
+    else:
+        music = get_post_track(song, artist)
+    
     title = "TEMP Post Title"
     
-    message = data
+    message = data['text']
     num_likes = 0
     time = datetime.now()
     
@@ -58,28 +77,47 @@ def on_post_receive(data):
     emit_posts()
 
 def emit_posts():
-    posts = [
-        {
-            "id": post.id,
-            "username": post.username,
-            "music": post.music,
-            "text": post.message,
-            "title": post.title,
-            "num_likes": post.num_likes,
-            "time": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
-            "pfp": post.pfp,
-            "comments": [
-                            { 
-                                "text": comment.text,
-                                "username": comment.username,
-                                "datetime": timeago.format(comment.datetime, datetime.now())
+    
+    if models.Posts.query.all() == None or models.Posts.query.all() == []:
+        return None
+    
+    posts = []
+    for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all():
+        entry = {
+                "id": post.id,
+                "username": post.username,
+                "text": post.message,
+                "title": post.title,
+                "num_likes": post.num_likes,
+                "time": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
+                "pfp": post.pfp,
+                "comments": [
+                                { 
+                                    "text": comment.text,
+                                    "username": comment.username,
+                                    "datetime": timeago.format(comment.datetime, datetime.now())
+                                }
+                            for comment in DB.session.query(models.Comments).filter(models.Comments.post_id == post.id).order_by(desc(models.Comments.datetime)).all()
+                            ],
+                "is_liked": DB.session.query(models.Likes).filter(models.Likes.username == post.username,models.Likes.post_id == post.id).scalar() is not None
+            }
+        
+        if post.music != "":
+            track = models.Music.query.filter_by(uri = post.music).first()
+            entry["music"] = {
+                                'song': track.song,
+                                'artist': ", ".join(track.artist),
+                                'album': track.album,
+                                'album_art': track.album_art,
+                                'external_link': track.external_link,
+                                'preview_url': track.preview_url
                             }
-                        for comment in DB.session.query(models.Comments).filter(models.Comments.post_id == post.id).order_by(desc(models.Comments.datetime)).all()
-                        ],
-            "is_liked": DB.session.query(models.Likes).filter(models.Likes.username == post.username,models.Likes.post_id == post.id).scalar() is not None
-        }
-        for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
-    ]
+        else:
+            entry["music"] = ""
+        
+        posts.append( entry )
+   
+    
     socketio.emit('emit posts channel', posts)
     # print(posts)
 
