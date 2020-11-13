@@ -153,8 +153,10 @@ def emit_user_data(userInfo, topArtists, currSong):
     artistList.append(topArtists[0])
     artistList.append(topArtists[1])
     artistList.append(topArtists[2])
-    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user-type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong})
-    #print("emiting user data")
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong})
+    
+    
+    # print("emiting user data", userInfo, topArtists, currSong)
 
 
 def emit_recommended():
@@ -223,8 +225,6 @@ def on_spotlogin(data):
     """
     user=get_user(data['token'])
     artists=get_artists(data['token'])
-    topArtists=get_top_artists(data['token'])
-    currSong=get_current_song(data['token'])
     
     # add to users if not already, update top artists
     usersquery = models.Users.query.filter_by(username = user['username']).first()
@@ -246,12 +246,12 @@ def on_spotlogin(data):
 
     
     # add to active users table
-    DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
+    DB.session.add(models.ActiveUsers(user['username'], flask.request.sid, data['token']))
     
     # commit all db changes
     DB.session.commit()
-    print("current song playing", currSong)
-    emit_user_data(user, topArtists, currSong)
+    
+    
 
 # emit trending and recommended and posts
 @socketio.on('user logged in')
@@ -260,8 +260,18 @@ def user_logged_in(data):
         emit_posts()
         emit_recommended()
         emit_trending()
-    
 
+    
+@socketio.on("get profile")
+def send_user_profile(data):
+    topArtists=get_top_artists(flask.request.sid)
+    currSong=get_current_song(flask.request.sid)
+        
+    user = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
+    usertype = models.Users.query.filter_by(username = user.user).first()
+    userinfo = {'username': user.user, 'user_type': usertype.user_type}
+    
+    emit_user_data(userinfo, topArtists, currSong)
 
 @socketio.on('post comment')
 def save_comment(data):

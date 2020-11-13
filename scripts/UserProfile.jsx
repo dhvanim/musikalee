@@ -13,18 +13,21 @@ export default function UserProfile(){
          
          React.useEffect(() => {
             Socket.on('emit user data', (data) => {
+                console.log("user data", data);
+                /*
                 if(data['profileType'] == "Artist")
                 {
                     setIsCreator(prevState => true);
-                    //console.log(data);
+                    console.log(data);
                 }
                 
                 else
                 {
                     setIsUser(prevState => true);
                 }
-                 //console.log(data);
-                 //console.log(isCreator);
+                */
+                console.log(data);
+                console.log(isCreator);
                  return setUserData(() => 
                  {return [data['username'], data['profileType'],  data['topArtists'], data['following'], data['currentSong']];
                      
@@ -35,6 +38,7 @@ export default function UserProfile(){
        
 }
     newItem();
+    
     return (
        <div className="page">
           <div style={{

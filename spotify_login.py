@@ -2,18 +2,21 @@
 Python Code to parse spotify requests
 """
 import requests
+import models
 
 def get_user(auth):
     """
     Aquire A user object from Spotify using Auth Token
     """
+    
     url = 'https://api.spotify.com/v1/me'
     try:
         response=requests.get(url,headers={"Authorization": "Bearer "+auth})
     except TypeError:
         response=requests.get(url,headers='{"Authorization": "Bearer "+auth}')
-        
+    
     unam=response.json()['display_name']
+
     try:
         pfp= response.json()['images'][0]['url']
     except:
@@ -29,6 +32,7 @@ def get_artists(auth):
     """
     Aquire the list of favorite artists
     """
+
     try:
         response = requests.get(
                             'https://api.spotify.com/v1/me/top/artists',
@@ -48,10 +52,11 @@ def get_artists(auth):
         uris.append(item['uri'])
     return uris
 
-def get_top_artists(auth):
+def get_top_artists(flaskid):
     """
     Aquire the name of favorite artists
     """
+    auth = models.ActiveUsers.query.filter_by(serverid = flaskid).first().authtoken
     headers = {
    'Accept': 'application/json',
    'Content-Type': 'application/json',
@@ -65,10 +70,11 @@ def get_top_artists(auth):
     return uris
 
 
-def get_current_song(auth):
+def get_current_song(flaskid):
     """
     Getting what's currently being played by user
     """
+    auth = models.ActiveUsers.query.filter_by(serverid = flaskid).first().authtoken
     url = 'https://api.spotify.com/v1/me/player/currently-playing'
     header = {"Authorization": "Bearer "+auth}
     response=requests.get(url,headers=header)
