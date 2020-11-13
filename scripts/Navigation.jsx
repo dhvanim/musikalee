@@ -1,6 +1,7 @@
 import React from 'react';
  
 import { NavLink } from 'react-router-dom';
+import { Socket } from './Socket';
 
 const imgStyle =  {
     display: "block",
@@ -19,11 +20,15 @@ const containerStyle ={
     zIndex:"10"
 };
  
+function getPosts(){
+    Socket.emit("user logged in", true);
+}
+
 export function Navigation(){
     return (
        <div style={containerStyle}>
        <div className="innernavigation">
-          <NavLink to="/"><img src="./static/timeline.png" style={imgStyle}/></NavLink>
+          <NavLink to="/" onClick={getPosts}><img src="./static/timeline.png" style={imgStyle}/></NavLink>
           <NavLink to="/profile"><img src="./static/profile.png" style={imgStyle}/></NavLink>
           <NavLink to="/messaging"><img src="./static/messaging.png" style={imgStyle}/></NavLink>
        </div>
