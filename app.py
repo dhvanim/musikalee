@@ -8,10 +8,10 @@ import flask_sqlalchemy
 from sqlalchemy import asc, desc
 import models
 import random
-from spotify_login import get_user, get_artists
+from spotify_login import get_user, get_artists, get_top_artists, get_current_song
 import timeago
 from flask_socketio import join_room, leave_room
-from spotify_login import get_user, get_artists
+from spotify_login import get_user, get_artists, get_top_artists, get_current_song
 from spotify_music import spotify_get_trending, spotify_get_recommended, spotify_search_track
 
 app = flask.Flask(__name__)
@@ -70,6 +70,7 @@ def on_post_receive(data):
     time = datetime.now()
     
     post = models.Posts(username, pfp, music, message, title, num_likes, time)
+
     DB.session.add( post )
     DB.session.commit()
     print("added post", post)
@@ -143,17 +144,19 @@ def update_num_likes(data):
     
     emit_posts()
     
-@socketio.on('user data')    
-def on_user_data_recieve():
-    print("going to user")
-    #database stuff happens here
     
-    
-def emit_user_data():
+def emit_user_data(userInfo, topArtists, currSong):
     print("giving user data")
+    #print(userInfo['profile-picture'])
     #userdata = {'username':'jan3apples','profileYype':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']}
-    socketio.emit('emit user data', {'username':'jan3apples','profileType':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']})
-    print("emiting user data")
+    artistList = []
+    artistList.append(topArtists[0])
+    artistList.append(topArtists[1])
+    artistList.append(topArtists[2])
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong})
+    
+    
+    # print("emiting user data", userInfo, topArtists, currSong)
 
 
 def emit_recommended():
@@ -161,6 +164,7 @@ def emit_recommended():
     query_activeusers = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
     query_users = models.Users.query.filter_by(username = query_activeusers.user).first()
     
+
     recommended = get_recommended( query_users.top_artists )
     print( recommended )
     socketio.emit('recommended channel', recommended, room=flask.request.sid)
@@ -239,12 +243,15 @@ def on_spotlogin(data):
 
     # emit success to user, so they can access timeline
     socketio.emit('login success', True, room=flask.request.sid)
+
     
     # add to active users table
-    DB.session.add(models.ActiveUsers(user['username'], flask.request.sid))
+    DB.session.add(models.ActiveUsers(user['username'], flask.request.sid, data['token']))
     
     # commit all db changes
     DB.session.commit()
+    
+    
 
 # emit trending and recommended and posts
 @socketio.on('user logged in')
@@ -253,9 +260,18 @@ def user_logged_in(data):
         emit_posts()
         emit_recommended()
         emit_trending()
-    
-    
 
+    
+@socketio.on("get profile")
+def send_user_profile(data):
+    topArtists=get_top_artists(flask.request.sid)
+    currSong=get_current_song(flask.request.sid)
+        
+    user = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
+    usertype = models.Users.query.filter_by(username = user.user).first()
+    userinfo = {'username': user.user, 'user_type': usertype.user_type}
+    
+    emit_user_data(userinfo, topArtists, currSong)
 
 @socketio.on('post comment')
 def save_comment(data):
@@ -276,7 +292,6 @@ def on_connect():
     join_room( flask.request.sid )
     
     print('Someone connected!')
-    emit_user_data()
     socketio.emit('connected', {
         'test': 'Connected'
     })

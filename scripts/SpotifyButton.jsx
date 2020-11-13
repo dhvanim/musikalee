@@ -3,7 +3,7 @@ import SpotifyLogin from 'react-spotify-login';
 import { Socket } from './Socket';
 
 const onSuccess = (response) => {
-  console.log( response );
+  //console.log( response );
   Socket.emit('new spotify user', {
     token: response.access_token,
   });

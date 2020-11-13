@@ -82,10 +82,12 @@ class ActiveUsers(DB.Model):
     id = DB.Column(DB.Integer, primary_key=True)
     user = DB.Column(DB.String(500))
     serverid = DB.Column(DB.String(500))
+    authtoken = DB.Column(DB.String(500))
     
-    def __init__(self, user, serverid):
+    def __init__(self, user, serverid, authtoken):
         self.user = user
         self.serverid = serverid
+        self.authtoken = authtoken
         
     def __repr__(self):
         return "<ActiveUsers user: {} id: {}>".format(self.user, self.serverid)
