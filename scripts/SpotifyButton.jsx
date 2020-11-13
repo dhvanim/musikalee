@@ -17,7 +17,7 @@ export default function SpotifyButton() {
         /* redirectUri={process.env.uri} */
         redirectUri="https://37baa11411bc449598a28599488f841f.vfs.cloud9.us-east-1.amazonaws.com/"
         onSuccess={onSuccess}
-        scope="user-read-email user-top-read user-follow-read"
+        scope="user-read-email user-top-read user-follow-read user-read-currently-playing"
         className="spotifybutton"
       />
     </div>
