@@ -69,5 +69,11 @@ SPOTIFY_CLIENT_SECRET={your client secret here}
 2. Got user data from spotify
 3. Got user's top artists from spotify
 ```
+2. Catarina DeMatos
+```
+1. Created models for Posts, Comments, Likes, Users
+2. Users can interact with posts on the timeline by commenting or liking
+3. The Navigation sidebar takes you to the timeline, user profile, and messaging tab.
+```
 
 <br />
