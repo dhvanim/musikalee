@@ -90,4 +90,14 @@ _________________
 Incompleted:
 1. Better styling for timeline (sometimes song overlaps with posts)
 ```
+4. Joseph Cayemitte
+```
+1. Users can see there own profile stats (what they're listening too, who's following them, etc)
+2. Got what the user is currently listening to
+3. Got the name of the user's top 3 Artists
+___________________________
+Incompleted:
+1. Users should be seperated into 2 different catagories: Listen(users) or Artists
+2. Follow button
+```
 <br />
