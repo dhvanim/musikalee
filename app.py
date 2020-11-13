@@ -117,7 +117,7 @@ def emit_posts():
         
         posts.append( entry )
    
-    
+    DB.session.commit()
     socketio.emit('emit posts channel', posts)
     # print(posts)
 
@@ -135,7 +135,7 @@ def update_num_likes(data):
     post_id = data["id"]
     print("Post_id: {}".format(post_id))
     DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
-    DB.session.commit
+    DB.session.commit()
     
     query_username = models.ActiveUsers.query.filter_by(serverid = flask.request.sid).first()
     username = query_username.user
