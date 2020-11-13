@@ -23,7 +23,7 @@ export default function StatusBar() {
     return (
         <div className="statusbar">
             <form onSubmit={submitPost}>
-                <input type="text" id="text_status" placeholder="What are you listening to?" maxLength="256"/>
+                <input type="text" id="text_status" placeholder="What are you listening to?" maxLength="256" required />
                 <input type="text" id="song" placeholder="Enter Song" maxLength="500"/>
                 <input type="text" id="artist" placeholder="Enter Artist" maxLength="500"/>
                 <input type="submit" name="Send Post" />

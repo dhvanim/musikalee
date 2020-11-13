@@ -9,34 +9,21 @@ export default function UserProfile(){
     const [isUser, setIsUser] = React.useState(false);
     
     
-     function newItem() {
-         
-         React.useEffect(() => {
-            Socket.on('emit user data', (data) => {
-                console.log("user data", data);
-                /*
-                if(data['profileType'] == "Artist")
-                {
-                    setIsCreator(prevState => true);
-                    console.log(data);
-                }
-                
-                else
-                {
-                    setIsUser(prevState => true);
-                }
-                */
-                console.log(data);
-                console.log(isCreator);
-                 return setUserData(() => 
-                 {return [data['username'], data['profileType'],  data['topArtists'], data['following'], data['currentSong']];
-                     
-                 });
-                 
-            });
+    function newItem() {
+        React.useEffect(() => {
+            Socket.on('emit user data', updateUserData);
+            return () => {
+                Socket.off('emit user data', updateUserData);
+            };
         });
-       
-}
+    }
+    
+    function updateUserData(data) {
+        return setUserData(() => {
+            return [data['username'], data['profileType'],  data['topArtists'], data['following'], data['currentSong']];
+        });
+    }
+    
     newItem();
     
     return (

@@ -10,13 +10,10 @@ export default function Home() {
         <div className="home">
             
             <StatusBar />
-            
-            
-            
+
             <RightSideBar />
             
             <Timeline />
-            
             
         </div>
     );
