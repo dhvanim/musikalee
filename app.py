@@ -155,7 +155,7 @@ def emit_user_data(userInfo, topArtists, currSong):
     artistList.append(topArtists[0])
     artistList.append(topArtists[1])
     artistList.append(topArtists[2])
-    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong})
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong}, room=flask.request.sid)
     
     
     # print("emiting user data", userInfo, topArtists, currSong)
