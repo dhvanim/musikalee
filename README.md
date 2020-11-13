@@ -74,6 +74,9 @@ SPOTIFY_CLIENT_SECRET={your client secret here}
 1. Created models for Posts, Comments, Likes, Users
 2. Users can interact with posts on the timeline by commenting or liking
 3. The Navigation sidebar takes you to the timeline, user profile, and messaging tab.
+_________________
+Incompleted: 
+1. I should be able to visit other people's profile pages by clicking their username on their post. 
 ```
 
 <br />
