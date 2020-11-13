@@ -73,9 +73,9 @@ def get_current_song(auth):
     header = {"Authorization": "Bearer "+auth}
     response=requests.get(url,headers=header)
     
-    #if str(response) == "<Response [200]>":
-    return response.json()
+    if str(response) == "<Response [200]>":
+        return response.json()['item']['name']
         
-    #else:
-        #return "nothing is playing"
+    else:
+        return "nothing is playing"
     

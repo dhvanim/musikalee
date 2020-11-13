@@ -24,9 +24,9 @@ export default function UserProfile(){
                     setIsUser(prevState => true);
                 }
                  //console.log(data);
-                 console.log(isCreator);
+                 //console.log(isCreator);
                  return setUserData(() => 
-                 {return [data['username'], data['profileType'],  data['topArtists'], data['following'], data['currSong']];
+                 {return [data['username'], data['profileType'],  data['topArtists'], data['following'], data['currentSong']];
                      
                  });
                  
@@ -53,6 +53,8 @@ export default function UserProfile(){
                 </div>
             </div>
           </div>
+          <h1>Currently listening to:</h1>
+          <p>{userData[4]}</p>
           <h1> Top artists here:</h1>
           <p>{userData[2]}</p>
           <h1>following:</h1>
