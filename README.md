@@ -60,14 +60,14 @@
 SPOTIFY_CLIENT_ID={your client id here}
 SPOTIFY_CLIENT_SECRET={your client secret here}
 ```
-
 *\*note the lack of quotes*
 
-<br />
 # Part of Work Done
 1. Justin Chow
-        ```
-        1. Added login through spotify
-        2. Got user data from spotify
-        3. Got user's top artists from spotify
-        ```
+```
+1. Added login through spotify
+2. Got user data from spotify
+3. Got user's top artists from spotify
+```
+
+<br />
