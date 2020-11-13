@@ -1,7 +1,7 @@
 import React from 'react';
  
 import { NavLink } from 'react-router-dom';
-import { Socket } from './Socket'
+import { Socket } from './Socket';
 
 const imgStyle =  {
     display: "block",
@@ -21,8 +21,9 @@ const containerStyle ={
 };
  
 function getPosts(){
-    Socket.emit("user logged in", true)
+    Socket.emit("user logged in", true);
 }
+
 export function Navigation(){
     return (
        <div style={containerStyle}>
