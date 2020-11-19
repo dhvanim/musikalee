@@ -136,3 +136,7 @@ audio {
     width:90%;
     margin:auto;
 }
+
+#song, #artist, #album, #playlist {
+    display:none;
+}
