@@ -4,18 +4,30 @@ import { Socket } from './Socket';
 export default function StatusBar() {
     
     function submitPost(event) {
+
         let status = document.getElementById("text_status");
+
+        let type = document.getElementById("option");
         let song = document.getElementById("song");
         let artist = document.getElementById("artist");
+        let album = document.getElementById("album");
+        let playlist = document.getElementById("playlist");
         
-        Socket.emit('user post channel', {"text" :status.value,
-                                            "song": song.value,
-                                            "artist": artist.value
-                    });
-                    
+        
+        Socket.emit('user post channel', {
+                                            "text" : status.value,
+                                            "type" : type.value,
+                                            "song" : song.value,
+                                            "artist" : artist.value,
+                                            "album" : album.value,
+                                            "playlist" : playlist.value
+                                        });
+
         status.value = '';
         song.value = '';
         artist.value = '';
+        album.value = '';
+        playlist.value = '';
         
         event.preventDefault();
     }
@@ -64,8 +76,11 @@ export default function StatusBar() {
         <div className="statusbar">
             <form onSubmit={submitPost}>
                 <input type="text" id="text_status" placeholder="What are you listening to?" maxLength="256" required />
+                
+                <br />
+                
                 <select id="option" name="option" onClick={dropdownselect}>
-                    <option value="default"> Media Type </option>
+                    <option value="default"> Attach Media </option>
                     <option value="song"> Song </option>
                     <option value="artist"> Artist </option>
                     <option value="album"> Album </option>
