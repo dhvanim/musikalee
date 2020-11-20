@@ -57,6 +57,7 @@ def on_post_receive(data):
     query_pfp = models.Users.query.filter_by(username = username).first()
     pfp = query_pfp.profile_picture
     
+    
     song = data['song'].strip()
     artist = data['artist'].strip()
     
