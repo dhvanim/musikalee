@@ -4,7 +4,6 @@ All the api parts of spotlogin_api
 import requests
 import models
 
-
 def get_user_call(auth):
     """
     Calls to get the user object

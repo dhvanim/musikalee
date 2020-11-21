@@ -3,7 +3,6 @@ Python Code to parse spotify requests
 """
 import spotlogin_api
 
-
 def get_user(auth):
     """
     Aquire A user object from Spotify using Auth Token
