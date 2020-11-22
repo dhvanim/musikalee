@@ -2,10 +2,12 @@ import * as React from 'react';
 
 export default function PostItem(props) {
     const music = props.music;
+    const music_type = props.music_type;
     
+    console.log(music_type);
     console.log(music);
     
-    if (music == "") {
+    if (music_type == "default") {
         return "";
     }
 

@@ -131,5 +131,4 @@ def spotify_search_track(song, artist):
             'album_art': album_art,
             'external_link': external_link,
             'preview_url': preview_url,
-            'uri': uri
             }

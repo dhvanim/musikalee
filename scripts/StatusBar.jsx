@@ -17,10 +17,12 @@ export default function StatusBar() {
         Socket.emit('user post channel', {
                                             "text" : status.value,
                                             "type" : type.value,
-                                            "song" : song.value,
-                                            "artist" : artist.value,
-                                            "album" : album.value,
-                                            "playlist" : playlist.value
+                                            "music" : {
+                                                "song" : song.value,
+                                                "artist" : artist.value,
+                                                "album" : album.value,
+                                                "playlist" : playlist.value
+                                            }
                                         });
 
         status.value = '';

@@ -6,8 +6,8 @@ import flask
 import flask_socketio
 import flask_sqlalchemy
 from sqlalchemy import asc, desc
-import models
 import random
+import models
 from spotify_login import get_user, get_artists, get_top_artists, get_current_song
 import timeago
 from flask_socketio import join_room, leave_room
@@ -35,18 +35,16 @@ DB.session.commit()
 
 app.static_folder = 'static'
 
-def get_post_track(song, artist):
-    info = spotify_search_track(song, artist)
+def get_post_music_data(music_type, music_data):
+    data = {}
+
+    if music_type == "song":
+        song = music_data['song'].strip()
+        artist = music_data['artist'].strip()
+        data = spotify_search_track(song, artist)
+        
+    return data
     
-    if info == None:
-        return ""
-    
-    if models.Music.query.filter_by(uri = info['uri']).first() == None:
-        music_entry = models.Music(info['song'], info['artist'], info['album'], info['album_art'], info['external_link'], info['preview_url'], info['uri'])
-        DB.session.add( music_entry )
-        DB.session.commit()
-    
-    return info['uri']
 
 @socketio.on('user post channel')
 def on_post_receive(data):
@@ -57,13 +55,8 @@ def on_post_receive(data):
     query_pfp = models.Users.query.filter_by(username = username).first()
     pfp = query_pfp.profile_picture
     
-    song = data['song'].strip()
-    artist = data['artist'].strip()
-    
-    if song == "" and artist == "":
-        music = ""
-    else:
-        music = get_post_track(song, artist)
+    music_type = data['type']
+    music_entry = get_post_music_data(music_type, data['music'])
     
     title = "TEMP Post Title"
     
@@ -71,7 +64,7 @@ def on_post_receive(data):
     num_likes = 0
     time = datetime.now()
     
-    post = models.Posts(username, pfp, music, message, title, num_likes, time)
+    post = models.Posts(username, pfp, music_type, music_entry, message, title, num_likes, time)
 
     DB.session.add( post )
     DB.session.commit()
@@ -99,21 +92,10 @@ def emit_posts():
                                 }
                             for comment in DB.session.query(models.Comments).filter(models.Comments.post_id == post.id).order_by(desc(models.Comments.datetime)).all()
                             ],
-                "is_liked": DB.session.query(models.Likes).filter(models.Likes.username == post.username,models.Likes.post_id == post.id).scalar() is not None
-            }
-        
-        if post.music != "":
-            track = models.Music.query.filter_by(uri = post.music).first()
-            entry["music"] = {
-                                'song': track.song,
-                                'artist': ", ".join(track.artist),
-                                'album': track.album,
-                                'album_art': track.album_art,
-                                'external_link': track.external_link,
-                                'preview_url': track.preview_url
-                            }
-        else:
-            entry["music"] = ""
+                "is_liked": DB.session.query(models.Likes).filter(models.Likes.username == post.username,models.Likes.post_id == post.id).scalar() is not None,
+                "music_type" : post.music_type,
+                "music" : post.music
+        }
         
         posts.append( entry )
    
