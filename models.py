@@ -10,17 +10,15 @@ class Posts(DB.Model):
     music_type = DB.Column(DB.String(120))
     music = DB.Column(DB.JSON)
     message = DB.Column(DB.String(256))
-    title = DB.Column(DB.String(120))
     num_likes = DB.Column(DB.Integer)
     datetime = DB.Column(DB.DateTime)
 
-    def __init__(self, username, pfp, music_type, music, message, title, num_likes, datetime):
+    def __init__(self, username, pfp, music_type, music, message, num_likes, datetime):
         self.username = username
         self.pfp = pfp
         self.music_type = music_type
         self.music = music
         self.message = message
-        self.title = title
         self.num_likes = num_likes
         self.datetime = datetime
 

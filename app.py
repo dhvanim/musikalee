@@ -58,13 +58,11 @@ def on_post_receive(data):
     music_type = data['type']
     music_entry = get_post_music_data(music_type, data['music'])
     
-    title = "TEMP Post Title"
-    
     message = data['text']
     num_likes = 0
     time = datetime.now()
     
-    post = models.Posts(username, pfp, music_type, music_entry, message, title, num_likes, time)
+    post = models.Posts(username, pfp, music_type, music_entry, message, num_likes, time)
 
     DB.session.add( post )
     DB.session.commit()
@@ -80,7 +78,6 @@ def emit_posts():
                 "id": post.id,
                 "username": post.username,
                 "text": post.message,
-                "title": post.title,
                 "num_likes": post.num_likes,
                 "time": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
                 "pfp": post.pfp,
