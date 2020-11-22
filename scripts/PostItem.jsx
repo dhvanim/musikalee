@@ -8,8 +8,6 @@ import PostMusic from './PostMusic';
 
 
 export default function PostItem(props) {
-    const [likeState, toggleLiked] = React.useState(false);
-    
     const id= props.id;
     const num_likes = props.likes
 
@@ -23,17 +21,12 @@ export default function PostItem(props) {
     }
     
     function handleToggle() {
-        let localLiked = likeState; 
-        localLiked = !localLiked
-        toggleLiked(localLiked); 
-        
         Socket.emit('like post', {
             id: id,
-            num_likes: (localLiked? num_likes+1 : num_likes-1) 
+            num_likes: (props.is_liked? num_likes-1 : num_likes+1) 
         });
         
     }
-    
     
     var likeIcon = (props.is_liked? "./static/heart-filled.png" : "./static/heart-outline.png")
 
