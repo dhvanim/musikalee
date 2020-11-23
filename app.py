@@ -8,6 +8,7 @@ import flask_sqlalchemy
 from sqlalchemy import asc, desc
 import random
 import timeago
+import json
 from flask_socketio import join_room, leave_room
 
 
@@ -59,7 +60,6 @@ def on_post_receive(data):
     query_pfp = query_user(username)
     pfp = query_pfp.profile_picture
     
-    
     song = data['song'].strip()
     artist = data['artist'].strip()
     
@@ -79,8 +79,33 @@ def on_post_receive(data):
     DB.session.add( post )
     DB.session.commit()
     print("added post", post)
-
-    emit_posts()
+    
+    post_dict = {
+        "id": post.id,
+        "username": post.username,
+        "message": post.message,
+        "title": post.title,
+        "num_likes": post.num_likes,
+        "datetime": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
+        "pfp": post.pfp,
+        "comments": [],
+        "is_liked": False,
+        "isCommentsOpen": False
+    }
+    if post.music != "":
+        track = models.Music.query.filter_by(uri = post.music).first()
+        post_dict["music"] = {
+                    'song': track.song,
+                    'artist': ", ".join(track.artist),
+                    'album': track.album,
+                    'album_art': track.album_art,
+                    'external_link': track.external_link,
+                    'preview_url': track.preview_url
+                }
+    else:
+        post_dict["music"] = ""
+        
+    socketio.emit('emit new post channel', post_dict)
 
 def emit_posts():
     
@@ -92,11 +117,12 @@ def emit_posts():
         entry = {
                 "id": post.id,
                 "username": post.username,
-                "text": post.message,
+                "message": post.message,
                 "title": post.title,
                 "num_likes": post.num_likes,
-                "time": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
+                "datetime": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
                 "pfp": post.pfp,
+                "isCommentsOpen": False,
                 "comments": [
                                 { 
                                     "text": comment.text,
@@ -123,31 +149,31 @@ def emit_posts():
         
         posts.append( entry )
    
-    
     socketio.emit('emit posts channel', posts)
     # print(posts)
 
 def add_or_remove_like_from_db(user, liked_post_id):
-    exists = DB.session.query(models.Likes.id).filter_by(username=user, post_id=liked_post_id).scalar() is not None
-    if (exists):
+    is_liked = DB.session.query(models.Likes.id).filter_by(username=user, post_id=liked_post_id).scalar() is not None
+    if (is_liked):
         DB.session.query(models.Likes).filter_by(username=user, post_id=liked_post_id).delete()
     else:
         DB.session.add(models.Likes(user, liked_post_id))
     DB.session.commit()
+    return not is_liked
     
 @socketio.on('like post')    
 def update_num_likes(data):
     num_likes = data["num_likes"]
     post_id = data["id"]
-    print("Post_id: {}".format(post_id))
-    DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
+    print("Post_id: {}, num_likes={}".format(post_id, num_likes))
+    post_to_like = DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
     DB.session.commit
     
     username = get_username(flask.request.sid)
-    add_or_remove_like_from_db(username, post_id)
+    is_liked = add_or_remove_like_from_db(username, post_id)
     
-    emit_posts()
-    
+    socketio.emit("like post channel", {"post_id": post_id, "num_likes":num_likes,  "is_liked": is_liked})
+
     
 def emit_user_data(userInfo, topArtists, currSong):
     print("giving user data")
@@ -219,7 +245,9 @@ def get_trending():
     
     return trending
 
-
+@socketio.on("get local storage")
+def get_local_storage():
+    socketio.emit('navigation change', True)
 
 @socketio.on('new spotify user')
 def on_spotlogin(data):
@@ -254,7 +282,12 @@ def on_spotlogin(data):
     # commit all db changes
     DB.session.commit()
     
-    
+ # tell view to get local storage on navigation change
+@socketio.on('get local storage')
+def emit_local_storage(data):
+    if(data):
+        # emit success to user, so they can access timeline
+        socketio.emit('get posts from local storage', True) 
 
 # emit trending and recommended and posts
 @socketio.on('user logged in')
@@ -279,10 +312,17 @@ def send_user_profile(data):
 @socketio.on('post comment')
 def save_comment(data):
     username = get_username(flask.request.sid)
-    
-    DB.session.add(models.Comments(username, data['comment'], data['post_id'], datetime.now()))
+    time = datetime.now()
+    comment = models.Comments(username, data['comment'], data['post_id'], time)
+    DB.session.add(comment)
     DB.session.commit()
-    emit_posts()
+    
+    comment = { 
+        "text": data['comment'],
+        "username": username,
+        "datetime": timeago.format(time, datetime.now())
+    }
+    socketio.emit("NEW COMMENT ON POST", {"post_id": data['post_id'], "comment": comment})
 
 
 @app.route('/')
