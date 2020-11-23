@@ -12,7 +12,7 @@ from spotify_login import get_user, get_artists, get_top_artists, get_current_so
 import timeago
 from flask_socketio import join_room, leave_room
 from spotify_login import get_user, get_artists, get_top_artists, get_current_song
-from spotify_music import spotify_get_trending, spotify_get_recommended, spotify_search_track, spotify_search_artist
+from spotify_music import spotify_get_trending, spotify_get_recommended, spotify_search_track, spotify_search_artist, spotify_search_album, spotify_search_playlist
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -40,6 +40,8 @@ def get_post_music_data(music_type, music_data):
     
     song = music_data['song'].strip()
     artist = music_data['artist'].strip()
+    album = music_data['album'].strip()
+    playlist = music_data['playlist'].strip()
 
     if music_type == "song":
         data = spotify_search_track(song, artist)
@@ -49,6 +51,9 @@ def get_post_music_data(music_type, music_data):
     
     elif music_type == "album":
         data = spotify_search_album(album, artist)
+        
+    elif music_type == "playlist":
+        data = spotify_search_playlist(playlist)
     
     return data
     

@@ -1,6 +1,7 @@
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 import requests
 
 # set up spotify keys
@@ -203,4 +204,39 @@ def spotify_search_album(album, artist):
         "external_link" : external_link
     }
 
-spotify_search_album("sawayama", "rina sawayama")
+def spotify_search_playlist(url):
+    try:
+        parsed_url = urlparse(url)
+        playlist_id = parsed_url.path.split('/')[2]
+    except:
+        return None
+    
+    access_token = spotify_get_access_token()
+    header = { 'Authorization': 'Bearer {token}'.format(token=access_token) }
+
+    # get tracks API endpoint URL
+    search_url = "https://api.spotify.com/v1/playlists/" + playlist_id
+    search_body_params = {'fields':"description,external_urls,followers,images,name,owner"}
+    search_response = requests.get(search_url, headers=header, params=search_body_params)
+
+    # if api response error
+    if search_response.status_code != 200:
+        return None
+        
+    search_data = search_response.json()
+    
+    playlist_desc = search_data['description']
+    external_link = search_data['external_urls']['spotify']
+    followers = search_data['followers']['total']
+    playlist_art = search_data['images'][0]['url']
+    playlist_name = search_data['name']
+    playlist_owner = search_data['owner']['id']
+    
+    return {
+        "playlist_name" : playlist_name,
+        "playlist_desc" : playlist_desc,
+        "playlist_art" : playlist_art,
+        "playlist_owner" : playlist_owner,
+        "followers" : followers,
+        "external_link" : external_link
+        }
