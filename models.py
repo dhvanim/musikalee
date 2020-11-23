@@ -105,15 +105,14 @@ class Likes(DB.Model):
         return "<Likes username: {} post_id: {}>".format(self.username, self.post_id)        
 
 class Music(DB.Model):
-    id = DB.Column(DB.Integer, primary_key=True)
+    uri = DB.Column(DB.String(500), primary_key=True)
     song = DB.Column(DB.String(500))
     artist = DB.Column(postgresql.ARRAY(DB.String))
     album = DB.Column(DB.String(500))
     album_art = DB.Column(DB.String(500))
     external_link = DB.Column(DB.String(500))
     preview_url = DB.Column(DB.String(500))
-    uri = DB.Column(DB.String(500))
-    
+
     def __init__(self, song, artist, album, art, link, preview_url, uri):
         self.song = song
         self.artist = artist
