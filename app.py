@@ -44,9 +44,12 @@ def get_post_music_data(music_type, music_data):
     if music_type == "song":
         data = spotify_search_track(song, artist)
     
-    elif music_type =="artist":
+    elif music_type == "artist":
         data = spotify_search_artist(artist)
-        
+    
+    elif music_type == "album":
+        data = spotify_search_album(album, artist)
+    
     return data
     
 

@@ -163,5 +163,28 @@ def spotify_search_artist(artist):
         'external_link' : external_link
     }
 
-print(spotify_search_artist("boy pablo"))
+def spotify_search_album(album, artist):
+    query = "album:" + album + " artist:" + artist
+
+    access_token = spotify_get_access_token()
     
+    header = { 'Authorization': 'Bearer {token}'.format(token=access_token) }
+
+    # get tracks API endpoint URL
+    search_url = "https://api.spotify.com/v1/search"
+    search_body_params = { 'q': query, 'type':'album', 'limit':1 }
+    search_response = requests.get(search_url, headers=header, params=search_body_params)
+
+    # if api response error
+    if search_response.status_code != 200:
+        return None
+        
+    search_data = search_response.json()
+    
+    # if no results
+    if search_data['albums']['total'] == 0:
+        return None
+        
+    print(search_data)
+
+spotify_search_album("sawayama", "rina sawayama")
