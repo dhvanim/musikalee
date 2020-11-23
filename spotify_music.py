@@ -185,6 +185,22 @@ def spotify_search_album(album, artist):
     if search_data['albums']['total'] == 0:
         return None
         
-    print(search_data)
+    artists = []
+    for a in search_data['albums']['items'][0]['artists']:
+        artists.append( a['name']) 
+    album_name = search_data['albums']['items'][0]['name']
+    album_art = search_data['albums']['items'][0]['images'][0]['url']
+    release_date = search_data['albums']['items'][0]['release_date']
+    total_tracks = search_data['albums']['items'][0]['total_tracks']
+    external_link = search_data['albums']['items'][0]['external_urls']['spotify']
+    
+    return {
+        "artists" : artists,
+        "album_name" : album_name,
+        "album_art" : album_art,
+        "release_date" : release_date,
+        "total_tracks" : total_tracks,
+        "external_link" : external_link
+    }
 
 spotify_search_album("sawayama", "rina sawayama")
