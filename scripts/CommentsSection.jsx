@@ -7,7 +7,7 @@ import  Comment  from './Comment';
 export default function CommentsSection(props) {
     const comments= props.comments;
     const post_id= props.post_id;
-
+    
     function postComment() {
         let comment = document.getElementById(post_id);
         

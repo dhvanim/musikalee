@@ -27,7 +27,7 @@ export default function PostItem(props) {
         });
         
     }
-    
+
     var likeIcon = (props.is_liked? "./static/heart-filled.png" : "./static/heart-outline.png")
 
     const likeButton = () => <span style={{float:"right"}}onClick={handleToggle}> <img style={icon} src={likeIcon}/> { num_likes } </span>;
@@ -43,7 +43,7 @@ export default function PostItem(props) {
                 <span className="time"> { props.time } </span> 
                 <div className="iconsContainer">
                 
-                    <Collapsible trigger={<span> <img style={icon} src={"./static/comments.png"}/> { props.comments.length } </span>} triggerStyle={triggerStyle} overflowWhenOpen="auto" triggerSibling={likeButton}>
+                    <Collapsible trigger={<span> <img style={icon} src={"./static/comments.png"}/> { props.comments.length } </span>} open={props.isCommentsOpen}triggerStyle={triggerStyle} overflowWhenOpen="auto" triggerSibling={likeButton}>
                         <CommentsSection post_id={id} comments={props.comments}/>
                     </Collapsible>
                         

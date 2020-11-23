@@ -80,8 +80,6 @@ def on_post_receive(data):
     DB.session.commit()
     print("added post", post)
     
-
-    #TODO - EMIT NEW SINGLE POST with post,
     post_dict = {
         "id": post.id,
         "username": post.username,
@@ -91,7 +89,8 @@ def on_post_receive(data):
         "datetime": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
         "pfp": post.pfp,
         "comments": [],
-        "is_liked": False
+        "is_liked": False,
+        "isCommentsOpen": False
     }
     if post.music != "":
         track = models.Music.query.filter_by(uri = post.music).first()
@@ -108,8 +107,6 @@ def on_post_receive(data):
         
     socketio.emit('emit new post channel', post_dict)
 
-    #emit_posts()
-
 def emit_posts():
     
     if models.Posts.query.count() == 0:
@@ -125,6 +122,7 @@ def emit_posts():
                 "num_likes": post.num_likes,
                 "datetime": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
                 "pfp": post.pfp,
+                "isCommentsOpen": False,
                 "comments": [
                                 { 
                                     "text": comment.text,
@@ -174,10 +172,8 @@ def update_num_likes(data):
     username = get_username(flask.request.sid)
     is_liked = add_or_remove_like_from_db(username, post_id)
     
-    #TODO - update LIKE NEW POST
     socketio.emit("like post channel", {"post_id": post_id, "num_likes":num_likes,  "is_liked": is_liked})
-    # emit_posts()
-    
+
     
 def emit_user_data(userInfo, topArtists, currSong):
     print("giving user data")
@@ -249,7 +245,9 @@ def get_trending():
     
     return trending
 
-
+@socketio.on("get local storage")
+def get_local_storage():
+    socketio.emit('navigation change', True)
 
 @socketio.on('new spotify user')
 def on_spotlogin(data):
@@ -314,11 +312,17 @@ def send_user_profile(data):
 @socketio.on('post comment')
 def save_comment(data):
     username = get_username(flask.request.sid)
-    
-    DB.session.add(models.Comments(username, data['comment'], data['post_id'], datetime.now()))
+    time = datetime.now()
+    comment = models.Comments(username, data['comment'], data['post_id'], time)
+    DB.session.add(comment)
     DB.session.commit()
-    # TODO - EMIT NEW COMMENT with post_id, comment, 
-    # emit_posts()
+    
+    comment = { 
+        "text": data['comment'],
+        "username": username,
+        "datetime": timeago.format(time, datetime.now())
+    }
+    socketio.emit("NEW COMMENT ON POST", {"post_id": data['post_id'], "comment": comment})
 
 
 @app.route('/')
