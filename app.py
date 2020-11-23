@@ -34,10 +34,14 @@ DB.app = app
 app.static_folder = 'static'
 
 def get_username(flask_id):
-    return models.ActiveUsers.query.filter_by(serverid = flask_id).first().user
+    user = models.ActiveUsers.query.filter_by(serverid = flask_id).first().user
+    DB.session.commit()
+    return user
 
 def query_user(user):
-    return models.Users.query.filter_by(username = user).first()
+    user = models.Users.query.filter_by(username = user).first()
+    DB.session.commit()
+    return user
 
 def get_post_track(song, artist):
     info = spotify_search_track(song, artist)
@@ -45,10 +49,12 @@ def get_post_track(song, artist):
     if info == None:
         return ""
     
-    if models.Music.query.filter_by(uri = info['uri']).first() == None:
+    try:
         music_entry = models.Music(info['song'], info['artist'], info['album'], info['album_art'], info['external_link'], info['preview_url'], info['uri'])
         DB.session.add( music_entry )
         DB.session.commit()
+    except:
+        print("already added")
     
     return info['uri']
 
@@ -94,6 +100,7 @@ def on_post_receive(data):
     }
     if post.music != "":
         track = models.Music.query.filter_by(uri = post.music).first()
+        DB.session.commit()
         post_dict["music"] = {
                     'song': track.song,
                     'artist': ", ".join(track.artist),
@@ -110,10 +117,13 @@ def on_post_receive(data):
 def emit_posts():
     
     if models.Posts.query.count() == 0:
+        DB.session.commit()
         return None
-    
+    DB.session.commit()
     posts = []
-    for post in DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all():
+    all_posts = DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
+    DB.session.commit()
+    for post in all_posts:
         entry = {
                 "id": post.id,
                 "username": post.username,
@@ -134,8 +144,11 @@ def emit_posts():
                 "is_liked": DB.session.query(models.Likes).filter(models.Likes.username == post.username,models.Likes.post_id == post.id).scalar() is not None
             }
         
+        DB.session.commit()
+        
         if post.music != "":
             track = models.Music.query.filter_by(uri = post.music).first()
+            DB.session.commit()
             entry["music"] = {
                                 'song': track.song,
                                 'artist': ", ".join(track.artist),
@@ -154,6 +167,7 @@ def emit_posts():
 
 def add_or_remove_like_from_db(user, liked_post_id):
     is_liked = DB.session.query(models.Likes.id).filter_by(username=user, post_id=liked_post_id).scalar() is not None
+    DB.session.commit()
     if (is_liked):
         DB.session.query(models.Likes).filter_by(username=user, post_id=liked_post_id).delete()
     else:
@@ -167,7 +181,7 @@ def update_num_likes(data):
     post_id = data["id"]
     print("Post_id: {}, num_likes={}".format(post_id, num_likes))
     post_to_like = DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
-    DB.session.commit
+    DB.session.commit()
     
     username = get_username(flask.request.sid)
     is_liked = add_or_remove_like_from_db(username, post_id)
@@ -228,10 +242,12 @@ def get_trending():
                 artist.append(item_artist['name'])
         
             DB.session.add(models.Trending(track, artist))
+            DB.session.commit()
         
         DB.session.commit()
     
     trending_query = models.Trending.query.all()
+    DB.session.commit()
     sample = random.sample(trending_query, 3)
     
     trending = []
@@ -269,6 +285,7 @@ def on_spotlogin(data):
                         my_likes=[]
                         )
         DB.session.add(db_user)
+        DB.session.commit()
     else:
         usersquery.top_artists = artists
 
