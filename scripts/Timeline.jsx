@@ -14,10 +14,17 @@ export default function Timeline() {
     
     function getPosts() {
         React.useEffect( () => {
-            Socket.on('emit posts channel', (posts) => {setPosts( posts );});
-            window.localStorage.setItem("posts", JSON.stringify(posts));
+            let isMounted = true; // note this flag denote mount status to avoid "Can't perform a React state update on an unmounted component"
+            Socket.on('emit posts channel', (posts) => {
+                if (isMounted){
+                    setPosts( posts );
+                    window.localStorage.setItem("posts", JSON.stringify(posts));
+                }
+            });
             return () => {
                 Socket.off('emit posts channel', true);
+                isMounted = false;
+
             };
         });
     }
@@ -27,13 +34,17 @@ export default function Timeline() {
     
     function getNewPost() {
         React.useEffect( () => {
+            let isMounted = true; // note this flag denote mount status to avoid "Can't perform a React state update on an unmounted component"
             Socket.on('emit new post channel', (new_post) => {
-                setPosts([new_post].concat(posts));
-                window.localStorage.setItem("posts", JSON.stringify(posts));
-
+                if (isMounted){
+                    setPosts([new_post].concat(posts));
+                    window.localStorage.setItem("posts", JSON.stringify(posts));
+                }
             });
             return () => {
                 Socket.off('emit new post channel',true);
+                isMounted = false;
+
             };
         });
     }
@@ -87,11 +98,15 @@ export default function Timeline() {
     
     function getLocalStorage() {
         React.useEffect( () => {
+            let isMounted = true; // note this flag denote mount status
             Socket.on('navigation change', (data) => {
-                setPosts(window.localStorage.getItem("posts"));
+                if (isMounted){
+                    setPosts(window.localStorage.getItem("posts"));
+                }
             });
             return () => {
                 Socket.off('navigation change', true);
+                isMounted = false;
             };
         });
     }
