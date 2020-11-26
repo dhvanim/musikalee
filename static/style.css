@@ -132,6 +132,18 @@
     border-radius: 5px;
 }
 
+.artistList li {
+    display: inline;
+    float: left;
+    padding:40px;
+}
+
+.trackList li {
+    display: inline;
+    float: left;
+    padding:40px;
+}
+
 audio {
     width:90%;
     margin:auto;
