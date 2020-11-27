@@ -16,13 +16,6 @@ import spotlogin_api
 INPUT=""
 EXPECT=""
 
-class SpotifyResult:
-    def __init__(self,ret):
-        self.ret=ret
-        
-    def json(self): 
-        return self.ret
-
 class SpotifyLoginTest(unittest.TestCase):
     """
     This is the test for the 2 function in spotify_login.py
@@ -36,12 +29,16 @@ class SpotifyLoginTest(unittest.TestCase):
         }
     
     def mock_nuser(self, auth):
+        """
+        Mocks the response of a user with pfp
+        """
         oput={
                 'display_name': 'Bob',
                 'images': [{'url': 'http://hello'}],
                 'type': 'user'
             }
-        return SpotifyResult(oput).json()
+        return oput
+
     def test_user_normal(self):
         """
         Tests a User That has a pfp
@@ -54,6 +51,31 @@ class SpotifyLoginTest(unittest.TestCase):
         with mock.patch("spotlogin_api.get_user_call", self.mock_nuser):
             result=spotify_login.get_user(self.user[INPUT])
         self.assertEqual(result,expect)
+    
+    def mock_nopfp(self,auth):
+        """
+        Mocks the response of a user with no pfp
+        """
+        oput={
+                'display_name': 'Bob',
+                'type': 'user',
+            }
+        return oput
+    
+    def test_user_no_pfp(self):
+        """
+        Tests a User That has no pfp
+        """
+        expect={
+                'username': 'Bob', 
+                'profile-picture': './static/defaultPfp.png', 
+                "user-type": 'user',
+            }
+        with mock.patch("spotlogin_api.get_user_call", self.mock_nopfp):
+            result=spotify_login.get_user(self.user[INPUT])
+        self.assertEqual(result,expect)
+    
+    
     
 if __name__ == "__main__":
     unittest.main()
