@@ -9,7 +9,9 @@ import flask_socketio
 from alchemy_mock.mocking import UnifiedAlchemyMagicMock
 
 sys.path.insert(1, join(dirname(__file__), "../"))
+import app
 import spotify_login
+import spotlogin_api
 
 INPUT=""
 EXPECT=""
@@ -29,83 +31,29 @@ class SpotifyLoginTest(unittest.TestCase):
         """
         Initialize out Test Cases
         """
-        self.userchk={
+        self.user={
             INPUT: "12345",
-            EXPECT: {
-                        "username": "Bob",
-                        "profile-picture": "test.test.test",
-                        "user-type": "user"
-                        
-                    }
+        }
+    
+    def mock_nuser(self, auth):
+        oput={
+                'display_name': 'Bob',
+                'images': [{'url': 'http://hello'}],
+                'type': 'user'
             }
-            
-        self.npfp={
-            INPUT: "12345",
-            EXPECT: {
-                        "username": "Bob",
-                        "profile-picture": "./static/defaultPfp.png",
-                        "user-type": "user"
-                        
-                    }
-        }
-        self.artchk={
-            INPUT: "12345",
-            EXPECT: ["Hello", "World"]
-        }
-            
-    def mock_user(self,url,headers):
+        return SpotifyResult(oput).json()
+    def test_user_normal(self):
         """
-        Mocks the output of the spotify user response
+        Tests a User That has a pfp
         """
-        oput={
-            "display_name": "Bob",
-            "images": [ {"url" : "test.test.test"}],
-            "type": "user"
-        }
-        return SpotifyResult(oput)
-    
-    def test_user(self):
-        """
-        Tests a new User
-        """
-        with mock.patch("requests.get", self.mock_user):
-                result = spotify_login.get_user(self.userchk[INPUT])
-        self.assertEqual(result, self.userchk[EXPECT])
-    
-    def mock_pfp(self,url,headers):
-        """
-        Mocks the output of the spotify user response with no pfp
-        """
-        oput={
-            "display_name": "Bob",
-            "type": "user"
-        }
-        return SpotifyResult(oput)
-        
-    def test_nopfp(self):
-        """
-        Test default pfp
-        """
-        with mock.patch("requests.get", self.mock_pfp):
-                result = spotify_login.get_user(self.npfp[INPUT])
-        self.assertEqual(result, self.npfp[EXPECT])
-    
-    def mock_artist(self,url,headers):
-        """
-        Mocks an Artist Response
-        """
-        result={
-                'items': [{"uri": "Hello"},{"uri": "World"}],
-                }
-        return SpotifyResult(result)
-        
-    def test_artists(self):
-        """
-        Gets the top artists of user
-        """
-        with mock.patch("requests.get", self.mock_artist):
-            result = spotify_login.get_artists(self.artchk[INPUT])
-        self.assertEqual(result, self.artchk[EXPECT])
+        expect={
+                'username': 'Bob', 
+                'profile-picture': 'http://hello', 
+                "user-type": 'user',
+            }
+        with mock.patch("spotlogin_api.get_user_call", self.mock_nuser):
+            result=spotify_login.get_user(self.user[INPUT])
+        self.assertEqual(result,expect)
     
 if __name__ == "__main__":
     unittest.main()

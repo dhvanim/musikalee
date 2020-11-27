@@ -7,18 +7,15 @@ def get_user(auth):
     """
     Aquire A user object from Spotify using Auth Token
     """
+    response = spotlogin_api.get_user_call(auth)
+    unam = response["display_name"]
     try:
-        response = spotlogin_api.get_user_call(auth)
-        unam = response["display_name"]
-        try:
-            pfp = response["images"][0]["url"]
-        except KeyError:
-            pfp = "./static/defaultPfp.png"
-        utype = response["type"]
-        return {"username": unam, "profile-picture": pfp, "user-type": utype}
+        pfp = response["images"][0]["url"]
+    except KeyError:
+        pfp = "./static/defaultPfp.png"
+    utype = response["type"]
+    return {"username": unam, "profile-picture": pfp, "user-type": utype}
 
-    except Exception:
-        return {"username": "", "profile-picture": "", "user-type": ""}
 
 
 def get_artists(auth):
@@ -39,11 +36,7 @@ def get_top_artists(flaskid):
     """
     Aquire the name of favorite artists
     """
-    try:
-        response = spotlogin_api.get_top_call(flaskid)
-    except Exception:
-        return []
-
+    response = spotlogin_api.get_top_call(flaskid)
     uris = []
     try:
         for item in response["items"]:
