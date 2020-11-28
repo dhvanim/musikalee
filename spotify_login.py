@@ -37,9 +37,9 @@ def get_top_artists(flaskid):
     """
     Aquire the name of favorite artists
     """
-    response = spotlogin_api.get_top_call(flaskid)
     uris = []
     try:
+        response = spotlogin_api.get_top_call(flaskid)
         for item in response["items"]:
             uris.append(item["name"])
         return uris
@@ -55,8 +55,9 @@ def get_current_song(flaskid):
     """
     try:
         response = spotlogin_api.get_current_call(flaskid)
-        if str(response) == "<Response [200]>":
-            return response.json()["item"]["name"]
-        return "nothing is playing"
+        try:
+            return response["item"]["name"]
+        except KeyError:
+            return "nothing is playing"
     except Exception:
         return "nothing is playing"
