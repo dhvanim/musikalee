@@ -75,6 +75,37 @@ class SpotifyLoginTest(unittest.TestCase):
             result=spotify_login.get_user(self.user[INPUT])
         self.assertEqual(result,expect)
     
+    def mock_artist(self,auth):
+        """
+        Mocks Artists Response
+        """
+        oput={'items':[{'uri':"1"},{'uri':"2"},{'uri':"3"}]}
+        return oput
+        
+    def test_artist(self):
+        """
+        Tests a working artist link
+        """
+        expect=["1","2","3"]
+        with mock.patch("spotlogin_api.get_artists_call", self.mock_artist):
+            result=spotify_login.get_artists(self.user[INPUT])
+        self.assertEqual(result,expect)
+        
+    def mock_key(self,auth):
+        """
+        Mocks KeyError
+        """
+        raise KeyError
+        
+        
+    def test_artist_exception(self):
+        """
+        Tests a working artist link
+        """
+        with mock.patch("spotlogin_api.get_artists_call", self.mock_key):
+            result=spotify_login.get_artists(self.user[INPUT])
+        self.assertEqual(result,[])
+    
     
     
 if __name__ == "__main__":

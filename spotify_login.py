@@ -28,8 +28,9 @@ def get_artists(auth):
         for item in response["items"]:
             uris.append(item["uri"])
         return uris
-    except Exception:
+    except KeyError:
         return []
+
 
 
 def get_top_artists(flaskid):
@@ -45,6 +46,7 @@ def get_top_artists(flaskid):
 
     except KeyError:
         return uris
+
 
 
 def get_current_song(flaskid):
