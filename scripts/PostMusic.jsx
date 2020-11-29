@@ -5,7 +5,7 @@ export default function PostItem(props) {
     const music_type = props.music_type;
     
     if (music_type == "default" || music == null) {
-        return "";
+        return null;
     }
     
     if (music_type == "song") {
@@ -17,15 +17,15 @@ export default function PostItem(props) {
                         <a href={music.external_link} target="_blank">
                             <img src={music.album_art} className="album_art" />
                         </a>
-                        { music.song } <br />
+                        <b> { music.song } </b> <br />
                         { music.album } <br />
-                        { music.artist } <br /> <br />
+                        { music.artist } <br />
                         { music.preview_url != null ?
                         <audio controls name="media">
                                 <source src={ music.preview_url } type="audio/mpeg" />
                         </audio>
                         :
-                        <br />
+                        <div></div>
                         }
                     </span>
                 </div>
@@ -39,7 +39,7 @@ export default function PostItem(props) {
                     <a href={music.external_link} target="_blank">
                         <img src={music.artist_icon} className="album_art" />
                     </a>
-                    { music.artist_name }
+                    <h3> { music.artist_name } </h3>
                 </span>
             </div>
         );
@@ -52,7 +52,7 @@ export default function PostItem(props) {
                         <a href={music.external_link} target="_blank">
                             <img src={music.album_art} className="album_art" />
                         </a>
-                        { music.album_name } <br />
+                        <b> { music.album_name } </b> <br />
                         { music.artists } <br /> <br />
                         { music.total_tracks } Tracks || Released: { music.release_date }
                 </span>
@@ -67,10 +67,10 @@ export default function PostItem(props) {
                         <a href={music.external_link} target="_blank">
                             <img src={music.playlist_art} className="album_art" />
                         </a>
-                        { music.playlist_name } <br />
+                        <b> { music.playlist_name } </b> <br />
                         { music.playlist_desc } by { music.playlist_owner } <br /> <br />
                         { music.followers } Followers
-                    </span>
+                </span>
             </div>
         );
     }
