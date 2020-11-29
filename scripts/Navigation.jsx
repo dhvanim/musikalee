@@ -28,7 +28,8 @@ const containerStyle ={
 };
  
 function getPosts(){
-    Socket.emit("user logged in", true);
+    //TODO - emit get local storage
+    Socket.emit("get local storage", true);
 }
 
 function getProfile() {

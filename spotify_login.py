@@ -1,87 +1,63 @@
 """
 Python Code to parse spotify requests
 """
-import requests
-import models
+import spotlogin_api
 
 def get_user(auth):
     """
     Aquire A user object from Spotify using Auth Token
     """
-    
-    url = 'https://api.spotify.com/v1/me'
+    response = spotlogin_api.get_user_call(auth)
+    unam = response["display_name"]
     try:
-        response=requests.get(url,headers={"Authorization": "Bearer "+auth})
-    except TypeError:
-        response=requests.get(url,headers='{"Authorization": "Bearer "+auth}')
-    
-    unam=response.json()['display_name']
-
-    try:
-        pfp= response.json()['images'][0]['url']
-    except:
+        pfp = response["images"][0]["url"]
+    except IndexError:
         pfp = "./static/defaultPfp.png"
-    utype=response.json()['type']
-    return{
-        'username': unam,
-        'profile-picture': pfp,
-        'user-type': utype
-    }
+    utype = response["type"]
+    return {"username": unam, "profile-picture": pfp, "user-type": utype}
+
+
 
 def get_artists(auth):
     """
     Aquire the list of favorite artists
     """
-
     try:
-        response = requests.get(
-                            'https://api.spotify.com/v1/me/top/artists',
-                            headers={
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Bearer '+auth,
-                            }
-                            )
-                            
-    except TypeError:
-        response = requests.get(
-                            'https://api.spotify.com/v1/me/top/artists',
-                            headers="")
-    uris=[]
-    for item in response.json()['items']:
-        uris.append(item['uri'])
-    return uris
+        response = spotlogin_api.get_artists_call(auth)
+        uris = []
+        for item in response["items"]:
+            uris.append(item["uri"])
+        return uris
+    except KeyError:
+        return []
+
+
 
 def get_top_artists(flaskid):
     """
     Aquire the name of favorite artists
     """
-    auth = models.ActiveUsers.query.filter_by(serverid = flaskid).first().authtoken
-    headers = {
-   'Accept': 'application/json',
-   'Content-Type': 'application/json',
-    'Authorization': 'Bearer '+auth,
-    }
-    response = requests.get('https://api.spotify.com/v1/me/top/artists', headers=headers)
-    # print(response.json())
-    uris=[]
-    for item in response.json()['items']:
-        uris.append(item['name'])
-    return uris
+    uris = []
+    try:
+        response = spotlogin_api.get_top_call(flaskid)
+        for item in response["items"]:
+            uris.append(item["name"])
+        return uris
+
+    except KeyError:
+        return uris
+
 
 
 def get_current_song(flaskid):
     """
     Getting what's currently being played by user
     """
-    auth = models.ActiveUsers.query.filter_by(serverid = flaskid).first().authtoken
-    url = 'https://api.spotify.com/v1/me/player/currently-playing'
-    header = {"Authorization": "Bearer "+auth}
-    response=requests.get(url,headers=header)
-    
-    if str(response) == "<Response [200]>":
-        return response.json()['item']['name']
-        
-    else:
+    try:
+        response = spotlogin_api.get_current_call(flaskid)
+        try:
+            return response["item"]["name"]
+        except KeyError:
+            return "nothing is playing"
+    except Exception:
         return "nothing is playing"
-    

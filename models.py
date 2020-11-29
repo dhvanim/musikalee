@@ -102,3 +102,4 @@ class Likes(DB.Model):
         
     def __repr__(self):
         return "<Likes username: {} post_id: {}>".format(self.username, self.post_id)        
+
