@@ -136,3 +136,8 @@ audio {
     width:90%;
     margin:auto;
 }
+
+.username:hover {
+    text-decoration: underline;
+    
+}
