@@ -91,10 +91,10 @@ export default function StatusBar() {
                     <option value="playlist"> Playlist </option>
                 </select>
                 
-                <input type="text" id="song" placeholder="Enter Song" maxLength="500" required />
-                <input type="text" id="artist" placeholder="Enter Artist" maxLength="500" required />
-                <input type="text" id="album" placeholder="Enter Album" maxLength="500" required/>
-                <input type="text" id="playlist" placeholder="Enter Playlist Link" maxLength="500" required/>
+                <input type="text" id="song" placeholder="Enter Song" maxLength="500" />
+                <input type="text" id="artist" placeholder="Enter Artist" maxLength="500" />
+                <input type="text" id="album" placeholder="Enter Album" maxLength="500" />
+                <input type="text" id="playlist" placeholder="Enter Playlist Link" maxLength="500" />
                 
                 <input type="submit" name="Send Post" />
             </form>

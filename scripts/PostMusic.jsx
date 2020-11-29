@@ -68,7 +68,7 @@ export default function PostItem(props) {
                             <img src={music.playlist_art} className="album_art" />
                         </a>
                         <b> { music.playlist_name } </b> <br />
-                        { music.playlist_desc } by { music.playlist_owner } <br /> <br />
+                        <i> { music.playlist_desc } </i> by { music.playlist_owner } <br /> <br />
                         { music.followers } Followers
                 </span>
             </div>

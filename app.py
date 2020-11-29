@@ -88,14 +88,15 @@ def on_post_receive(data):
     post_dict = {
         "id": post.id,
         "username": post.username,
-        "message": post.message,
-        "title": post.title,
+        "text": post.message,
         "num_likes": post.num_likes,
         "datetime": post.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
         "pfp": post.pfp,
         "comments": [],
         "is_liked": False,
-        "isCommentsOpen": False
+        "isCommentsOpen": False,
+        "music_type" : post.music_type,
+        "music" : post.music
     }
         
     socketio.emit('emit new post channel', post_dict)
