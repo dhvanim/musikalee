@@ -42,35 +42,37 @@ export default function StatusBar() {
         var playlist = document.getElementById("playlist");
         
         if (dropdown.value == "default") {
-            song.style.display = "none";
-            artist.style.display = "none";
-            album.style.display = "none";
-            playlist.style.display = "none";
+            hide( [song, artist, album, playlist] );
         }
-        
-        if (dropdown.value == "song") {
-            song.style.display = "block";
-            artist.style.display = "block";
-            album.style.display = "none";
-            playlist.style.display = "none";
+        else if (dropdown.value == "song") {
+            display( [song, artist] );
+            hide( [album, playlist] );
         }
-        if (dropdown.value == "artist") {
-            song.style.display = "none";
-            artist.style.display = "block";
-            album.style.display = "none";
-            playlist.style.display = "none";
+        else if (dropdown.value == "artist") {
+            display( [artist] );
+            hide( [song, album, playlist] );
         }
-        if (dropdown.value == "album") {
-            song.style.display = "none";
-            artist.style.display = "block";
-            album.style.display = "block";
-            playlist.style.display = "none";
+        else if (dropdown.value == "album") {
+            display( [artist, album] );
+            hide( [song, playlist] );
         }
-        if (dropdown.value == "playlist") {
-            song.style.display = "none";
-            artist.style.display = "none";
-            album.style.display = "none";
-            playlist.style.display = "block";
+        else if (dropdown.value == "playlist") {
+            display( [playlist] );
+            hide( [song, artist, album] );
+        }
+    }
+    
+    function display(list) {
+        for (let i = 0; i < list.length; i++) {
+            list[i].style.display = "block";
+            list[i].required = true;
+        }
+    }
+    
+    function hide(list) {
+        for (let i = 0; i < list.length; i++) {
+            list[i].style.display = "none";
+            list[i].required = false;
         }
     }
     
@@ -89,10 +91,10 @@ export default function StatusBar() {
                     <option value="playlist"> Playlist </option>
                 </select>
                 
-                <input type="text" id="song" placeholder="Enter Song" maxLength="500"/>
-                <input type="text" id="artist" placeholder="Enter Artist" maxLength="500"/>
-                <input type="text" id="album" placeholder="Enter Album" maxLength="500"/>
-                <input type="text" id="playlist" placeholder="Enter Playlist Link" maxLength="500"/>
+                <input type="text" id="song" placeholder="Enter Song" maxLength="500" required />
+                <input type="text" id="artist" placeholder="Enter Artist" maxLength="500" required />
+                <input type="text" id="album" placeholder="Enter Album" maxLength="500" required/>
+                <input type="text" id="playlist" placeholder="Enter Playlist Link" maxLength="500" required/>
                 
                 <input type="submit" name="Send Post" />
             </form>

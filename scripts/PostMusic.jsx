@@ -38,8 +38,8 @@ export default function PostItem(props) {
                 <span>
                     <a href={music.external_link} target="_blank">
                         <img src={music.artist_icon} className="album_art" />
-                        { music.artist_name }
                     </a>
+                    { music.artist_name }
                 </span>
             </div>
         );
@@ -55,7 +55,7 @@ export default function PostItem(props) {
                         { music.album_name } <br />
                         { music.artists } <br /> <br />
                         { music.total_tracks } Tracks || Released: { music.release_date }
-                    </span>
+                </span>
             </div>
         );
     }
