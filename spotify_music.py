@@ -26,10 +26,8 @@ def spotify_get_access_token():
     access_token = auth_data['access_token']
     return access_token
     
-# returns a dict of top 50 trending songs
-def spotify_get_trending():
-    
-    playlist = "United States Top 50"
+
+def spotify_search(query, query_type):
     
     access_token = spotify_get_access_token()
     
@@ -37,15 +35,27 @@ def spotify_get_trending():
 
     # get tracks API endpoint URL
     search_url = "https://api.spotify.com/v1/search"
-    search_body_params = { 'q':playlist, 'type':'playlist', 'limit':1 }
+    search_body_params = { 'q':query, 'type':query_type, 'limit':1 }
     search_response = requests.get(search_url, headers=header, params=search_body_params)
 
+    return search_response
+
+# returns a dict of top 50 trending songs
+def spotify_get_trending():
+    
+    playlist = "United States Top 50"
+    
+    search_response = spotify_search(playlist, "playlist")
+    
     # if api response error
     if search_response.status_code != 200:
         return None
         
     search_data = search_response.json()
     
+    access_token = spotify_get_access_token()
+    header = { 'Authorization': 'Bearer {token}'.format(token=access_token) }
+
     tracks_url = search_data['playlists']['items'][0]['tracks']['href']
     tracks_body_params = { 'fields':'items(track(name,artists(name)))'}
     tracks_response = requests.get(tracks_url, headers=header, params=tracks_body_params)
@@ -94,15 +104,8 @@ def spotify_get_recommended(artists):
 def spotify_search_track(song, artist):
     
     query = "track:" + song + " artist:" + artist
-
-    access_token = spotify_get_access_token()
     
-    header = { 'Authorization': 'Bearer {token}'.format(token=access_token) }
-
-    # get tracks API endpoint URL
-    search_url = "https://api.spotify.com/v1/search"
-    search_body_params = { 'q': query, 'type':'track', 'limit':1 }
-    search_response = requests.get(search_url, headers=header, params=search_body_params)
+    search_response = spotify_search(query, "track")
 
     # if api response error
     if search_response.status_code != 200:
@@ -122,7 +125,6 @@ def spotify_search_track(song, artist):
     album_art = search_data['tracks']['items'][0]['album']['images'][0]['url']
     external_link = search_data['tracks']['items'][0]['external_urls']['spotify']
     preview_url = search_data['tracks']['items'][0]['preview_url']
-    uri = search_data['tracks']['items'][0]['uri']
     
     return { 'song': track,
             'artist': artists,
@@ -133,16 +135,10 @@ def spotify_search_track(song, artist):
             }
 
 def spotify_search_artist(artist):
-    query = "artist:" + artist
-
-    access_token = spotify_get_access_token()
     
-    header = { 'Authorization': 'Bearer {token}'.format(token=access_token) }
-
-    # get tracks API endpoint URL
-    search_url = "https://api.spotify.com/v1/search"
-    search_body_params = { 'q': query, 'type':'artist', 'limit':1 }
-    search_response = requests.get(search_url, headers=header, params=search_body_params)
+    query = "artist:" + artist
+    
+    search_response = spotify_search(query, "artist")
 
     # if api response error
     if search_response.status_code != 200:
@@ -165,16 +161,10 @@ def spotify_search_artist(artist):
     }
 
 def spotify_search_album(album, artist):
-    query = "album:" + album + " artist:" + artist
-
-    access_token = spotify_get_access_token()
     
-    header = { 'Authorization': 'Bearer {token}'.format(token=access_token) }
-
-    # get tracks API endpoint URL
-    search_url = "https://api.spotify.com/v1/search"
-    search_body_params = { 'q': query, 'type':'album', 'limit':1 }
-    search_response = requests.get(search_url, headers=header, params=search_body_params)
+    query = "album:" + album + " artist:" + artist
+    
+    search_response = spotify_search(query, "album")
 
     # if api response error
     if search_response.status_code != 200:
