@@ -24,7 +24,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
 DB = flask_sqlalchemy.SQLAlchemy(app)
 
 import models
-from spotify_login import get_user, get_artists, get_top_artists, get_current_song
+from spotify_login import get_user, get_artists, get_top_artists, get_current_song, get_num_listeners, get_top_tracks
 from spotify_music import spotify_get_trending, spotify_get_recommended
 from spotify_music import spotify_search_track, spotify_search_artist, spotify_search_album, spotify_search_playlist
 from ticketmaster_api import search_events
