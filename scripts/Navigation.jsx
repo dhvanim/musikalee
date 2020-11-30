@@ -35,7 +35,7 @@ export function Navigation(){
        <div className="innernavigation">
           <NavLink to="/" onClick={getPosts}><img src="./static/timeline.png" style={imgStyle}/></NavLink>
           <NavLink to="/profile" onClick={getProfile}><img src="./static/profile.png" style={imgStyle}/></NavLink>
-          <NavLink to="/messaging"><img src="./static/messaging.png" style={imgStyle}/></NavLink>
+          <NavLink to="/ticket"><img src="./static/ticket.png" style={imgStyle}/></NavLink>
        </div>
        </div>
     );
