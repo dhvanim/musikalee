@@ -160,10 +160,13 @@ def update_num_likes(data):
     
 def emit_user_data(userInfo, topArtists, currSong):
     print("giving user data")
+    
     artistList = []
-    artistList.append(topArtists[0])
-    artistList.append(topArtists[1])
-    artistList.append(topArtists[2])
+    if len(topArtists) != 0:
+        artistList.append(topArtists[0])
+        artistList.append(topArtists[1])
+        artistList.append(topArtists[2])
+        
     socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong})
     
     

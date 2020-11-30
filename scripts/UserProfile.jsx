@@ -59,6 +59,12 @@ export default function UserProfile(){
         });
     }
     
+    function getProfilePic() {
+        let data = window.localStorage.getItem("userinfo");
+        let user = JSON.parse(data);
+        return user['pfp'];
+    }
+    
  
     
     newItem();
@@ -72,7 +78,7 @@ export default function UserProfile(){
           borderBottom:"1px solid grey"
           }}>
             <div>
-                <img style={{width:"120px",height:"120px",borderRadius:"60px"}} src="./static/defaultPfp.png"/>
+                <img style={{width:"120px",height:"120px",borderRadius:"60px"}} src={getProfilePic()}/>
             </div>
             <div>
                 <h1 id="test">{users}</h1>
