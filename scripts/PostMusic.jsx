@@ -4,14 +4,9 @@ export default function PostItem(props) {
     const music = props.music;
     const music_type = props.music_type;
     
-    if (music_type == "default" || music == null) {
-        return null;
-    }
-    
     if (music_type == "song") {
 
         return (
-            
             <div className="postmusic">
                    <span> 
                         <a href={music.external_link} target="_blank">
@@ -32,7 +27,7 @@ export default function PostItem(props) {
             );
     }
     
-    if (music_type == "artist") {
+    else if (music_type == "artist") {
         return (
             <div className="postmusic">
                 <span>
@@ -45,7 +40,7 @@ export default function PostItem(props) {
         );
     }
     
-    if (music_type == "album") {
+    else if (music_type == "album") {
         return (
             <div className="postmusic">
                 <span> 
@@ -60,7 +55,7 @@ export default function PostItem(props) {
         );
     }
     
-    if (music_type == "playlist") {
+    else if (music_type == "playlist") {
         return (
             <div className="postmusic">
                 <span> 
@@ -74,4 +69,8 @@ export default function PostItem(props) {
             </div>
         );
     }
+    
+    return (
+        <div> </div>
+    );
 }

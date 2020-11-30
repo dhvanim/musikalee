@@ -26,10 +26,9 @@ export default function PostItem(props) {
             id: id,
             num_likes: (props.is_liked? num_likes-1 : num_likes+1) 
         });
-        
     }
     
-      const history = useHistory();
+    const history = useHistory();
 
     function goToUser(){
         console.log(props.username);
@@ -42,14 +41,13 @@ export default function PostItem(props) {
     const likeButton = () => <span style={{float:"right"}}onClick={handleToggle}> <img style={icon} src={likeIcon}/> { num_likes } </span>;
     
     function hasMusic(music_type) {
-        if (music_type == "default") {
+        if (music_type == "default" || music_type == null) {
             return <div></div>;
         }
         return <div> <PostMusic music={ props.music } music_type={props.music_type}/> <br /> </div>;
     }
     
     return (
-        
         <div>
             <li key={props.id} className="post">
                 <span className="pfp"> <img src={ props.pfp } /> </span> <br />
