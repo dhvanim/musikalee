@@ -331,7 +331,7 @@ def get_ticketmaster_events(data):
     zipcode = data['zipcode']
     artist = data['artist']
     events = search_events(zipcode, artist, str(0))
-    # print("EVENTS: ", events)
+    socketio.emit("display events", events)
 
 @app.route('/')
 def hello():

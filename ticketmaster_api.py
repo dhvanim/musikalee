@@ -28,23 +28,18 @@ def search_events(zipcode, artist, page):
         
     event_details = parse_events(response.json())
     
-    return response.json()
+    return event_details
     
     
 def parse_events(events_json):
     events = events_json["_embedded"]["events"]
-    a = []
+    all_events = []
     for e in events:
         name = e["name"]
-        print(name)
         url = e["url"]
-        print(url)
         images = e["images"][0]["url"]
-        print(images)
         date = e["dates"]["start"]["dateTime"]
-        print(date)
         venue = e["_embedded"]["venues"][0]["name"]
-        print(venue)
-        a.append([name, url, images, date, venue])
-        print(a)
-    return events
+        all_events.append({"name": name, "url": url, "image": images, "date": date, "venue": venue})
+        print(all_events)
+    return all_events
