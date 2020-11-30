@@ -41,14 +41,20 @@ export default function PostItem(props) {
 
     const likeButton = () => <span style={{float:"right"}}onClick={handleToggle}> <img style={icon} src={likeIcon}/> { num_likes } </span>;
     
+    function hasMusic(music_type) {
+        if (music_type == "default") {
+            return <div></div>;
+        }
+        return <div> <PostMusic music={ props.music } music_type={props.music_type}/> <br /> </div>;
+    }
+    
     return (
         
         <div>
             <li key={props.id} className="post">
                 <span className="pfp"> <img src={ props.pfp } /> </span> <br />
                 <span className="username" onClick={goToUser}> { props.username } </span> <br /> <p> </p>
-                { props.music_type != "default" ? 
-                <div> <PostMusic music={ props.music } music_type={props.music_type}/> <br /> </div>: <div></div> } 
+                { hasMusic( props.music_type) } 
                 <span className="text"> { props.text } </span> <br />
                 <span className="time"> { props.time } </span> 
                 <div className="iconsContainer">
