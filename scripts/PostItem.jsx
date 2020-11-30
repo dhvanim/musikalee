@@ -10,16 +10,16 @@ import PostMusic from './PostMusic';
 
 export default function PostItem(props) {
     const id= props.id;
-    const num_likes = props.likes
+    const num_likes = props.likes;
 
     const triggerStyle={
         float:"right",
-    }
+    };
 
     const icon = {
         height: "20px",
         width: "20px",
-    }
+    };
     
     function handleToggle() {
         Socket.emit('like post', {
@@ -32,12 +32,12 @@ export default function PostItem(props) {
       const history = useHistory();
 
     function goToUser(){
-        console.log(props.username)
+        console.log(props.username);
         Socket.emit("get profile", props.username);
         history.push("/profile");
     }
 
-    var likeIcon = (props.is_liked? "./static/heart-filled.png" : "./static/heart-outline.png")
+    var likeIcon = (props.is_liked? "./static/heart-filled.png" : "./static/heart-outline.png");
 
     const likeButton = () => <span style={{float:"right"}}onClick={handleToggle}> <img style={icon} src={likeIcon}/> { num_likes } </span>;
     
