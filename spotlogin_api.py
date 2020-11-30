@@ -4,6 +4,7 @@ All the api parts of spotlogin_api
 import requests
 import models
 from sqlalchemy import desc
+import json
 
 def get_user_call(auth):
     """
@@ -60,3 +61,43 @@ def get_current_call(username):
     response = requests.get(url, headers=header)
     print(response.json())
     return response.json()
+
+def get_artist_id(flaskid, name):
+    query = models.ActiveUsers.query
+    auth = query.filter_by(serverid=flaskid).first().authtoken
+    url = "https://api.spotify.com/v1/search?q={}&type=artist&market=US".format(name)
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + auth,
+    }
+    response = requests.get(url, headers=headers)
+    return json.dumps(response.json()['artists']['items'][0]['name'], indent=2)
+
+def get_artist_top_tracks_call(flaskid):
+    """
+    Get Artist's top tracks
+    """
+    query = models.ActiveUsers.query
+    auth = query.filter_by(serverid=flaskid).first().authtoken
+    name = query.filter_by(serverid=flaskid).first().user
+    artistID = get_artist_id(flaskid, name)
+    url = "https://api.spotify.com/v1/artists/{}/top-tracks?country=US".format(artistID)
+    header = {"Authorization": "Bearer " + auth}
+    response = requests.get(url, headers=header)
+    return response.json()
+    
+def get_artist_num_listeners(flaskid):
+    query = models.ActiveUsers.query
+    auth = query.filter_by(serverid=flaskid).first().authtoken
+    name = query.filter_by(serverid=flaskid).first().user
+    artistID = get_artist_id(flaskid, name)
+    url = "https://api.spotify.com/v1/artists/{}".format(artistID)
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + auth,
+    }
+    response = requests.get(url, headers=headers)
+    return response.json()
+    

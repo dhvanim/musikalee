@@ -1,3 +1,12 @@
+body {
+    background-color:#bfcfba;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h4, h3 {
+    padding:0;
+    margin:0;
+}
 .statusbar input[type=submit] {
     background-color:#222;
     color:#fff;
@@ -9,13 +18,17 @@
 .statusbar input[type=text] {
     margin:5px;
     padding:5px;
-    width:40%;
+    width:50%;
+}
+
+.statusbar {
+    margin-left:25%;
 }
 
 .timeline {
     position:relative;
-    width:50%;
-    margin-left:20%;
+    width:60%;
+    margin-left:10%;
 }
 
 .timeline ul {
@@ -27,8 +40,17 @@
 .timeline li {
     padding:5px;
     margin-bottom:20px;
-    background-color:#f1f1f1;
-    list-style-type:none
+    list-style-type:none;
+}
+
+h2 {
+    text-align:center;
+}
+
+.post {
+    border-radius:20px;
+    border: 1px solid #476e3b;
+    background-color:#fff;
 }
 
 .post .username {
@@ -44,34 +66,30 @@
 }
 
 .rightsidebar {
-    float:right;
+    position:fixed;
+    right:10px;
+    top:40px;
     width:20%;
+    background-color:#fff;
+    border: 1px solid #476e3b;
+    border-radius: 15px;
 }
 
-.innerrightsidebar {
-    max-width:100%;
-    position: fixed;
-    height:100%;
-    right:25px;
-    top:25px;
-}
-
-.innernavigation {
-    position: fixed;
-    height:100%;
-    left:25px;
-    top:25%;
-}
 
 .rightsidebar ul {
     list-style:none;
     padding-left:10px;
     max-width:100%;
+    text-align:center;
 }
 
 .rightsidebar li {
     margin-bottom: 10px;
 } 
+
+.rightsidebar .artist {
+    font-style:italic;
+}
 
 .commentsSection {
     max-height: 200px;
@@ -87,7 +105,7 @@
     display:flex; 
     flex-direction: row; 
     justify-content: center; 
-    align-items: center
+    align-items: center;
 }
 
 .comment {
@@ -117,27 +135,48 @@
     border-radius:50%;
 }
 
+.post .username {
+    line-height:0px;
+}
+
 .album_art {
     float:left;
-    width:75px;
+    width:110px;
     padding-right:5px;
     padding-bottom:5px;
 }
 
 .postmusic {
-    background-color:#aaa;
-    width:90%;
+    background-color:#cee0c8;
+    width:75%;
     margin:auto;
-    padding:10px;
     border-radius: 5px;
+    overflow:visible;
+    min-height:110px;
+}
+
+.artistList li {
+    display: inline;
+    float: left;
+    padding:40px;
+}
+
+.trackList li {
+    display: inline;
+    float: left;
+    padding:40px;
 }
 
 audio {
-    width:90%;
+    width:70%;
     margin:auto;
 }
 
 .username:hover {
     text-decoration: underline;
-    
+    padding:0;
+}
+
+#song, #artist, #album, #playlist {
+    display:none;
 }
