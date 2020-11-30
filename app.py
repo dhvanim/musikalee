@@ -25,9 +25,9 @@ DB = flask_sqlalchemy.SQLAlchemy(app)
 
 import models
 from spotify_login import get_user, get_artists, get_top_artists, get_current_song
-from spotify_music import spotify_get_trending, spotify_get_recommended, 
+from spotify_music import spotify_get_trending, spotify_get_recommended
 from spotify_music import spotify_search_track, spotify_search_artist, spotify_search_album, spotify_search_playlist
-
+from ticketmaster_api import search_events
 
 DB.init_app(app)
 DB.app = app
@@ -319,6 +319,13 @@ def save_comment(data):
     }
     socketio.emit("NEW COMMENT ON POST", {"post_id": data['post_id'], "comment": comment})
 
+@socketio.on("search ticketmaster")
+def get_ticketmaster_events(data):
+    print(data)
+    zipcode = data['zipcode']
+    artist = data['artist']
+    events = search_events(zipcode, artist, str(0))
+    socketio.emit("display events", events)
 
 @app.route('/')
 def hello():
