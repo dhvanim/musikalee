@@ -7,12 +7,9 @@ import flask_socketio
 import flask_sqlalchemy
 from sqlalchemy import asc, desc
 import random
-import models
 import timeago
 import json
 from flask_socketio import join_room, leave_room
-from spotify_login import get_user, get_artists, get_top_artists, get_current_song
-from spotify_music import spotify_get_trending, spotify_get_recommended, spotify_search_track, spotify_search_artist, spotify_search_album, spotify_search_playlist
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -28,7 +25,7 @@ DB = flask_sqlalchemy.SQLAlchemy(app)
 
 import models
 from spotify_login import get_user, get_artists, get_top_artists, get_current_song
-from spotify_music import spotify_get_trending, spotify_get_recommended, spotify_search_track
+from spotify_music import spotify_get_trending, spotify_get_recommended, spotify_search_track, spotify_search_artist, spotify_search_album, spotify_search_playlist
 
 DB.init_app(app)
 DB.app = app
