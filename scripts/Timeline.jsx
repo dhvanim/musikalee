@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Socket } from './Socket';
 
-import PostItem from "./PostItem"
+import PostItem from "./PostItem";
 
 export default function Timeline() {
     
@@ -14,17 +14,16 @@ export default function Timeline() {
     
     function getPosts() {
         React.useEffect( () => {
-            let isMounted = true; // note this flag denote mount status to avoid "Can't perform a React state update on an unmounted component"
-            Socket.on('emit posts channel', (posts) => {
-                if (isMounted){
+            let isMounted = true; 
+            Socket.on('emit posts channel', (posts) => { 
+                if(isMounted){ 
                     setPosts( posts );
-                    window.localStorage.setItem("posts", JSON.stringify(posts));
-                }
-            });
+                    
+                }});
+            window.localStorage.setItem("posts", JSON.stringify(posts));
             return () => {
                 Socket.off('emit posts channel', true);
                 isMounted = false;
-
             };
         });
     }
@@ -34,22 +33,22 @@ export default function Timeline() {
     
     function getNewPost() {
         React.useEffect( () => {
-            let isMounted = true; // note this flag denote mount status to avoid "Can't perform a React state update on an unmounted component"
+            let isMounted = true; 
             Socket.on('emit new post channel', (new_post) => {
-                if (isMounted){
-                    setPosts([new_post].concat(posts));
-                    window.localStorage.setItem("posts", JSON.stringify(posts));
+                if(isMounted){
+                setPosts([new_post].concat(posts));
+                window.localStorage.setItem("posts", JSON.stringify(posts));
                 }
+
             });
             return () => {
                 Socket.off('emit new post channel',true);
                 isMounted = false;
-
             };
         });
     }
 
-    getNewPost() 
+    getNewPost();
 
     function updateLikes() {
         React.useEffect( () => {
@@ -72,7 +71,7 @@ export default function Timeline() {
         });
     }
     
-    updateLikes()
+    updateLikes();
     
     function updateComments() {
         React.useEffect( () => {
@@ -86,7 +85,7 @@ export default function Timeline() {
                     window.localStorage.setItem("posts", JSON.stringify(posts));                    
                 }
 
-            })
+            });
             return () => {
                 Socket.off('NEW COMMENT ON POST', true);
                 isMounted = false;
@@ -94,11 +93,11 @@ export default function Timeline() {
         });
     }
     
-    updateComments()
+    updateComments();
     
     function getLocalStorage() {
         React.useEffect( () => {
-            let isMounted = true; // note this flag denote mount status
+            let isMounted = true; 
             Socket.on('navigation change', (data) => {
                 if (isMounted){
                     setPosts(window.localStorage.getItem("posts"));
@@ -111,13 +110,14 @@ export default function Timeline() {
         });
     }
 
-    getLocalStorage()
+    getLocalStorage();
+    
     return (
         <div>
         <ul className="timeline">
             { 
                 posts.map( (post, index) => (
-                    <PostItem key={index} id={post.id} username={post.username} text={post.message} time={post.datetime} likes={post.num_likes} is_liked={post.is_liked} comments={post.comments} isCommentsOpen={post.isCommentsOpen} pfp={post.pfp} music={post.music}/>
+                    <PostItem key={index} id={post.id} username={post.username} text={post.text} time={post.datetime} likes={post.num_likes} is_liked={post.is_liked} comments={post.comments} isCommentsOpen={post.isCommentsOpen} pfp={post.pfp} music={post.music} music_type={post.music_type}/>
                 ))    
             }
         </ul>

@@ -3,8 +3,18 @@ import { Socket } from './Socket';
 
 export default function RightSideBar() {
     
-    const [trending, setTrending] = React.useState([]);
-    const [recommended, setRecommended] = React.useState([]);
+    const [trending, setTrending] = React.useState(() => {
+        const stickyValue = window.localStorage.getItem("trending");
+        return stickyValue !== null
+          ? JSON.parse(stickyValue)
+          : [];
+    });
+    const [recommended, setRecommended] = React.useState(() => {
+    const stickyValue = window.localStorage.getItem("recommended");
+    return stickyValue !== null
+      ? JSON.parse(stickyValue)
+      : [];
+  });
     
     function getTrending() {
         React.useEffect( () => {
@@ -12,11 +22,11 @@ export default function RightSideBar() {
             return () => {
                 Socket.off('trending channel', updateTrending);
             };
-        });
+        }, [trending]);
     }
     
     function updateTrending(data) {
-        console.log("trending", data);
+        window.localStorage.setItem("trending", JSON.stringify(data));
         setTrending( data );
     }
     
@@ -26,11 +36,11 @@ export default function RightSideBar() {
             return () => {
                 Socket.off('recommended channel', updateRecommended);
             };
-        });
+        }, [recommended]);
     }
     
     function updateRecommended(data) {
-        console.log("rec", data);
+        window.localStorage.setItem("recommended", JSON.stringify(data));
         setRecommended( data );
     }
     
