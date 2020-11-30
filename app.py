@@ -289,13 +289,21 @@ def user_logged_in(data):
     
 @socketio.on("get profile")
 def send_user_profile(data):
-    topArtists=get_top_artists(flask.request.sid)
-    currSong=get_current_song(flask.request.sid)
+    print(data)
+    if(data):
+        username = get_username(flask.request.sid)
+    else:
+        username = data
+    print("USER: ", username)
+    topArtists=get_top_artists(username)
+    print(topArtists)
+    currSong=get_current_song(username)
+    print(currSong)
         
-    username = get_username(flask.request.sid)
     usertype = query_user(username)
     userinfo = {'username': username, 'user_type': usertype.user_type}
     
+
     if usertype is "artist":
         topTracks = get_top_tracks(flask.request.sid)
         numListeners = get_num_listeners(flask.request.sid)
@@ -303,6 +311,7 @@ def send_user_profile(data):
         
     else:
         emit_user_data(userinfo, topArtists, currSong)
+
 
 @socketio.on('post comment')
 def save_comment(data):

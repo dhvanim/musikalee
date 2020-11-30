@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Collapsible from 'react-collapsible';
+import { useHistory } from "react-router-dom";
 
 import { Socket } from './Socket';
 import CommentsSection from './CommentsSection';
@@ -27,6 +28,14 @@ export default function PostItem(props) {
         });
         
     }
+    
+      const history = useHistory();
+
+    function goToUser(){
+        console.log(props.username)
+        Socket.emit("get profile", props.username);
+        history.push("/profile");
+    }
 
     var likeIcon = (props.is_liked? "./static/heart-filled.png" : "./static/heart-outline.png")
 
@@ -37,7 +46,7 @@ export default function PostItem(props) {
         <div>
             <li key={props.id} className="post">
                 <span className="pfp"> <img src={ props.pfp } /> </span> <br />
-                <span className="username"> { props.username } </span> <br /> <br /> <p> </p>
+                <span className="username" onClick={goToUser}> { props.username } </span> <br /> <p> </p>
                 { props.music_type != "default" ? 
                 <div> <PostMusic music={ props.music } music_type={props.music_type}/> <br /> </div>: <div></div> } 
                 <span className="text"> { props.text } </span> <br />

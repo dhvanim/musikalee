@@ -34,13 +34,13 @@ def get_artists(auth):
 
 
 
-def get_top_artists(flaskid):
+def get_top_artists(username):
     """
     Aquire the name of favorite artists
     """
     uris = []
     try:
-        response = spotlogin_api.get_top_call(flaskid)
+        response = spotlogin_api.get_top_call(username)
         for item in response["items"]:
             uris.append(item["name"])
         return uris
@@ -50,12 +50,12 @@ def get_top_artists(flaskid):
 
 
 
-def get_current_song(flaskid):
+def get_current_song(username):
     """
     Getting what's currently being played by user
     """
     try:
-        response = spotlogin_api.get_current_call(flaskid)
+        response = spotlogin_api.get_current_call(username)
         try:
             return response["item"]["name"]
         except KeyError:
