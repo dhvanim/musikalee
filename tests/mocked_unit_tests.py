@@ -9,6 +9,7 @@ import unittest.mock as mock
 sys.path.insert(1, join(dirname(__file__), "../"))
 import app
 import spotify_login
+import spotify_music
 
 INPUT = ""
 EXPECT = ""
@@ -166,7 +167,44 @@ class SpotifyLoginTest(unittest.TestCase):
         with mock.patch("spotlogin_api.get_current_call", self.mock_key):
             result = spotify_login.get_current_song(self.user[INPUT])
         self.assertEqual(result, expect)
+        
 
+# TODO : if access token fails
+class SpotifyMusicTest(unittest.TestCase):
+    ''' tests all functions in spotify_music.py '''
+    
+    def mock_access_token(self):
+        return "123"
+    
+    def mock_request_post(self, url, data):
+        post_mock = mock.MagicMock()
+        post_mock.json.return_value = {'access_token':'123'}
+        return post_mock
+
+    def mock_request_get(self, url, headers, params):
+        get_mock = mock.MagicMock()
+        get_mock = params['type']
+        return get_mock
+    
+    # tests spotify_get_access_token()
+    def test_access_token(self):
+        with mock.patch("spotify_music.requests.post", self.mock_request_post):
+            result = spotify_music.spotify_get_access_token()
+        
+        self.assertEqual(result, '123')
+    
+    # tests spotify_search(query, query_type)
+    def test_spotify_search(self):
+        with mock.patch("spotify_music.spotify_get_access_token", self.mock_access_token),\
+        mock.patch("spotify_music.requests.get", self.mock_request_get):
+            result = spotify_music.spotify_search("query", "artist")
+        
+        self.assertEqual(result, "artist")
+    
+        
+        
+    
+    
 
 if __name__ == "__main__":
     unittest.main()
