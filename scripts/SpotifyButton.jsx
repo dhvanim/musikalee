@@ -15,7 +15,7 @@ export default function SpotifyButton() {
       <SpotifyLogin
         clientId="803918090e2d4726a922c0f05862e6e7"
         /* redirectUri={process.env.uri} */
-        redirectUri="https://musikalee.herokuapp.com/"
+        redirectUri="https://37baa11411bc449598a28599488f841f.vfs.cloud9.us-east-1.amazonaws.com/"
         onSuccess={onSuccess}
         scope="user-read-email user-top-read user-follow-read user-read-currently-playing"
         className="spotifybutton"

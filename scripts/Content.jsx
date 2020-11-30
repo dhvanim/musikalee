@@ -11,16 +11,22 @@ export function Content() {
     
     function getLoggedStatus() {
         React.useEffect( () => {
-            Socket.on('login success', updateLoggedStatus);
+            let isMounted = true;
+            Socket.on('login success', (data) => {
+                if (isMounted) {
+                    let status = data['status'];
+                    let userinfo = data['userinfo'];
+                    setLoggedIn( status );
+                    window.localStorage.setItem('userinfo', JSON.stringify(userinfo));
+                    console.log('saved to local storage', userinfo);
+                    Socket.emit("user logged in", true);
+                }
+            });
             return () => {
-                Socket.off('login success', updateLoggedStatus);
+                Socket.off('login success', true);
+                isMounted = false;
             };
         });
-    }
-    
-    function updateLoggedStatus(data) {
-        setLoggedIn( data );
-        Socket.emit("user logged in", true);
     }
     
     getLoggedStatus();
