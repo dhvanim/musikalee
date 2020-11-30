@@ -65,7 +65,7 @@ def get_post_music_data(music_type, music_data):
 
 @socketio.on('user post channel')
 def on_post_receive(data):
-    print("got post", data)
+
     username = data['user']['username']
     pfp = data['user']['pfp']
     
@@ -80,7 +80,7 @@ def on_post_receive(data):
 
     DB.session.add( post )
     DB.session.commit()
-    print("added post", post)
+
     
     post_dict = {
         "id": post.id,
@@ -132,7 +132,7 @@ def emit_posts():
         posts.append( entry )
    
     socketio.emit('emit posts channel', posts)
-    # print(posts)
+
 
 def add_or_remove_like_from_db(user, liked_post_id):
     is_liked = DB.session.query(models.Likes.id).filter_by(username=user, post_id=liked_post_id).scalar() is not None
@@ -148,7 +148,7 @@ def add_or_remove_like_from_db(user, liked_post_id):
 def update_num_likes(data):
     num_likes = data["num_likes"]
     post_id = data["id"]
-    print("Post_id: {}, num_likes={}".format(post_id, num_likes))
+
     post_to_like = DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
     DB.session.commit()
     
@@ -159,7 +159,7 @@ def update_num_likes(data):
 
     
 def emit_user_data(userInfo, topArtists, currSong):
-    print("giving user data")
+
     
     artistList = []
     if len(topArtists) != 0:
@@ -169,11 +169,10 @@ def emit_user_data(userInfo, topArtists, currSong):
         
     socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong})
     
-    
-    # print("emiting user data", userInfo, topArtists, currSong)
+
 
 def emit_artist_data(userInfo, topTracks, numListeners):
-    print("giving artist data")
+
     socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topTracks':topTracks, 'numListeners':numListeners, 'following':['Cat', 'Dhvani','Justin']})
 
 def emit_recommended():
@@ -296,16 +295,16 @@ def user_logged_in(data):
     
 @socketio.on("get profile")
 def send_user_profile(data):
-    print(data)
+
     if(data):
         username = get_username(flask.request.sid)
     else:
         username = data
-    print("USER: ", username)
+
     topArtists=get_top_artists(username)
-    print(topArtists)
+
     currSong=get_current_song(username)
-    print(currSong)
+
         
     usertype = query_user(username)
     userinfo = {'username': username, 'user_type': usertype.user_type}
@@ -337,7 +336,6 @@ def save_comment(data):
 
 @socketio.on("search ticketmaster")
 def get_ticketmaster_events(data):
-    print(data)
     zipcode = data['zipcode']
     artist = data['artist']
     events = search_events(zipcode, artist, str(0))
