@@ -182,10 +182,16 @@ def emit_recommended():
     query_users = query_user(username)
 
     recommended = get_recommended( query_users.top_artists )
-    print( recommended )
+    
+    if recommended == None:
+        return
+    
     socketio.emit('recommended channel', recommended, room=flask.request.sid)
 
 def get_recommended( user_top_artists ):
+    
+    if len(user_top_artists) == 0:
+        return None
     
     # keep only spotify ID
     for i in range(len(user_top_artists)):
