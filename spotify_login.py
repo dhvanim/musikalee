@@ -2,6 +2,7 @@
 Python Code to parse spotify requests
 """
 import spotlogin_api
+import json
 
 def get_user(auth):
     """
@@ -61,3 +62,27 @@ def get_current_song(flaskid):
             return "nothing is playing"
     except Exception:
         return "nothing is playing"
+
+def get_top_tracks(flaskid):
+    """
+    Getting Artist's top tracks
+    """
+    try:
+        response = spotlogin_api.get_artist_top_tracks_call(flaskid)
+        topTracks = []
+        
+        for i in range(3):
+            topTracks.append(json.dumps(response.json()['tracks'][i]['name'], indent=2))
+        
+        return topTracks
+        
+    except KeyError:
+        return ["no tracks","no tracks","no tracks"]
+        
+def get_num_listeners(flaskid):
+    try:
+        response = spotlogin_api.get_artist_num_listeners(flaskid)
+        return  json.dumps(response.json()['artists']['items'][0]['name'], indent=2)
+    
+    except Exception:
+        return 0
