@@ -155,6 +155,17 @@ h2 {
     min-height:110px;
 }
 
+.artistList li {
+    display: inline;
+    float: left;
+    padding:40px;
+}
+
+.trackList li {
+    display: inline;
+    float: left;
+    padding:40px;
+}
 
 audio {
     width:70%;

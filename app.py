@@ -25,7 +25,9 @@ DB = flask_sqlalchemy.SQLAlchemy(app)
 
 import models
 from spotify_login import get_user, get_artists, get_top_artists, get_current_song
-from spotify_music import spotify_get_trending, spotify_get_recommended, spotify_search_track, spotify_search_artist, spotify_search_album, spotify_search_playlist
+from spotify_music import spotify_get_trending, spotify_get_recommended, 
+from spotify_music import spotify_search_track, spotify_search_artist, spotify_search_album, spotify_search_playlist
+
 
 DB.init_app(app)
 DB.app = app
@@ -160,8 +162,6 @@ def update_num_likes(data):
     
 def emit_user_data(userInfo, topArtists, currSong):
     print("giving user data")
-    #print(userInfo['profile-picture'])
-    #userdata = {'username':'jan3apples','profileYype':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']}
     artistList = []
     artistList.append(topArtists[0])
     artistList.append(topArtists[1])
@@ -171,6 +171,9 @@ def emit_user_data(userInfo, topArtists, currSong):
     
     # print("emiting user data", userInfo, topArtists, currSong)
 
+def emit_artist_data(userInfo, topTracks, numListeners):
+    print("giving artist data")
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topTracks':topTracks, 'numListeners':numListeners, 'following':['Cat', 'Dhvani','Justin']})
 
 def emit_recommended():
     
@@ -293,7 +296,13 @@ def send_user_profile(data):
     usertype = query_user(username)
     userinfo = {'username': username, 'user_type': usertype.user_type}
     
-    emit_user_data(userinfo, topArtists, currSong)
+    if usertype is "artist":
+        topTracks = get_top_tracks(flask.request.sid)
+        numListeners = get_num_listeners(flask.request.sid)
+        emit_artist_data(userinfo, topTracks, numListeners)
+        
+    else:
+        emit_user_data(userinfo, topArtists, currSong)
 
 @socketio.on('post comment')
 def save_comment(data):
