@@ -1,6 +1,6 @@
 import React from 'react';
  
-const Messaging = () => {
+const Ticket = () => {
     return (
        <div className="page">
           <h1>Discover events near you!</h1>
@@ -10,4 +10,4 @@ const Messaging = () => {
     );
 }
  
-export default Messaging
+export default Ticket
