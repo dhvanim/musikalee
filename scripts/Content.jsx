@@ -18,7 +18,6 @@ export function Content() {
                     let userinfo = data['userinfo'];
                     setLoggedIn( status );
                     window.localStorage.setItem('userinfo', JSON.stringify(userinfo));
-                    console.log('saved to local storage', userinfo);
                     Socket.emit("user logged in", true);
                 }
             });

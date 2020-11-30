@@ -11,9 +11,6 @@ export default function StatusBar() {
     function submitPost(event) {
         
         let user = getUserInfo();
-        console.log('saved', user);
-        console.log('saved', user['username']);
-        console.log('saved', user['pfp']);
         let status = document.getElementById("text_status");
 
         let type = document.getElementById("option");
