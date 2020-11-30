@@ -3,8 +3,14 @@ import { Socket } from './Socket';
 
 export default function StatusBar() {
     
+    function getUserInfo() {
+        let data = window.localStorage.getItem("userinfo");
+        return JSON.parse(data);
+    }
+    
     function submitPost(event) {
-
+        
+        let user = getUserInfo();
         let status = document.getElementById("text_status");
 
         let type = document.getElementById("option");
@@ -15,6 +21,10 @@ export default function StatusBar() {
         
         
         Socket.emit('user post channel', {
+                                            "user" : {
+                                                "username" : user['username'],
+                                                "pfp" : user['pfp']
+                                            },
                                             "text" : status.value,
                                             "type" : type.value,
                                             "music" : {

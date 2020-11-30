@@ -8,12 +8,18 @@ export default function CommentsSection(props) {
     const comments= props.comments;
     const post_id= props.post_id;
     
+    function getUserInfo() {
+        let data = window.localStorage.getItem("userinfo");
+        return JSON.parse(data);
+    }
+    
     function postComment() {
         let comment = document.getElementById(post_id);
-        
+        let user = getUserInfo();
         Socket.emit('post comment', {
             comment: comment.value,
-            post_id: props.post_id
+            post_id: props.post_id,
+            'username':user['username']
         });
         
         comment.value = '';

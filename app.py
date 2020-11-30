@@ -66,10 +66,8 @@ def get_post_music_data(music_type, music_data):
 @socketio.on('user post channel')
 def on_post_receive(data):
     print("got post", data)
-    username = get_username(flask.request.sid)
-    
-    query_pfp = query_user(username)
-    pfp = query_pfp.profile_picture
+    username = data['user']['username']
+    pfp = data['user']['pfp']
     
     music_type = data['type']
     music_entry = get_post_music_data(music_type, data['music'])
@@ -262,7 +260,7 @@ def on_spotlogin(data):
         usersquery.top_artists = artists
 
     # emit success to user, so they can access timeline
-    socketio.emit('login success', True, room=flask.request.sid)
+    socketio.emit('login success', {'status':True,'userinfo':{'username':user['username'],'pfp':user['profile-picture']}}, room=flask.request.sid)
 
     
     # add to active users table
@@ -315,7 +313,7 @@ def send_user_profile(data):
 
 @socketio.on('post comment')
 def save_comment(data):
-    username = get_username(flask.request.sid)
+    username = data['username']
     time = datetime.now()
     comment = models.Comments(username, data['comment'], data['post_id'], time)
     DB.session.add(comment)
