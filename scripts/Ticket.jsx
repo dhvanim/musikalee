@@ -18,9 +18,14 @@ export default function Ticket(){
         let entered_artist = document.getElementById("artist_search").value;
         
         setSearchParams({zipcode: entered_zipcode, artist:entered_artist});
+        setPage(0);
+        setPageItems([])
         
-        searchEvents(entered_zipcode, entered_artist, page);
-        
+        Socket.emit('search ticketmaster', {"zipcode" :entered_zipcode,
+                                            "artist": entered_artist,
+                                            "page": 0
+                    });
+
         entered_zipcode = '';
         entered_artist = '';
         
