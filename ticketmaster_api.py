@@ -22,12 +22,16 @@ def search_events(zipcode, artist, page):
         "Accept": "application/json",
         "Content-Type": "application/json",}
     )
-    
+    print(response)
     # if api response error
-    if response.status_code != 200 or response.json()["page"]["totalElements"] == 0:
+    if response.status_code != 200:
+        return None
+      
+    response_json = response.json 
+    if response_json["page"]["totalElements"] == 0:
         return None
         
-    event_details = parse_events(response.json())
+    event_details = parse_events(response_json)
     
     return event_details
     
@@ -45,5 +49,4 @@ def parse_events(events_json):
         date = date.strftime("%B %d, %Y")
         venue = e["_embedded"]["venues"][0]["name"]
         all_events.append({"name": name, "url": url, "image": images, "date": date, "venue": venue, "totalPages":num_pages, "currPage":curr_page})
-        print(all_events)
     return all_events
