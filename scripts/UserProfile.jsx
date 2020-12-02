@@ -40,6 +40,7 @@ export default function UserProfile(){
                     setTopTracks(prevState => data['topTracks']);
                     setNumListeners(prevState => data['numListeners']);
                     setFollowers(prevState => data['following']);
+                    window.localStorage.setItem("User Data", JSON.stringify(data));
                     return users, profileType, topTracks, numListeners, followers;
                 }
                 
@@ -51,10 +52,10 @@ export default function UserProfile(){
                     setTopArtists(prevState => data['topArtists']);
                     setFollowers(prevState => data['following']);
                     setCurrSong(prevState => data['currentSong']);
+                    window.localStorage.setItem("User Data", JSON.stringify(data));
                     return users, profileType, topArtists, followers, currSong;
                 }
                 
-
             
         });
     }
