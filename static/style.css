@@ -155,6 +155,12 @@ h2 {
     min-height:110px;
 }
 
+.page {
+    position: absolute;
+    left: 150px;
+    width: 90%;
+}
+
 .artistList li {
     display: inline;
     float: left;
@@ -165,6 +171,28 @@ h2 {
     display: inline;
     float: left;
     padding:40px;
+}
+
+.tabsUser li{
+    display: inline-block;
+    border: 4px solid gray;
+    border-bottom: none;
+    bottom: -1px;
+    position: relative;
+    list-style: none;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.tabsArtist li{
+    display: inline-block;
+    border: 4px solid gray;
+    border-bottom: none;
+    bottom: -1px;
+    position: relative;
+    list-style: none;
+    padding: 6px 12px;
+    cursor: pointer;
 }
 
 audio {

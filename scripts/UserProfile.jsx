@@ -1,6 +1,7 @@
 import React from 'react';
 import { Socket } from './Socket';
- 
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+//import 'react-tabs/style/react-tabs.css'; 
 
 
 export default function UserProfile(){
@@ -52,6 +53,7 @@ export default function UserProfile(){
                     setTopArtists(prevState => data['topArtists']);
                     setFollowers(prevState => data['following']);
                     setCurrSong(prevState => data['currentSong']);
+                    console.log("this is the profile type",profileType);
                     window.localStorage.setItem("User Data", JSON.stringify(data));
                     return users, profileType, topArtists, followers, currSong;
                 }
@@ -88,34 +90,44 @@ export default function UserProfile(){
                 </div>
             </div>
             <div>
-                <button> following </button>
-                
-                <ul>
-                    { followers.map( (followers, index) => (
-                        <li key={index} className="F">
-                            <span className="followers"> { followers } </span> <br />
-                        </li>
-                        ))
-                    }
-                </ul>
-                
+                <button> Follow </button>
             </div>
           </div>
           {isUser?
                 <div>
-                    <h1>Currently listening to:</h1>
-                    <p>{currSong}</p>
-                    <h1> Top artists here:</h1>
-                     
-                    <ul className="artistList">
-                        { topArtists.map( (artists, index) => (
-                            <li key={index} className="AL">
-                                <img style={{width:"90px",height:"90px",borderRadius:"45px"}} src="./static/defaultPfp.png"/><br/>
-                                <span className="artists"> { artists } </span> <br/>
-                            </li>
-                            ))
-                        }
-                    </ul>
+                    <Tabs>
+                        <TabList className="tabsUser">
+                            <Tab>User Info</Tab>
+                            <Tab>Followers</Tab>
+                        </TabList>
+                        
+                        <TabPanel>
+                            <h1>Currently listening to:</h1>
+                            <p>{currSong}</p>
+                            <h1> Top artists:</h1>
+                             
+                            <ul className="artistList">
+                                { topArtists.map( (artists, index) => (
+                                    <li key={index} className="AL">
+                                        <img style={{width:"90px",height:"90px",borderRadius:"45px"}} src="./static/defaultPfp.png"/><br/>
+                                        <span className="artists"> { artists } </span> <br/>
+                                    </li>
+                                    ))
+                                }
+                            </ul>
+                        </TabPanel>
+                        
+                        <TabPanel>
+                        <ul>
+                            { followers.map( (followers, index) => (
+                                <li key={index} className="F">
+                                    <span className="followers"> { followers } </span> <br />
+                                </li>
+                                ))
+                            }
+                        </ul>
+                        </TabPanel>
+                    </Tabs>
                 </div>
                 :
                 <div>
@@ -124,8 +136,15 @@ export default function UserProfile(){
             
             {isCreator?
                 <div>
+                    <TabList className="tabsArtist">
+                        <Tab>User Info</Tab>
+                        <Tab>Followers</Tab>
+                    </TabList>
+                    
+                    <TabPanel>
                     <h1>Number of monthly listeners:</h1>
                     <p>{numListeners}</p>
+                    
                     
                     <ul className="trackList">
                         { topTracks.map( (tracks, index) => (
@@ -136,6 +155,18 @@ export default function UserProfile(){
                             ))
                         }
                     </ul>
+                    </TabPanel>
+                    
+                    <TabPanel>
+                        <ul>
+                            { followers.map( (followers, index) => (
+                                <li key={index} className="F">
+                                    <span className="followers"> { followers } </span> <br />
+                                </li>
+                                ))
+                            }
+                        </ul>
+                    </TabPanel>
                 </div>
                 :
                 <div></div>
