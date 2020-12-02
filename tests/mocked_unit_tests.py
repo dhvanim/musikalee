@@ -11,6 +11,7 @@ import requests
 sys.path.insert(1, join(dirname(__file__), "../"))
 import app
 import models
+from datetime import datetime
 import spotify_login
 import ticketmaster_api
 
@@ -260,5 +261,55 @@ class TicketmasterTest(unittest.TestCase):
             self.assertEqual(events, expected)
 
 
+class TestCommentsAndLikes(unittest.TestCase):
+    
+    
+    def test_push_new_user_to_db(self):
+        session = UnifiedAlchemyMagicMock() 
+        with mock.patch("app.DB.session", session): 
+            app.add_or_remove_like_from_db("username", "0000") 
+            is_liked = session.query(app.models.Likes.id).filter_by(username="username", post_id="0000").scalar() is not None
+            session.commit()
+            self.assertEqual(is_liked, True)
+    
+    def test_save_comment(self):
+        session = UnifiedAlchemyMagicMock() 
+        data = {"username":"user", "comment": "comment", "post_id": "0000"};
+        with mock.patch("app.DB.session", session): #
+            app.save_comment(data) 
+            count = session.query(app.models.Comments).count()
+            session.commit()
+            self.assertEqual(count, 1)
+            
+    def test_update_likes_on_post(self):
+        session = UnifiedAlchemyMagicMock() 
+        data = {
+                    "user" : {
+                        "username" : "",
+                        "pfp" : ""
+                    },
+                    "text" : "",
+                    "type" : "",
+                    "music" : {
+                        "song" : "",
+                        "artist" : "",
+                        "album" : "",
+                        "playlist" : ""
+                    }
+                }
+        with mock.patch("app.DB.session", session): #
+            app.on_post_receive(data)
+            print("FIRST:", session.query(app.models.Posts).first().id)
+            
+            
+            
+            app.update_likes_on_post(session.query(app.models.Posts).first().id, 33) 
+            print("SECOND:",session.query(app.models.Posts).first().num_likes)
+            num_likes = 0
+            
+            session.commit()
+            self.assertEqual(num_likes, 33)
+            
+    
 if __name__ == "__main__":
     unittest.main()
