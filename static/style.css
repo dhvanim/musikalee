@@ -208,3 +208,55 @@ audio {
 #song, #artist, #album, #playlist {
     display:none;
 }
+
+
+.eventItem {
+    border-radius:20px;
+    border: 1px solid #476e3b;
+    background-color:#fff;
+}
+
+.post .title{
+    font-weight:bold;
+}
+
+.post .location{
+    opacity:0.7;
+}
+
+.post .datetime{
+    opacity:0.7;
+}
+
+.post .image {
+    float:left;
+    width:110px;
+    padding-right:5px;
+    padding:5px;
+}
+
+.post .buyLink {
+    float:right;
+    width:110px;
+    padding-right:25px;
+    padding:5px;
+}
+
+.pageItem {
+    border: 1px solid #476e3b;
+    padding: 2px;
+    width:15px;
+    hight:15px;
+    background-color:white;
+    text-align: center;
+    list-style-type: none;
+    display: inline-block;
+}
+
+.eventsPages {
+  list-style-type: none;
+  padding: 0;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+}
