@@ -14,6 +14,8 @@ def get_user(auth):
         pfp = response["images"][0]["url"]
     except IndexError:
         pfp = "./static/defaultPfp.png"
+    except KeyError:
+        pfp = "./static/defaultPfp.png"
     utype = response["type"]
     return {"username": unam, "profile-picture": pfp, "user-type": utype}
 

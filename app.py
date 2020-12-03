@@ -46,19 +46,23 @@ def query_user(user):
 
 def get_post_music_data(music_type, music_data):
     data = {}
-    
-    song = music_data['song'].strip()
-    artist = music_data['artist'].strip()
-    album = music_data['album'].strip()
-    playlist = music_data['playlist'].strip()
 
     if music_type == "song":
+        song = music_data['song'].strip()
+        artist = music_data['artist'].strip()
         data = spotify_search_track(song, artist)
-    if music_type == "artist":
+        
+    elif music_type == "artist":
+        artist = music_data['artist'].strip()
         data = spotify_search_artist(artist)
+        
     elif music_type == "album":
+        artist = music_data['artist'].strip()
+        album = music_data['album'].strip()
         data = spotify_search_album(album, artist)
+        
     elif music_type == "playlist":
+        playlist = music_data['playlist'].strip()
         data = spotify_search_playlist(playlist)
     
     return data
@@ -162,8 +166,6 @@ def update_num_likes(data):
 
     
 def emit_user_data(userInfo, topArtists, currSong):
-
-    
     artistList = []
     if len(topArtists) != 0:
         artistList.append(topArtists[0])
@@ -373,4 +375,3 @@ if __name__ == '__main__':
         port=int(os.getenv('PORT', 8080)),
         debug=True
     )
-
