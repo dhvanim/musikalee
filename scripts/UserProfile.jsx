@@ -1,4 +1,5 @@
 import React from 'react';
+import { Follow } from './Follow';
 import { Socket } from './Socket';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 //import 'react-tabs/style/react-tabs.css'; 
@@ -12,6 +13,7 @@ export default function UserProfile(){
     const[profileType, setProfileType] = React.useState("");
     const[topArtists, setTopArtists] = React.useState([]);
     const[followers, setFollowers] = React.useState([]);
+    const[isFollowed, setIsFollowed] = React.useState(false);
     const[currSong, setCurrSong] = React.useState("");
     const[topTracks, setTopTracks] = React.useState([]);
     const[numListeners, setNumListeners] = React.useState(0);
@@ -53,7 +55,6 @@ export default function UserProfile(){
                     setTopArtists(prevState => data['topArtists']);
                     setFollowers(prevState => data['following']);
                     setCurrSong(prevState => data['currentSong']);
-                    console.log("this is the profile type",profileType);
                     window.localStorage.setItem("User Data", JSON.stringify(data));
                     return users, profileType, topArtists, followers, currSong;
                 }
@@ -68,9 +69,10 @@ export default function UserProfile(){
         return user['pfp'];
     }
     
- 
     
     newItem();
+    
+    
     
     return (
        <div className="page">
@@ -90,7 +92,7 @@ export default function UserProfile(){
                 </div>
             </div>
             <div>
-                <button> Follow </button>
+                <Follow />
             </div>
           </div>
           {isUser?
