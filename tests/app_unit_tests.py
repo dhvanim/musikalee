@@ -125,6 +125,7 @@ class RecieveAndEmit(unittest.TestCase):
         with mock.patch('app.DB.session',session):
             with mock.patch('app.get_post_music_data',self.mock_mustype):
                 result=app.on_post_receive(self.rec[INPUT])
+        print(session.query(app.models.Posts).first()) #there for even more coverage yay
         self.assertEqual(session.query(app.models.Posts).count(),1)
     
     
