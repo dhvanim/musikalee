@@ -91,6 +91,42 @@ class Post_music(unittest.TestCase):
         with mock.patch('app.spotify_search_playlist',self.mock_playl):
             result = app.get_post_music_data("playlist",self.post_playlist[INPUT])
         self.assertEqual(result,self.post_playlist[EXPECT])
+
+
+class RecieveAndEmit(unittest.TestCase):
+    """
+    Tests the functions recieve_posts and emit_posts
+    """
+    def setUp(self):
+        """
+        The inputs/outputs for the tests
+        """
+        self.rec={
+            INPUT: {
+                'user': {
+                    'username': "Bob",
+                    'pfp': "https://hello.com/hello.jpg",
+                },
+                'type': "song",
+                'music': 'playlist',
+                'text': "Listening to my boi bob",
+            }
+        }
+    def mock_mustype(self, music_type,music_data):
+        """
+        mocks the function get_post_music_data
+        """
+        return {'playlist': 'https://music'}
+    def test_post_recieve(self):
+        """
+        tests the on_post_recieve
+        """
+        session = UnifiedAlchemyMagicMock()
+        with mock.patch('app.DB.session',session):
+            with mock.patch('app.get_post_music_data',self.mock_mustype):
+                result=app.on_post_receive(self.rec[INPUT])
+        self.assertEqual(session.query(app.models.Posts).count(),1)
+    
     
 if __name__ == "__main__":
     unittest.main()
