@@ -6,7 +6,7 @@ from alchemy_mock.mocking import UnifiedAlchemyMagicMock
 import requests
 
 sys.path.insert(1, join(dirname(__file__), "../"))
-import spotify_music
+import spotify_music 
 
 # TODO : if access token fails
 # tests spotify_get_access_token()
@@ -45,8 +45,9 @@ class Search(unittest.TestCase):
 
  # tests spotify_get_trending()
 class GetTrending(unittest.TestCase):
-        
-    def mock_search(self, query, query_type):
+    
+    # mocks
+    def mock_search_success(self, query, query_type):
         search_mock = mock.MagicMock()
         search_mock.status_code = 200
         search_mock.json.return_value = {'playlists' : 
@@ -54,21 +55,76 @@ class GetTrending(unittest.TestCase):
                 {'tracks': {'href': 'https://open.spotify.com/playlist/37i9dQZEVXbLRQDuF5jeBp?si=DevSoVAKT5WiU7YfwFFc7A'}}]
             }}
         return search_mock
-    
-    def mock_get_request_get_track(self, url, headers, params):
+        
+    def mock_search_failure(self, query, query_type):
+        search_mock = mock.MagicMock()
+        search_mock.status_code = 201
+        return search_mock
+        
+    def mock_request_track_success(self, url, headers, params):
         get_track_mock = mock.MagicMock()
         get_track_mock.status_code = 200
         get_track_mock.json.return_value = {'items' : ['Justin Beiber', 'Ariana Grande']}
         return get_track_mock
 
-    def test_spotify_trending(self):
-        with mock.patch("spotify_music.spotify_search", self.mock_search),\
+    def mock_request_track_failure(self, url, headers, params):
+        get_track_mock = mock.MagicMock()
+        get_track_mock.status_code = 201
+        return get_track_mock
+
+    ## tests
+    def test_trending_success(self):
+        with mock.patch("spotify_music.spotify_search", self.mock_search_success),\
         mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
-        mock.patch('spotify_music.requests.get', self.mock_get_request_get_track):
+        mock.patch('spotify_music.requests.get', self.mock_request_track_success):
             result = spotify_music.spotify_get_trending()
         
         self.assertEqual(result, ['Justin Beiber', 'Ariana Grande'])
- 
+    
+    def test_trending_search_failure(self):
+        with mock.patch("spotify_music.spotify_search", self.mock_search_failure),\
+        mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
+        mock.patch('spotify_music.requests.get', self.mock_request_track_success):
+            result = spotify_music.spotify_get_trending()
+        
+        self.assertEqual(result, None)
+        
+    def test_trending_tracks_failure(self):
+        with mock.patch("spotify_music.spotify_search", self.mock_search_success),\
+        mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
+        mock.patch('spotify_music.requests.get', self.mock_request_track_failure):
+            result = spotify_music.spotify_get_trending()
+        
+        self.assertEqual(result, None)
+
+# tests spotify_get_recommended(artists):
+class GetRecommended(unittest.TestCase):
+    
+    def mock_request_rec_success(self, url, headers, params):
+        rec_mock = mock.MagicMock()
+        rec_mock.status_code = 200
+        rec_mock.json.return_value = {'tracks': [{'name':'Self Control', 'artists': [{'name':'Frank Ocean'}]}]}
+        return rec_mock
+    
+    def mock_request_rec_failure(self, url, headers, params):
+        rec_mock = mock.MagicMock()
+        rec_mock.status_code = 202
+        return rec_mock
+    
+    def test_recommended_success(self):
+        with mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
+        mock.patch('spotify_music.requests.get', self.mock_request_rec_success):
+            results = spotify_music.spotify_get_recommended(['1anyVhU62p31KFi8MEzkbf', '2P5sC9cVZDToPxyomzF1UH'])
+        
+        self.assertEqual(results, [{'song':'Self Control', 'artist':'Frank Ocean'}])
+  
+    def test_recommended_failure(self):
+        with mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
+        mock.patch('spotify_music.requests.get', self.mock_request_rec_failure):
+            results = spotify_music.spotify_get_recommended([])
+        
+        self.assertEqual(results, None)
+
     
 if __name__ == "__main__":
     unittest.main()
