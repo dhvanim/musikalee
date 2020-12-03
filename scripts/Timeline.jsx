@@ -126,12 +126,12 @@ export default function Timeline() {
                     text={post.text}
                     time={post.datetime}
                     likes={post.num_likes}
-                    is_liked={post.is_liked}
+                    isLiked={post.is_liked}
                     comments={post.comments}
                     isCommentsOpen={post.isCommentsOpen}
                     pfp={post.pfp}
                     music={post.music}
-                    music_type={post.music_type}
+                    musicType={post.music_type}
                   />
                 ))
             }
