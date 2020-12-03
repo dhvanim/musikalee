@@ -181,15 +181,47 @@ class SearchArtist(unittest.TestCase):
             'external_link':'httpspotify',
         })
     
-    def test_track_search_failure(self):
+    def test_artist_search_failure(self):
         with mock.patch('spotify_music.spotify_search', MockedSearch().failure):
             results = spotify_music.spotify_search_artist('Frank Ocean')
         
         self.assertEqual(results, None)
     
-    def test_track_empty(self):
+    def test_artist_empty(self):
         with mock.patch('spotify_music.spotify_search', MockedSearch().empty):
             results = spotify_music.spotify_search_artist('Frank SeaLake')
+        
+        self.assertEqual(results, None)
+
+
+class SearchAlbum(unittest.TestCase):
+    
+    '''
+    tests for spotify_search_album
+    '''
+    
+    def test_album_success(self):
+        with mock.patch('spotify_music.spotify_search', MockedSearch().success):
+            results = spotify_music.spotify_search_album('Blonde', 'Frank Ocean')
+        
+        self.assertDictEqual(results, {
+            'artists':['Frank Ocean'],
+            'album_name':'Blonde',
+            'album_art':'httpimg',
+            'release_date':'2016',
+            'total_tracks':17,
+            'external_link':'httpspotify',
+        })
+    
+    def test_album_search_failure(self):
+        with mock.patch('spotify_music.spotify_search', MockedSearch().failure):
+            results = spotify_music.spotify_search_album('Blonde', 'Frank Ocean')
+        
+        self.assertEqual(results, None)
+    
+    def test_album_empty(self):
+        with mock.patch('spotify_music.spotify_search', MockedSearch().empty):
+            results = spotify_music.spotify_search_album('Brunette','Frank SeaLake')
         
         self.assertEqual(results, None)
 
@@ -233,6 +265,21 @@ class MockedSearch():
                     'items': [ {
                         'name': 'Frank Ocean',
                         'images': [{'url':'httpicon'}],
+                        'external_urls': {'spotify':'httpspotify'},
+                    }]
+                }
+            }
+            
+        elif query_type == "album":
+            search_mock.json.return_value = {
+                'albums': {
+                    'total': 1,
+                    'items': [ {
+                        'artists': [ {'name':'Frank Ocean'}],
+                        'name': 'Blonde',
+                        'images': [{'url':'httpimg'}],
+                        'release_date': '2016',
+                        'total_tracks': 17,
                         'external_urls': {'spotify':'httpspotify'},
                     }]
                 }
