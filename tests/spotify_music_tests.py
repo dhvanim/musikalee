@@ -9,7 +9,8 @@ sys.path.insert(1, join(dirname(__file__), "../"))
 import spotify_music
 
 # TODO : if access token fails
-class SpotifyMusicTest(unittest.TestCase):
+# tests spotify_get_access_token()
+class GetAccessToken(unittest.TestCase):
     ''' tests all functions in spotify_music.py '''
     
     def mock_access_token(self):
@@ -19,11 +20,31 @@ class SpotifyMusicTest(unittest.TestCase):
         post_mock = mock.MagicMock()
         post_mock.json.return_value = {'access_token':'123'}
         return post_mock
+        
+    def test_access_token(self):
+        with mock.patch("spotify_music.requests.post", self.mock_request_post):
+            result = spotify_music.spotify_get_access_token()
+        
+        self.assertEqual(result, '123')
+
+
+# tests spotify_search(query, query_type)
+class Search(unittest.TestCase):
 
     def mock_request_get(self, url, headers, params):
         get_mock = mock.MagicMock()
         get_mock = params['type']
         return get_mock
+
+    def test_spotify_search(self):
+        with mock.patch("spotify_music.spotify_get_access_token", GetAccessToken().mock_access_token),\
+        mock.patch("spotify_music.requests.get", self.mock_request_get):
+            result = spotify_music.spotify_search("query", "artist")
+        
+        self.assertEqual(result, "artist")
+
+ # tests spotify_get_trending()
+class GetTrending(unittest.TestCase):
         
     def mock_search(self, query, query_type):
         search_mock = mock.MagicMock()
@@ -39,27 +60,15 @@ class SpotifyMusicTest(unittest.TestCase):
         get_track_mock.status_code = 200
         get_track_mock.json.return_value = {'items' : ['Justin Beiber', 'Ariana Grande']}
         return get_track_mock
-    
-    # tests spotify_get_access_token()
-    def test_access_token(self):
-        with mock.patch("spotify_music.requests.post", self.mock_request_post):
-            result = spotify_music.spotify_get_access_token()
-        
-        self.assertEqual(result, '123')
-    
-    # tests spotify_search(query, query_type)
-    def test_spotify_search(self):
-        with mock.patch("spotify_music.spotify_get_access_token", self.mock_access_token),\
-        mock.patch("spotify_music.requests.get", self.mock_request_get):
-            result = spotify_music.spotify_search("query", "artist")
-        
-        self.assertEqual(result, "artist")
-        
-    # tests spotify_get_trending()
+
     def test_spotify_trending(self):
         with mock.patch("spotify_music.spotify_search", self.mock_search),\
-        mock.patch('spotify_music.spotify_get_access_token', self.mock_access_token),\
+        mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
         mock.patch('spotify_music.requests.get', self.mock_get_request_get_track):
             result = spotify_music.spotify_get_trending()
         
         self.assertEqual(result, ['Justin Beiber', 'Ariana Grande'])
+ 
+    
+if __name__ == "__main__":
+    unittest.main()
