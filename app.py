@@ -24,8 +24,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
 DB = flask_sqlalchemy.SQLAlchemy(app)
 
 import models
-from spotify_login import get_user, get_artists, get_top_artists, get_current_song
-from spotify_music import spotify_get_trending, spotify_get_recommended, spotify_search_track, spotify_search_artist, spotify_search_album, spotify_search_playlist
+from spotify_login import get_user, get_artists, get_top_artists, get_current_song, get_num_listeners, get_top_tracks
+from spotify_music import spotify_get_trending, spotify_get_recommended
+from spotify_music import spotify_search_track, spotify_search_artist, spotify_search_album, spotify_search_playlist
+from ticketmaster_api import search_events
 
 DB.init_app(app)
 DB.app = app
@@ -63,11 +65,9 @@ def get_post_music_data(music_type, music_data):
 
 @socketio.on('user post channel')
 def on_post_receive(data):
-    print("got post", data)
-    username = get_username(flask.request.sid)
-    
-    query_pfp = query_user(username)
-    pfp = query_pfp.profile_picture
+
+    username = data['user']['username']
+    pfp = data['user']['pfp']
     
     music_type = data['type']
     music_entry = get_post_music_data(music_type, data['music'])
@@ -80,7 +80,7 @@ def on_post_receive(data):
 
     DB.session.add( post )
     DB.session.commit()
-    print("added post", post)
+
     
     post_dict = {
         "id": post.id,
@@ -132,7 +132,7 @@ def emit_posts():
         posts.append( entry )
    
     socketio.emit('emit posts channel', posts)
-    # print(posts)
+
 
 def add_or_remove_like_from_db(user, liked_post_id):
     is_liked = DB.session.query(models.Likes.id).filter_by(username=user, post_id=liked_post_id).scalar() is not None
@@ -148,7 +148,7 @@ def add_or_remove_like_from_db(user, liked_post_id):
 def update_num_likes(data):
     num_likes = data["num_likes"]
     post_id = data["id"]
-    print("Post_id: {}, num_likes={}".format(post_id, num_likes))
+
     post_to_like = DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
     DB.session.commit()
     
@@ -159,18 +159,21 @@ def update_num_likes(data):
 
     
 def emit_user_data(userInfo, topArtists, currSong):
-    print("giving user data")
-    #print(userInfo['profile-picture'])
-    #userdata = {'username':'jan3apples','profileYype':'Listener', 'topArtists':['Drake', 'Shawn Mendes', 'Ariana Grande'], 'following':['Cat', 'Dhvani','Justin']}
+
+    
     artistList = []
-    artistList.append(topArtists[0])
-    artistList.append(topArtists[1])
-    artistList.append(topArtists[2])
+    if len(topArtists) != 0:
+        artistList.append(topArtists[0])
+        artistList.append(topArtists[1])
+        artistList.append(topArtists[2])
+        
     socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong})
     
-    
-    # print("emiting user data", userInfo, topArtists, currSong)
 
+
+def emit_artist_data(userInfo, topTracks, numListeners):
+
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topTracks':topTracks, 'numListeners':numListeners, 'following':['Cat', 'Dhvani','Justin']})
 
 def emit_recommended():
     
@@ -178,10 +181,16 @@ def emit_recommended():
     query_users = query_user(username)
 
     recommended = get_recommended( query_users.top_artists )
-    print( recommended )
+    
+    if recommended == None:
+        return
+    
     socketio.emit('recommended channel', recommended, room=flask.request.sid)
 
 def get_recommended( user_top_artists ):
+    
+    if len(user_top_artists) == 0:
+        return None
     
     # keep only spotify ID
     for i in range(len(user_top_artists)):
@@ -259,7 +268,7 @@ def on_spotlogin(data):
         usersquery.top_artists = artists
 
     # emit success to user, so they can access timeline
-    socketio.emit('login success', True, room=flask.request.sid)
+    socketio.emit('login success', {'status':True,'userinfo':{'username':user['username'],'pfp':user['profile-picture']}}, room=flask.request.sid)
 
     
     # add to active users table
@@ -286,18 +295,33 @@ def user_logged_in(data):
     
 @socketio.on("get profile")
 def send_user_profile(data):
-    topArtists=get_top_artists(flask.request.sid)
-    currSong=get_current_song(flask.request.sid)
+
+    if(data):
+        username = get_username(flask.request.sid)
+    else:
+        username = data
+
+    topArtists=get_top_artists(username)
+
+    currSong=get_current_song(username)
+
         
-    username = get_username(flask.request.sid)
     usertype = query_user(username)
     userinfo = {'username': username, 'user_type': usertype.user_type}
     
-    emit_user_data(userinfo, topArtists, currSong)
+
+    if usertype is "artist":
+        topTracks = get_top_tracks(flask.request.sid)
+        numListeners = get_num_listeners(flask.request.sid)
+        emit_artist_data(userinfo, topTracks, numListeners)
+        
+    else:
+        emit_user_data(userinfo, topArtists, currSong)
+
 
 @socketio.on('post comment')
 def save_comment(data):
-    username = get_username(flask.request.sid)
+    username = data['username']
     time = datetime.now()
     comment = models.Comments(username, data['comment'], data['post_id'], time)
     DB.session.add(comment)
@@ -310,6 +334,18 @@ def save_comment(data):
     }
     socketio.emit("NEW COMMENT ON POST", {"post_id": data['post_id'], "comment": comment})
 
+@socketio.on("search ticketmaster")
+def get_ticketmaster_events(data):
+    print(data)
+    zipcode = data['zipcode']
+    artist = data['artist']
+    page = str(data["page"])
+    events = search_events(zipcode, artist, page)
+    if( zipcode=="" and artist==""):
+        events = []
+    if(events == None ):
+        events = []
+    socketio.emit("display events", events)
 
 @app.route('/')
 def hello():

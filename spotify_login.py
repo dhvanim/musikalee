@@ -2,6 +2,7 @@
 Python Code to parse spotify requests
 """
 import spotlogin_api
+import json
 
 def get_user(auth):
     """
@@ -33,13 +34,13 @@ def get_artists(auth):
 
 
 
-def get_top_artists(flaskid):
+def get_top_artists(username):
     """
     Aquire the name of favorite artists
     """
     uris = []
     try:
-        response = spotlogin_api.get_top_call(flaskid)
+        response = spotlogin_api.get_top_call(username)
         for item in response["items"]:
             uris.append(item["name"])
         return uris
@@ -49,15 +50,39 @@ def get_top_artists(flaskid):
 
 
 
-def get_current_song(flaskid):
+def get_current_song(username):
     """
     Getting what's currently being played by user
     """
     try:
-        response = spotlogin_api.get_current_call(flaskid)
+        response = spotlogin_api.get_current_call(username)
         try:
             return response["item"]["name"]
         except KeyError:
             return "nothing is playing"
     except Exception:
         return "nothing is playing"
+
+def get_top_tracks(flaskid):
+    """
+    Getting Artist's top tracks
+    """
+    try:
+        response = spotlogin_api.get_artist_top_tracks_call(flaskid)
+        topTracks = []
+        
+        for i in range(3):
+            topTracks.append(json.dumps(response.json()['tracks'][i]['name'], indent=2))
+        
+        return topTracks
+        
+    except KeyError:
+        return ["no tracks","no tracks","no tracks"]
+        
+def get_num_listeners(flaskid):
+    try:
+        response = spotlogin_api.get_artist_num_listeners(flaskid)
+        return  json.dumps(response.json()['artists']['items'][0]['name'], indent=2)
+    
+    except Exception:
+        return 0

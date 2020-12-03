@@ -50,7 +50,8 @@ https://powerful-ravine-41625.herokuapp.com/
 
 # Set up React Libraries
 1. Run `npm install --save react-router-dom && npm install react-spotify-login && npm install react-collapsible --save` 
-2. Run `pip install timeago`
+2. Install Bootstrap `npm install react-bootstrap bootstrap` 
+3. Run `pip install timeago`
 
 # Set up Spotify Login
 1. `npm i react-spotify-login`
@@ -65,6 +66,14 @@ SPOTIFY_CLIENT_ID={your client id here}
 SPOTIFY_CLIENT_SECRET={your client secret here}
 ```
 *\*note the lack of quotes*
+
+#Set up TicketMaster
+1. Nagivate to https://developer.ticketmaster.com/ and sign up for an account <br />
+2. Go to your apps dashboard and copy your Consumer Key
+3. Under your main directory create a file called `ticketmaster.env` and populate it as follows:
+```
+TICKETMASTER_API_KEY='{your consumer key}'
+```
 
 # Part of Work Done
 1. Justin Chow
