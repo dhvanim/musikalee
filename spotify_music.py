@@ -198,6 +198,8 @@ def spotify_search_playlist(url):
     try:
         parsed_url = urlparse(url)
         playlist_id = parsed_url.path.split('/')[2]
+        if len(playlist_id) == 0:
+            return None
     except:
         return None
     

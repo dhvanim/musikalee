@@ -226,6 +226,66 @@ class SearchAlbum(unittest.TestCase):
         self.assertEqual(results, None)
 
 
+class SearchPlaylist(unittest.TestCase):
+    
+    '''
+    tests for spotify_search_playlist
+    '''
+    
+    def mock_request_playlist_success(self, url, headers, params):
+        playlist_mock = mock.MagicMock()
+        playlist_mock.status_code = 200
+        playlist_mock.json.return_value = {
+            'description': 'heyyyyyy :-)',
+            'external_urls': { 'spotify': 'httpspotify' },
+            'followers': {'total': 0},
+            'images': [ {'url':'httpimg'} ],
+            'name': 'Down to Earth',
+            'owner': {'id':'dhvanii'},
+        }
+        return playlist_mock
+    
+    def mock_request_playlist_failure(self, url, headers, params):
+        playlist_mock = mock.MagicMock()
+        playlist_mock.status_code = 201
+        return playlist_mock
+    
+    def test_playlist_success(self):
+        with mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
+            mock.patch('spotify_music.requests.get', self.mock_request_playlist_success):
+                results = spotify_music.spotify_search_playlist('https://open.spotify.com/playlist/0Ix3TaQtxZb7cZNpFV1YKi?si=kUhWWU0lQ4SVUj8NYyYWxQ')
+            
+        self.assertEqual(results, {
+            'playlist_name': 'Down to Earth',
+            'playlist_desc': 'heyyyyyy :-)',
+            'playlist_art': 'httpimg',
+            'playlist_owner': 'dhvanii',
+            'followers': 0,
+            'external_link': 'httpspotify',
+        })
+    
+    def test_playlist_url_failure1(self):
+        with mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
+            mock.patch('spotify_music.requests.get', self.mock_request_playlist_success):
+                results = spotify_music.spotify_search_playlist('https://open.spotify.com/playlist/')
+                
+        self.assertEqual(results, None)
+
+    def test_playlist_url_failure2(self):
+        with mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
+            mock.patch('spotify_music.requests.get', self.mock_request_playlist_success):
+                results = spotify_music.spotify_search_playlist('http/')
+                
+        self.assertEqual(results, None)
+    
+    def test_playlist_search_failure(self):
+        with mock.patch('spotify_music.spotify_get_access_token', GetAccessToken().mock_access_token),\
+            mock.patch('spotify_music.requests.get', self.mock_request_playlist_failure):
+                results = spotify_music.spotify_search_playlist('https://open.spotify.com/playlist/3544443543')
+                
+        self.assertEqual(results, None)
+
+
 class MockedSearch():
     
     '''
