@@ -9,9 +9,10 @@ sys.path.insert(1, join(dirname(__file__), "../"))
 import spotify_music 
 
 # TODO : if access token fails
-# tests spotify_get_access_token()
 class GetAccessToken(unittest.TestCase):
-    ''' tests all functions in spotify_music.py '''
+    ''' 
+    tests for spotify_get_access_token
+    '''
     
     def mock_access_token(self):
         return "123"
@@ -28,8 +29,11 @@ class GetAccessToken(unittest.TestCase):
         self.assertEqual(result, '123')
 
 
-# tests spotify_search(query, query_type)
 class Search(unittest.TestCase):
+    
+    '''
+    tests for spotify_search
+    '''
 
     def mock_request_get(self, url, headers, params):
         get_mock = mock.MagicMock()
@@ -43,8 +47,12 @@ class Search(unittest.TestCase):
         
         self.assertEqual(result, "artist")
 
- # tests spotify_get_trending()
+
 class GetTrending(unittest.TestCase):
+    
+    '''
+    tests for spotify_get_trending
+    '''
     
     # mocks
     def mock_search_success(self, query, query_type):
@@ -92,8 +100,12 @@ class GetTrending(unittest.TestCase):
         
         self.assertEqual(result, None)
 
-# tests spotify_get_recommended(artists):
+
 class GetRecommended(unittest.TestCase):
+    
+    '''
+    tests for spotify_get_recommended
+    '''
     
     def mock_request_rec_success(self, url, headers, params):
         rec_mock = mock.MagicMock()
@@ -120,48 +132,12 @@ class GetRecommended(unittest.TestCase):
         
         self.assertEqual(results, None)
 
-class MockedSearch():
-    def failure(self, query, query_type):
-        search_mock = mock.MagicMock()
-        search_mock.status_code = 201
-        return search_mock
-    
-    def success(self, query, query_type):
-        search_mock = mock.MagicMock()
-        search_mock.status_code = 200
-        
-        if query_type == "track":
-            search_mock.json.return_value = {
-                'tracks': {
-                    'total': 3,
-                    'items': [ {
-                        'name': 'Self Control',
-                        'artists': [ {'name':'Frank Ocean'}],
-                        'album': {
-                            'name': 'Blonde',
-                            'images': [{'url' : 'httpimg'}],
-                        },
-                        'external_urls': { 'spotify': 'httpspotify' },
-                        'preview_url': 'httppreview'
-                    }]
-                }
-            }
-
-        return search_mock
-    
-    def empty(self, query, query_type):
-        search_mock = mock.MagicMock()
-        search_mock.status_code = 200
-        title = query_type+'s'
-        search_mock.json.return_value = {
-            title: {
-                'total': 0
-            }
-        }
-        return search_mock
-
 
 class SearchTrack(unittest.TestCase):
+    
+    '''
+    tests for spotify_search_track
+    '''
     
     def test_track_success(self):
         with mock.patch('spotify_music.spotify_search', MockedSearch().success):
@@ -187,7 +163,92 @@ class SearchTrack(unittest.TestCase):
             results = spotify_music.spotify_search_track('asdfghjkl','Frank Ocean')
         
         self.assertEqual(results, None)
+
+
+class SearchArtist(unittest.TestCase):
+    
+    '''
+    tests for spotify_search_artist
+    '''
+    
+    def test_artist_success(self):
+        with mock.patch('spotify_music.spotify_search', MockedSearch().success):
+            results = spotify_music.spotify_search_artist('Frank Ocean')
         
+        self.assertDictEqual(results, {
+            'artist_name':'Frank Ocean',
+            'artist_icon':'httpicon',
+            'external_link':'httpspotify',
+        })
+    
+    def test_track_search_failure(self):
+        with mock.patch('spotify_music.spotify_search', MockedSearch().failure):
+            results = spotify_music.spotify_search_artist('Frank Ocean')
+        
+        self.assertEqual(results, None)
+    
+    def test_track_empty(self):
+        with mock.patch('spotify_music.spotify_search', MockedSearch().empty):
+            results = spotify_music.spotify_search_artist('Frank SeaLake')
+        
+        self.assertEqual(results, None)
+
+
+class MockedSearch():
+    
+    '''
+    mocks the function spotify_search
+    '''
+    
+    def failure(self, query, query_type):
+        search_mock = mock.MagicMock()
+        search_mock.status_code = 201
+        return search_mock
+    
+    def success(self, query, query_type):
+        search_mock = mock.MagicMock()
+        search_mock.status_code = 200
+        
+        if query_type == "track":
+            search_mock.json.return_value = {
+                'tracks': {
+                    'total': 1,
+                    'items': [ {
+                        'name': 'Self Control',
+                        'artists': [ {'name':'Frank Ocean'}],
+                        'album': {
+                            'name': 'Blonde',
+                            'images': [{'url' : 'httpimg'}],
+                        },
+                        'external_urls': { 'spotify': 'httpspotify' },
+                        'preview_url': 'httppreview'
+                    }]
+                }
+            }
+        
+        elif query_type == "artist":
+            search_mock.json.return_value = {
+                'artists': {
+                    'total': 1,
+                    'items': [ {
+                        'name': 'Frank Ocean',
+                        'images': [{'url':'httpicon'}],
+                        'external_urls': {'spotify':'httpspotify'},
+                    }]
+                }
+            }
+        return search_mock
+    
+    def empty(self, query, query_type):
+        search_mock = mock.MagicMock()
+        search_mock.status_code = 200
+        title = query_type+'s'
+        search_mock.json.return_value = {
+            title: {
+                'total': 0
+            }
+        }
+        return search_mock
 
     
     
