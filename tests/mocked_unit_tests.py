@@ -16,8 +16,6 @@ import spotify_login
 import ticketmaster_api
 
 
-
-
 INPUT = ""
 EXPECT = ""
 
@@ -79,18 +77,19 @@ class SpotifyLoginTest(unittest.TestCase):
         }
         return oput
 
-    def test_user_no_pfp(self):
-        """
-        Tests a User That has no pfp
-        """
-        expect = {
-            "username": "Bob",
-            "profile-picture": "./static/defaultPfp.png",
-            "user-type": "user",
-        }
-        with mock.patch("spotlogin_api.get_user_call", self.mock_nopfp):
-            result = spotify_login.get_user(self.user[INPUT])
-        self.assertEqual(result, expect)
+#    def test_user_no_pfp(self):
+#        """
+#        Tests a User That has no pfp
+#        """
+#        expect = {
+#            "username": "Bob",
+#            "profile-picture": "./static/defaultPfp.png",
+#            "user-type": "user",
+#        }
+#        with mock.patch("spotlogin_api.get_user_call", self.mock_nopfp):
+#            result = spotify_login.get_user(self.user[INPUT])
+#        self.assertEqual(result, expect)
+
 
     def mock_artist(self, auth):
         """
@@ -184,8 +183,6 @@ class SpotifyLoginTest(unittest.TestCase):
         with mock.patch("spotlogin_api.get_current_call", self.mock_key):
             result = spotify_login.get_current_song(self.user[INPUT])
         self.assertEqual(result, expect)
-
-
 
 class TicketmasterTest(unittest.TestCase):
 
