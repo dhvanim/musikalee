@@ -35,7 +35,7 @@ DB.app = app
 app.static_folder = 'static'
 
 def get_username(flask_id):
-    user = models.ActiveUsers.query.filter_by(serverid = flask_id).first().user
+    user = DB.session.query(models.ActiveUsers).filter_by(serverid = flask_id).first().user
     DB.session.commit()
     return user
 
@@ -130,7 +130,6 @@ def emit_posts():
         }
         
         posts.append( entry )
-   
     socketio.emit('emit posts channel', posts)
 
 
@@ -143,14 +142,18 @@ def add_or_remove_like_from_db(user, liked_post_id):
         DB.session.add(models.Likes(user, liked_post_id))
     DB.session.commit()
     return not is_liked
-    
+
+def update_likes_on_post(post_id, num_likes):
+    post = DB.session.query(models.Posts).filter(models.Posts.id == post_id)
+    post.num_likes = num_likes
+    DB.session.commit()
+
 @socketio.on('like post')    
 def update_num_likes(data):
     num_likes = data["num_likes"]
     post_id = data["id"]
 
-    post_to_like = DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
-    DB.session.commit()
+    update_likes_on_post(post_id, num_likes)
     
     username = get_username(flask.request.sid)
     is_liked = add_or_remove_like_from_db(username, post_id)
@@ -336,7 +339,6 @@ def save_comment(data):
 
 @socketio.on("search ticketmaster")
 def get_ticketmaster_events(data):
-    print(data)
     zipcode = data['zipcode']
     artist = data['artist']
     page = str(data["page"])

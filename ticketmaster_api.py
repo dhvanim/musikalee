@@ -20,14 +20,13 @@ def search_events(zipcode, artist, page):
     
     response = requests.get(url, headers={    
         "Accept": "application/json",
-        "Content-Type": "application/json",}
+        "Content-Type": "application/json"}
     )
-    print(response)
     # if api response error
     if response.status_code != 200:
         return None
       
-    response_json = response.json 
+    response_json = response.json() 
     if response_json["page"]["totalElements"] == 0:
         return None
         
