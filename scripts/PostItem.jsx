@@ -44,7 +44,7 @@ export default function PostItem(props) {
         if (music_type == "default" || music_type == null) {
             return <div></div>;
         }
-        return <div> <PostMusic music={ props.music } music_type={props.music_type}/> <br /> </div>;
+        return <div> <PostMusic music={ props.music } musicType={props.music_type}/> <br /> </div>;
     }
     
     return (
