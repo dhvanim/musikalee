@@ -35,7 +35,7 @@ DB.app = app
 app.static_folder = 'static'
 
 def get_username(flask_id):
-    user = models.ActiveUsers.query.filter_by(serverid = flask_id).first().user
+    user = DB.session.query(models.ActiveUsers).filter_by(serverid = flask_id).first().user
     DB.session.commit()
     return user
 
@@ -130,7 +130,6 @@ def emit_posts():
         }
         
         posts.append( entry )
-   
     socketio.emit('emit posts channel', posts)
 
 
@@ -145,14 +144,14 @@ def add_or_remove_like_from_db(user, liked_post_id):
     return not is_liked
 
 def update_likes_on_post(post_id, num_likes):
-    DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
+    post = DB.session.query(models.Posts).filter(models.Posts.id == post_id)
+    post.num_likes = num_likes
     DB.session.commit()
 
 @socketio.on('like post')    
 def update_num_likes(data):
     num_likes = data["num_likes"]
     post_id = data["id"]
-
 
     update_likes_on_post(post_id, num_likes)
     
