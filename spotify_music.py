@@ -35,7 +35,9 @@ def spotify_get_trending():
     search_data = search_response.json()
     access_token = spotify_get_access_token()
     tracks_data = spotmusic_api.trendcall(access_token, search_data)
-    return tracks_data["items"]
+    if tracks_data is not None:
+        return tracks_data["items"]
+    return ["Trending","Machine","Broke"]
 
 
 # returns recc songs
@@ -46,6 +48,8 @@ def spotify_get_recommended(artists):
     access_token = spotify_get_access_token()
     rec_data = spotmusic_api.getrecocall(artists, access_token)
     recs = []
+    if rec_data is None:
+        return recs
     for tracks in rec_data["tracks"]:
         track = {}
         track["song"] = tracks["name"]
@@ -158,6 +162,15 @@ def spotify_search_playlist(url):
         return None
     access_token = spotify_get_access_token()
     search_data = spotmusic_api.search_playlist(access_token, playlist_id)
+    if search_data is None:
+        return {
+        "playlist_name": "",
+        "playlist_desc": "",
+        "playlist_art": "",
+        "playlist_owner": "",
+        "followers": "",
+        "external_link": "",
+    }
     playlist_desc = search_data["description"]
     external_link = search_data["external_urls"]["spotify"]
     followers = search_data["followers"]["total"]
