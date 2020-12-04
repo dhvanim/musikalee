@@ -1,8 +1,9 @@
 """
 Python Code to parse spotify requests
 """
-import spotlogin_api
 import json
+import spotlogin_api
+
 
 def get_user(auth):
     """
@@ -20,7 +21,6 @@ def get_user(auth):
     return {"username": unam, "profile-picture": pfp, "user-type": utype}
 
 
-
 def get_artists(auth):
     """
     Aquire the list of favorite artists
@@ -33,7 +33,6 @@ def get_artists(auth):
         return uris
     except KeyError:
         return []
-
 
 
 def get_top_artists(username):
@@ -51,7 +50,6 @@ def get_top_artists(username):
         return uris
 
 
-
 def get_current_song(username):
     """
     Getting what's currently being played by user
@@ -65,26 +63,31 @@ def get_current_song(username):
     except Exception:
         return "nothing is playing"
 
+
 def get_top_tracks(flaskid):
     """
     Getting Artist's top tracks
     """
     try:
         response = spotlogin_api.get_artist_top_tracks_call(flaskid)
-        topTracks = []
-        
+        top_tracks = []
+
         for i in range(3):
-            topTracks.append(json.dumps(response.json()['tracks'][i]['name'], indent=2))
-        
-        return topTracks
-        
+            top_tracks.append(json.dumps(response.json()["tracks"][i]["name"], indent=2))
+
+        return top_tracks
+
     except KeyError:
-        return ["no tracks","no tracks","no tracks"]
-        
+        return ["no tracks", "no tracks", "no tracks"]
+
+
 def get_num_listeners(flaskid):
+    """
+    Get the number of listeners
+    """
     try:
         response = spotlogin_api.get_artist_num_listeners(flaskid)
-        return  json.dumps(response.json()['artists']['items'][0]['name'], indent=2)
-    
+        return json.dumps(response.json()["artists"]["items"][0]["name"], indent=2)
+
     except Exception:
         return 0
