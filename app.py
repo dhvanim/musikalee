@@ -179,27 +179,38 @@ def emit_posts():
     SOCKETIO.emit("emit posts channel", posts)
 
 def get_followers_db(user):
-    followersList = DB.session.query(models.Users.following).filter_by(username=user).scalar()
+    """
+    Gets list of Followers
+    """
+    followers_list = DB.session.query(
+        models.Users.following).filter_by(
+            username=user).scalar()
     DB.session.commit()
-    return followersList
+    return followers_list
 
 def follower_update_db(user):
-
-    followersList = DB.session.query(models.Users.following).filter_by(username=user).scalar()
-    newFollowersList = followersList
+    """
+    Get List of followers
+    """
+    followers_list = DB.session.query(
+        models.Users.following).filter_by(
+            username=user).scalar()
+    new_followers_list = followers_list
     DB.session.commit()
-    if user not in followersList:
-        newFollowersList.append(user)
-        isFollowed = True;
-        DB.session.query(models.Users).filter(models.Users.username == user).update({models.Users.following: newFollowersList}, synchronize_session = "fetch")
-        
+    if user not in followers_list:
+        new_followers_list.append(user)
+        is_followed = True
+        DB.session.query(models.Users).filter(
+            models.Users.username == user).update(
+                {models.Users.following: new_followers_list}, synchronize_session="fetch")
     else:
-        newFollowersList.remove(user)
-        isFollowed = False;
-        DB.session.query(models.Users).filter(models.Users.username == user).update({models.Users.following: newFollowersList}, synchronize_session = "fetch")
-    
+        new_followers_list.remove(user)
+        is_followed = False
+        DB.session.query(models.Users).filter(
+            models.Users.username == user).update(
+                {models.Users.following: new_followers_list}, synchronize_session="fetch")
     DB.session.commit()
-    return [newFollowersList, isFollowed]
+    return [new_followers_list, is_followed]
 
 def add_or_remove_like_from_db(user, liked_post_id):
     """
@@ -288,18 +299,14 @@ def emit_artist_data(user_info, top_tracks, num_listeners):
             "following": followers_list,
         },
     )
-
-
     username = get_username(flask.request.sid)
     results = follower_update_db(username)
-    followers = results[0] 
-    isFollowing = results[1]
-    
+    followers = results[0]
+    is_following = results[1]
     print("list of of followers", followers)
-    socketio.emit('emit follower data', {
-        'followers': followers,
-        'isFollowing': isFollowing})
-    
+    SOCKETIO.emit('emit follower data',
+                  {'followers': followers, 'isFollowing': is_following})
+
 def emit_recommended():
     """
     Emits user's recommended
