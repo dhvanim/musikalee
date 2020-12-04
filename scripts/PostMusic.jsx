@@ -122,6 +122,6 @@ export default function PostMusic(props) {
 }
 
 PostMusic.propTypes = {
-  music: PropTypes.node.isRequired,
-  musicType: PropTypes.string.isRequired,
+  music: PropTypes.any.isRequired,
+  musicType: PropTypes.any.isRequired,
 };

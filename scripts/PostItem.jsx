@@ -109,25 +109,27 @@ export default function PostItem(props) {
             overflowWhenOpen="auto"
             triggerSibling={likeButton}
           >
+            <br/>
             <CommentsSection post_id={id} comments={comments} />
           </Collapsible>
 
         </div>
+        <br />
       </li>
     </div>
   );
 }
 
 PostItem.propTypes = {
-  id: PropTypes.node.isRequired,
+  id: PropTypes.any.isRequired,
   username: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  time: PropTypes.node.isRequired,
-  likes: PropTypes.string.isRequired,
-  isLiked: PropTypes.node.isRequired,
-  comments: PropTypes.node.isRequired,
-  isCommentsOpen: PropTypes.node.isRequired,
+  time: PropTypes.any.isRequired,
+  likes: PropTypes.number.isRequired,
+  isLiked: PropTypes.any.isRequired,
+  comments: PropTypes.any.isRequired,
+  isCommentsOpen: PropTypes.any.isRequired,
   pfp: PropTypes.string.isRequired,
-  music: PropTypes.node.isRequired,
-  musicType: PropTypes.string.isRequired,
+  music: PropTypes.any.isRequired,
+  musicType: PropTypes.any.isRequired,
 };

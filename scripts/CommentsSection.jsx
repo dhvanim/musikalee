@@ -30,7 +30,7 @@ export default function CommentsSection(props) {
         <div className="commentsSection">
             <form onSubmit={postComment}>
                 <input type="text" id={post_id}  maxLength="256"/>
-                <input type="submit" name="Comment" />
+                <input type="submit" name="Comment" value="Comment" />
             </form>
             { 
                 comments.map( (comment, index) => (

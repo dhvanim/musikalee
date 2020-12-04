@@ -17,9 +17,9 @@ export function Navigation(){
        <div className="navigation">
        <div className="innernavigation">
         <ul>
-          <li><NavLink to="/" onClick={getPosts}> <i class="fas fa-home"></i> </NavLink></li>
-          <li><NavLink to="/profile" onClick={getProfile}> <i class="fas fa-user-circle"></i> </NavLink></li>
-          <li><NavLink to="/ticket"> <i class="fas fa-ticket-alt"></i> </NavLink></li>
+          <li><NavLink to="/" onClick={getPosts}> <i className="fas fa-home"></i> </NavLink></li>
+          <li><NavLink to="/profile" onClick={getProfile}> <i className="fas fa-user-circle"></i> </NavLink></li>
+          <li><NavLink to="/ticket"> <i className="fas fa-ticket-alt"></i> </NavLink></li>
         </ul>
        </div> 
        </div>

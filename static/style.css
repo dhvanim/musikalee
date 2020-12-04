@@ -14,7 +14,7 @@ h2, h4, h3 {
 .content {
     padding:0;
     margin:0;
-    margin-left:10%;
+    margin-left:8%;
     width:90%;
 }
 
@@ -80,18 +80,18 @@ h2, h4, h3 {
 
 .innerrightsidebar {
     margin-top:20%;
+    margin-left:10px;
 }
 
 .rightsidebar ul {
     list-style:none;
-    padding:10px 0;
+    padding:10px;
     margin:0;
-    width:90%;
 }
 
 .rightsidebar li {
     margin-bottom: 10px;
-    marin-left:5px
+    margin-left:5px
 } 
 
 .rightsidebar .artist {
@@ -116,7 +116,7 @@ h2, h4, h3 {
 }
 
 #text_status {
-    width:80%;
+    width:90%;
     margin:5px 0;
     padding:5px;
 }
@@ -149,7 +149,7 @@ h2, h4, h3 {
 }
 
 .middle {
-    width:70%;
+    width:75%;
 }
 
 /* TIMELINE */
@@ -157,10 +157,10 @@ h2, h4, h3 {
 .timeline {
     padding:0;
     margin:0;
-    margin:auto;
 }
 
 .timeline ul {
+    width:100%;
     list-style-type:none;
     padding:0;
     margin:0;
@@ -173,7 +173,7 @@ h2, h4, h3 {
 /* POSTS */
 
 .post {
-    background-color:#eee;
+    background-color:#fff;
     padding:20px 10px;
     margin:0;
     border-bottom:1px solid #999;
@@ -224,21 +224,32 @@ audio {
 /* COMMENTS */
 
 .commentsSection {
+    clear:both;
     max-height: 200px;
     float: left;
-    min-width: 500px;
+    width:100%;
     overflow: auto;
     display: flex;
     flex-direction: column-reverse;
-    background: white;
+    background: #fff;
 }
 
-.iconsContainer {
-    display:flex; 
-    flex-direction: row; 
-    justify-content: center; 
-    align-items: center;
+.commentsSection input[type=submit] {
+    background-color:#222;
+    color:#fff;
+    border:none;
+    padding:7px 10px;
+    cursor:pointer;
+    margin-left:5px;
+    border-radius:2px;
 }
+
+.commentsSection input[type=text] {
+    margin:5px 0;
+    padding:5px;
+    width:70%;
+}
+
 
 .comment {
     border-bottom: 1px solid gray;
