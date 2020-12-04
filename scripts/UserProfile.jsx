@@ -6,7 +6,6 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 
 export default function UserProfile(){
-    const [userData, setUserData] = React.useState([]);
     const [isCreator, setIsCreator] = React.useState(false);
     const [isUser, setIsUser] = React.useState(false);
     const[users, setUsers] = React.useState("");
@@ -31,7 +30,7 @@ export default function UserProfile(){
     }
     
     function updateUserData(data) {
-        return setUserData(() => {
+    
             
            
             
@@ -60,7 +59,7 @@ export default function UserProfile(){
                 }
                 
             
-        });
+        
     }
     
     function getProfilePic() {
@@ -72,7 +71,23 @@ export default function UserProfile(){
     
     newItem();
     
+      function followerData() {
+        React.useEffect(() => {
+            Socket.on('emit follower data', updateFollowerData);
+            
+            return () => {
+                Socket.off('emit follower data', updateFollowerData);
+            };
+        });
+    }
     
+    function updateFollowerData(data) {
+        setIsFollowed(prevState => data['isFollowing']);
+        setFollowers(prevState => data['followers']);
+        window.localStorage.setItem("Follower Data", JSON.stringify(data));
+    }
+    
+    followerData();
     
     return (
        <div className="page">
@@ -92,7 +107,7 @@ export default function UserProfile(){
                 </div>
             </div>
             <div>
-                <Follow />
+                <Follow isFollowed={isFollowed} />
             </div>
           </div>
           {isUser?

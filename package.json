@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.5.3",
-    "react-bootstrap": "^1.0.1",
+    "react-bootstrap": "^1.4.0",
     "react-collapsible": "^2.8.1",
     "react-router-dom": "^5.2.0",
     "react-spotify-login": "^0.9.1",

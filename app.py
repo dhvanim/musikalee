@@ -133,6 +133,28 @@ def emit_posts():
    
     socketio.emit('emit posts channel', posts)
 
+def get_followers_db(user):
+    followersList = DB.session.query(models.Users.following).filter_by(username=user).scalar()
+    DB.session.commit()
+    return followersList
+
+def follower_update_db(user):
+
+    followersList = DB.session.query(models.Users.following).filter_by(username=user).scalar()
+    newFollowersList = followersList
+    DB.session.commit()
+    if user not in followersList:
+        newFollowersList.append(user)
+        isFollowed = True;
+        DB.session.query(models.Users).filter(models.Users.username == user).update({models.Users.following: newFollowersList}, synchronize_session = "fetch")
+        
+    else:
+        newFollowersList.remove(user)
+        isFollowed = False;
+        DB.session.query(models.Users).filter(models.Users.username == user).update({models.Users.following: newFollowersList}, synchronize_session = "fetch")
+    
+    DB.session.commit()
+    return [newFollowersList, isFollowed]
 
 def add_or_remove_like_from_db(user, liked_post_id):
     is_liked = DB.session.query(models.Likes.id).filter_by(username=user, post_id=liked_post_id).scalar() is not None
@@ -159,22 +181,33 @@ def update_num_likes(data):
 
     
 def emit_user_data(userInfo, topArtists, currSong):
-
-    
     artistList = []
     if len(topArtists) != 0:
         artistList.append(topArtists[0])
         artistList.append(topArtists[1])
         artistList.append(topArtists[2])
         
-    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong})
+    followersList = get_followers_db(get_username(flask.request.sid))
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'currentSong':currSong, "following": followersList})
     
 
 
 def emit_artist_data(userInfo, topTracks, numListeners):
+    
+    followersList = get_followers_db(get_username(flask.request.sid))
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topTracks':topTracks, 'numListeners':numListeners, "following": followersList})
+    
+@socketio.on('recieve follower data')
+def update_follower_info():
 
-    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topTracks':topTracks, 'numListeners':numListeners, 'following':['Cat', 'Dhvani','Justin']})
-
+    username = get_username(flask.request.sid)
+    results = follower_update_db(username)
+    followers = results[0] 
+    isFollowing = results[1]
+    
+    print("list of of followers", followers)
+    socketio.emit('emit follower data', {'followers': followers, 'isFollowing': isFollowing})
+    
 def emit_recommended():
     
     username = get_username(flask.request.sid)
