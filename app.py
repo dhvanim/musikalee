@@ -202,13 +202,15 @@ def follower_update_db(user):
         is_followed = True
         DB.session.query(models.Users).filter(
             models.Users.username == user).update(
-                {models.Users.following: new_followers_list}, synchronize_session="fetch")
+                {models.Users.following: new_followers_list},
+                synchronize_session="fetch")
     else:
         new_followers_list.remove(user)
         is_followed = False
         DB.session.query(models.Users).filter(
             models.Users.username == user).update(
-                {models.Users.following: new_followers_list}, synchronize_session="fetch")
+                {models.Users.following: new_followers_list},
+                synchronize_session="fetch")
     DB.session.commit()
     return [new_followers_list, is_followed]
 
@@ -302,6 +304,9 @@ def emit_artist_data(user_info, top_tracks, num_listeners):
 
 @SOCKETIO.on("recieve follower data")
 def update_follower_info():
+    """
+    Runs on recieving follower data
+    """
     username = get_username(flask.request.sid)
     results = follower_update_db(username)
     followers = results[0]
@@ -462,7 +467,7 @@ def send_user_profile(data):
     """
     sends the profile
     """
-    if (data == True):
+    if data:
         username = get_username(flask.request.sid)
     else:
         username = data
