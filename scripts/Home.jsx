@@ -7,13 +7,19 @@ import RightSideBar from './RightSideBar'
 export default function Home() {
     
     return (
-        <div className="home">
-            
-            <StatusBar />
-
+        <div>
+        
             <RightSideBar />
             
-            <Timeline />
+            <div className="middle">
+            
+                <StatusBar />
+                
+                <div id="spacer20"> </div>
+                
+                <Timeline />
+            
+            </div>
             
         </div>
     );

@@ -11,12 +11,14 @@ export default function Router(){
        <HashRouter>
         <div>
           <Navigation />
+            <div class="content">
             <Switch>
              <Route path="/" component={Home} exact/>
              <Route path="/profile" component={UserProfile}/>
              <Route path="/ticket" component={Ticket}/>
             <Route component={Error}/>
            </Switch>
+           </div>
         </div> 
       </HashRouter>
     );

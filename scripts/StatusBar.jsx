@@ -83,9 +83,11 @@ export default function StatusBar() {
     <div className="statusbar">
       <form onSubmit={submitPost}>
         <input type="text" id="text_status" placeholder="What are you listening to?" maxLength="256" required />
-
-        <br />
-
+        
+        <input type="submit" name="Share" value="Share" />
+        
+        <br/>
+        
         <select id="option" name="option" onClick={dropdownselect}>
           <option value="default"> Attach Media </option>
           <option value="song"> Song </option>
@@ -93,13 +95,14 @@ export default function StatusBar() {
           <option value="album"> Album </option>
           <option value="playlist"> Playlist </option>
         </select>
-
-        <input type="text" id="song" placeholder="Enter Song" maxLength="500" />
-        <input type="text" id="artist" placeholder="Enter Artist" maxLength="500" />
-        <input type="text" id="album" placeholder="Enter Album" maxLength="500" />
-        <input type="text" id="playlist" placeholder="Enter Playlist Link" maxLength="500" />
-
-        <input type="submit" name="Send Post" />
+        
+        <div className="media_input">
+        <input type="text" id="song" placeholder="Song" maxLength="500" />
+        <input type="text" id="artist" placeholder="Artist" maxLength="500" />
+        <input type="text" id="album" placeholder="Album" maxLength="500" />
+        <input type="text" id="playlist" placeholder="Spotify Playlist Link" maxLength="500" />
+        </div>
+        
       </form>
     </div>
   );
