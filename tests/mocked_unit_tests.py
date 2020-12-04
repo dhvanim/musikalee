@@ -7,6 +7,7 @@ import unittest
 import unittest.mock as mock
 from alchemy_mock.mocking import UnifiedAlchemyMagicMock
 import requests
+from flask import Flask, request, current_app
 
 sys.path.insert(1, join(dirname(__file__), "../"))
 import app
@@ -378,14 +379,18 @@ class TestDatabase(unittest.TestCase):
             app.query_user("user")
             user = session.query(app.models.ActiveUsers).first()
             self.assertEqual(user.user, "user")
-
-    # @mock.patch('app.socketio.emit')
-    # def test_update_num_likes(self, mocked_socket):
-    #     session = UnifiedAlchemyMagicMock() 
-    #     with mock.patch("app.DB.session", session):
-    #         app.update_num_likes({"num_likes": 13, "id": 0})
-    #         expected = [{'id': 0, 'username': 'username', 'text': 'message', 'num_likes': 12, 'datetime': '06/01/2005, 00:00:00', 'pfp': 'pfp', 'isCommentsOpen': False, 'comments': [], 'is_liked': True, 'music_type': 'music_type', 'music': 'music'}]
-    #         mocked_socket.assert_called_once_with( "like post channe", expected )
+    
+    def mflask(self):
+        return 12345
+    
+    #@mock.patch('app.socketio.emit')
+    #def test_update_num_likes(self, mocked_socket):
+    #    session = UnifiedAlchemyMagicMock()
+    #    with mock.patch("app.DB.session", session):
+    #        with mock.patch("app.flask.request",self.mflask):
+    #            app.update_num_likes({"num_likes": 13, "id": 0})
+    #    expected = [{'id': 0, 'username': 'username', 'text': 'message', 'num_likes': 12, 'datetime': '06/01/2005, 00:00:00', 'pfp': 'pfp', 'isCommentsOpen': False, 'comments': [], 'is_liked': True, 'music_type': 'music_type', 'music': 'music'}]
+    #    mocked_socket.assert_called_once_with( "like post channel", expected )
     
     @mock.patch('app.socketio.emit')
     def test_emit_posts(self, mocked_socket):
@@ -407,5 +412,11 @@ class TestDatabase(unittest.TestCase):
             app.emit_posts()
             expected = [{'id': 0, 'username': 'username', 'text': 'message', 'num_likes': 12, 'datetime': '06/01/2005, 00:00:00', 'pfp': 'pfp', 'isCommentsOpen': False, 'comments': [], 'is_liked': True, 'music_type': 'music_type', 'music': 'music'}]
             mocked_socket.assert_called_once_with( "emit posts channel", expected )
+    
+    def test_emit_posts_null(self):
+        session=UnifiedAlchemyMagicMock()
+        with mock.patch('app.DB.session',session):
+            result=app.emit_posts()
+        self.assertEqual(result,None)
 if __name__ == "__main__":
     unittest.main()
