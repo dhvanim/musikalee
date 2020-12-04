@@ -299,6 +299,9 @@ def emit_artist_data(user_info, top_tracks, num_listeners):
             "following": followers_list,
         },
     )
+
+@SOCKETIO.on("recieve follower data")
+def update_follower_info():
     username = get_username(flask.request.sid)
     results = follower_update_db(username)
     followers = results[0]
