@@ -103,6 +103,11 @@ def on_post_receive(data):
     socketio.emit('emit new post channel', post_dict)
 
 def emit_posts():
+    
+    if models.Posts.query.count() == 0:
+        DB.session.commit()
+        return None
+    DB.session.commit()
     posts = []
     all_posts = DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
     DB.session.commit()
@@ -162,26 +167,19 @@ def update_num_likes(data):
     
 def emit_user_data(userInfo, topArtists, currSong):
     artistList = []
-    if len(topArtists) >= 3:
+    if len(topArtists) != 0:
         artistList.append(topArtists[0])
         artistList.append(topArtists[1])
         artistList.append(topArtists[2])
         
-    socketio.emit('emit user data', {
-            'username':userInfo['username'],
-            'profileType':userInfo['user_type'], 
-            'topArtists':artistList, 
-            'following':['Cat', 'Dhvani','Justin'],
-            'currentSong':currSong})
+    print(userInfo['username'])
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'following':['Cat', 'Dhvani','Justin'], 'currentSong':currSong})
     
 
+
 def emit_artist_data(userInfo, topTracks, numListeners):
-    socketio.emit('emit user data',{
-            'username':userInfo['username'],
-            'profileType':userInfo['user_type'],
-            'topTracks':topTracks,
-            'numListeners':numListeners,
-            'following':['Cat', 'Dhvani','Justin']})
+
+    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topTracks':topTracks, 'numListeners':numListeners, 'following':['Cat', 'Dhvani','Justin']})
 
 def emit_recommended():
     
@@ -199,6 +197,7 @@ def get_recommended( user_top_artists ):
     
     if len(user_top_artists) == 0:
         return None
+    
     # keep only spotify ID
     for i in range(len(user_top_artists)):
         user_top_artists[i] = user_top_artists[i].split(":")[2]
@@ -218,7 +217,7 @@ def get_trending():
     
     # if DB empty, get trending
     # TODO later add timestamp and check daily
-    if (DB.session.query(models.Trending).count() == 0):
+    if (models.Trending.query.count() == 0):
         data = spotify_get_trending()
         for item in data:
             track = item['track']['name']
@@ -302,8 +301,7 @@ def user_logged_in(data):
     
 @socketio.on("get profile")
 def send_user_profile(data):
-
-    if(data):
+    if(data == True):
         username = get_username(flask.request.sid)
     else:
         username = data
@@ -323,6 +321,7 @@ def send_user_profile(data):
         emit_artist_data(userinfo, topTracks, numListeners)
         
     else:
+        print(userinfo)
         emit_user_data(userinfo, topArtists, currSong)
 
 
