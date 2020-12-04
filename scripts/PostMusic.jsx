@@ -13,17 +13,12 @@ export default function PostMusic(props) {
             <img src={music.album_art} className="album_art" alt={music.album} />
           </a>
           <b>
-            {' '}
             { music.song }
-            {' '}
           </b>
-          {' '}
           <br />
           { music.album }
-          {' '}
           <br />
           { music.artist }
-          {' '}
           <br />
           { music.preview_url != null
             ? (
@@ -45,9 +40,7 @@ export default function PostMusic(props) {
             <img src={music.artist_icon} className="album_art" alt={music.artist_name} />
           </a>
           <h3>
-            {' '}
             { music.artist_name }
-            {' '}
           </h3>
         </span>
       </div>
@@ -62,19 +55,14 @@ export default function PostMusic(props) {
             <img src={music.album_art} className="album_art" alt={music.album} />
           </a>
           <b>
-            {' '}
             { music.album_name }
-            {' '}
           </b>
-          {' '}
           <br />
           { music.artists }
-          {' '}
           <br />
-          {' '}
           <br />
           { music.total_tracks }
-          {' '}
+          
           Tracks || Released:
           { music.release_date }
         </span>
@@ -90,26 +78,20 @@ export default function PostMusic(props) {
             <img src={music.playlist_art} className="album_art" alt={music.playlist_name} />
           </a>
           <b>
-            {' '}
             { music.playlist_name }
-            {' '}
           </b>
-          {' '}
+          
           <br />
           <i>
-            {' '}
             { music.playlist_desc }
-            {' '}
           </i>
-          {' '}
+          
           by
           { music.playlist_owner }
-          {' '}
+          
           <br />
-          {' '}
           <br />
           { music.followers }
-          {' '}
           Followers
         </span>
       </div>

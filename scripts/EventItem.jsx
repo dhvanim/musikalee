@@ -1,17 +1,34 @@
 import React from 'react';
-import { Socket } from './Socket';
+import PropTypes from 'prop-types';
 
-export default function EventItem(props){
+export default function EventItem(props) {
+  const { image } = props.image;
+  const { name } = props.name;
+  const { venue } = props.venue;
+  const { date } = props.date;
+  const { url } = props.url;
+  return (
+    <div className="eventItem">
+      <img alt=".png" src={image} className="album_art" />
+      <p className="title">
+        {name}
+      </p>
+      <p className="location">
+        {venue}
+      </p>
+      <p className="datetime">
+        {date}
+      </p>
+      <button type="button" className="buyLink" onClick={() => window.open(url, '_blank')}> Buy Tickets</button>
 
-    return (
-       <div className="eventItem">
-            <img src={props.image} className="album_art" />
-            <p className="title"> {props.name} </p>
-            <p className="location"> {props.venue} </p>
-            <p className="datetime"> {props.date} </p>
-            <button className="buyLink" onClick={()=> window.open(props.url, "_blank")}> Buy Tickets</button>
-          
-       </div>
-    );
+    </div>
+  );
 }
- 
+
+EventItem.propTypes = {
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  venue: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+};

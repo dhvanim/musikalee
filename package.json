@@ -38,11 +38,28 @@
     "bootstrap": "^4.5.3",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
-    "react-bootstrap": "^0.31.5",
-    "react-dom": "^16.12.0",
+    "react-bootstrap": "^1.0.1",
     "react-collapsible": "^2.8.1",
+    "react-dom": "^16.12.0",
     "react-router-dom": "^5.2.0",
     "react-spotify-login": "^0.9.1",
     "socket.io-client": "^2.3.1"
-  }
+  },
+  "name": "project3-music-sprint2",
+  "description": "https://powerful-ravine-41625.herokuapp.com/",
+  "version": "1.0.0",
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhvanim/project3-music-sprint2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dhvanim/project3-music-sprint2/issues"
+  },
+  "homepage": "https://github.com/dhvanim/project3-music-sprint2#readme"
 }

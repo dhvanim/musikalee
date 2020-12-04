@@ -100,7 +100,7 @@ export default function Timeline() {
   function getLocalStorage() {
     React.useEffect(() => {
       let isMounted = true;
-      Socket.on('navigation change', (data) => {
+      Socket.on('navigation change', () => {
         if (isMounted) {
           setPosts(window.localStorage.getItem('posts'));
         }
