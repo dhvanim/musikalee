@@ -218,12 +218,38 @@ h2, h4, h3 {
 
 .postmusic span {
     font-size:1.1em;
+
+.artistList li {
+    display: inline;
+    float: left;
+    padding:40px;
 }
 
 .post .text {
     padding: 0 10px;
 }
 
+.tabsUser li{
+    display: inline-block;
+    border: 4px solid gray;
+    border-bottom: none;
+    bottom: -1px;
+    position: relative;
+    list-style: none;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.tabsArtist li{
+    display: inline-block;
+    border: 4px solid gray;
+    border-bottom: none;
+    bottom: -1px;
+    position: relative;
+    list-style: none;
+    padding: 6px 12px;
+    cursor: pointer;
+}
 
 audio {
     width:100%;

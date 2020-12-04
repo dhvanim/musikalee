@@ -1,5 +1,5 @@
 import React from 'react';
- 
+
 import { NavLink } from 'react-router-dom';
 import { Socket } from './Socket';
 
@@ -9,10 +9,10 @@ function getPosts(){
 }
 
 function getProfile() {
-    Socket.emit("get profile", true);
+  Socket.emit('get profile', true);
 }
 
-export function Navigation(){
+export default function Navigation(){
     return (
        <div className="navigation">
        <div className="innernavigation">
@@ -25,5 +25,3 @@ export function Navigation(){
        </div>
     );
 }
- 
-export default Navigation;

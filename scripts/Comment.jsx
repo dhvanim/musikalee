@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-
 export default function Comment(props) {
     const comment= props.comment;
     
@@ -13,3 +12,7 @@ export default function Comment(props) {
         </div>
     );
 }
+
+Comment.propTypes = {
+  comment: PropTypes.any.isRequired,
+};

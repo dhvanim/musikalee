@@ -49,8 +49,8 @@ https://powerful-ravine-41625.herokuapp.com/
       `models.DB.session.commit()`
 
 # Set up React Libraries
-1. Run `npm install --save react-router-dom && npm install react-spotify-login && npm install react-collapsible --save` 
-2. Install Bootstrap `npm install react-bootstrap bootstrap` 
+1. Run `npm install --save react-router-dom && npm install react-spotify-login && npm install react-collapsible --save && npm install --save react-tabs` 
+2. Install Bootstrap `npm install react-bootstrap@1.0.1` 
 3. Run `pip install timeago`
 
 # Set up Spotify Login

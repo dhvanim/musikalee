@@ -2,20 +2,12 @@ import * as React from 'react';
 import { Socket } from './Socket';
 
 export default function RightSideBar() {
-    
-    const [trending, setTrending] = React.useState(() => {
-        const stickyValue = window.localStorage.getItem("trending");
-        return stickyValue !== null
-          ? JSON.parse(stickyValue)
-          : [];
-    });
-    const [recommended, setRecommended] = React.useState(() => {
-    const stickyValue = window.localStorage.getItem("recommended");
+  const [trending, setTrending] = React.useState(() => {
+    const stickyValue = window.localStorage.getItem('trending');
     return stickyValue !== null
       ? JSON.parse(stickyValue)
       : [];
   });
-    
     function getTrending() {
         React.useEffect( () => {
             Socket.on('trending channel', updateTrending);
@@ -81,5 +73,7 @@ export default function RightSideBar() {
             </div>
             </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
