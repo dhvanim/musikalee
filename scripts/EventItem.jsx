@@ -2,11 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function EventItem(props) {
-  const { image } = props.image;
-  const { name } = props.name;
-  const { venue } = props.venue;
-  const { date } = props.date;
-  const { url } = props.url;
+  const { image, name, venue, date, url } = props;
+
   return (
     <div className="eventItem">
       <img alt=".png" src={image} className="album_art" />

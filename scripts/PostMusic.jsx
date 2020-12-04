@@ -2,8 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 export default function PostMusic(props) {
-  const { music } = props;
-  const { musicType } = props;
+  const { music, musicType } = props;
 
   if (musicType === 'song') {
     return (
