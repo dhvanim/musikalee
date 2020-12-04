@@ -44,7 +44,10 @@ def parse_events(events_json):
         name = e["name"]
         url = e["url"]
         images = e["images"][0]["url"]
-        date = datetime.strptime(e["dates"]["start"]["dateTime"], "%Y-%m-%dT%XZ")
+        try:
+            date = datetime.strptime(e["dates"]["start"]["dateTime"], "%Y-%m-%dT%XZ")
+        except KeyError:
+            date = ""
         date = date.strftime("%B %d, %Y")
         venue = e["_embedded"]["venues"][0]["name"]
         all_events.append({"name": name, "url": url, "image": images, "date": date, "venue": venue, "totalPages":num_pages, "currPage":curr_page})
