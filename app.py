@@ -35,7 +35,7 @@ DB.app = app
 app.static_folder = 'static'
 
 def get_username(flask_id):
-    user = models.ActiveUsers.query.filter_by(serverid = flask_id).first().user
+    user = DB.session.query(models.ActiveUsers).filter_by(serverid = flask_id).first().user
     DB.session.commit()
     return user
 
@@ -46,19 +46,23 @@ def query_user(user):
 
 def get_post_music_data(music_type, music_data):
     data = {}
-    
-    song = music_data['song'].strip()
-    artist = music_data['artist'].strip()
-    album = music_data['album'].strip()
-    playlist = music_data['playlist'].strip()
 
     if music_type == "song":
+        song = music_data['song'].strip()
+        artist = music_data['artist'].strip()
         data = spotify_search_track(song, artist)
-    if music_type == "artist":
+        
+    elif music_type == "artist":
+        artist = music_data['artist'].strip()
         data = spotify_search_artist(artist)
+        
     elif music_type == "album":
+        artist = music_data['artist'].strip()
+        album = music_data['album'].strip()
         data = spotify_search_album(album, artist)
+        
     elif music_type == "playlist":
+        playlist = music_data['playlist'].strip()
         data = spotify_search_playlist(playlist)
     
     return data
@@ -99,11 +103,6 @@ def on_post_receive(data):
     socketio.emit('emit new post channel', post_dict)
 
 def emit_posts():
-    
-    if models.Posts.query.count() == 0:
-        DB.session.commit()
-        return None
-    DB.session.commit()
     posts = []
     all_posts = DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
     DB.session.commit()
@@ -130,7 +129,6 @@ def emit_posts():
         }
         
         posts.append( entry )
-   
     socketio.emit('emit posts channel', posts)
 
 def get_followers_db(user):
@@ -165,14 +163,18 @@ def add_or_remove_like_from_db(user, liked_post_id):
         DB.session.add(models.Likes(user, liked_post_id))
     DB.session.commit()
     return not is_liked
-    
+
+def update_likes_on_post(post_id, num_likes):
+    post = DB.session.query(models.Posts).filter(models.Posts.id == post_id)
+    post.num_likes = num_likes
+    DB.session.commit()
+
 @socketio.on('like post')    
 def update_num_likes(data):
     num_likes = data["num_likes"]
     post_id = data["id"]
 
-    post_to_like = DB.session.query(models.Posts).filter(models.Posts.id == post_id).update({models.Posts.num_likes: num_likes}, synchronize_session = False) 
-    DB.session.commit()
+    update_likes_on_post(post_id, num_likes)
     
     username = get_username(flask.request.sid)
     is_liked = add_or_remove_like_from_db(username, post_id)
@@ -182,20 +184,30 @@ def update_num_likes(data):
     
 def emit_user_data(userInfo, topArtists, currSong):
     artistList = []
-    if len(topArtists) != 0:
+    if len(topArtists) >= 3:
         artistList.append(topArtists[0])
         artistList.append(topArtists[1])
         artistList.append(topArtists[2])
         
-    followersList = get_followers_db(get_username(flask.request.sid))
-    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topArtists':artistList, 'currentSong':currSong, "following": followersList})
-    
 
+    followersList = get_followers_db(get_username(flask.request.sid))
+    socketio.emit('emit user data', {
+            'username':userInfo['username'],
+            'profileType':userInfo['user_type'], 
+            'topArtists':artistList, 
+            "following": followersList,
+            'currentSong':currSong})
+
+    
 
 def emit_artist_data(userInfo, topTracks, numListeners):
-    
     followersList = get_followers_db(get_username(flask.request.sid))
-    socketio.emit('emit user data', {'username':userInfo['username'],'profileType':userInfo['user_type'], 'topTracks':topTracks, 'numListeners':numListeners, "following": followersList})
+    socketio.emit('emit user data', {
+        'username':userInfo['username'],
+        'profileType':userInfo['user_type'],
+        'topTracks':topTracks,
+        'numListeners':numListeners,
+        "following": followersList})
     
 @socketio.on('recieve follower data')
 def update_follower_info():
@@ -206,7 +218,9 @@ def update_follower_info():
     isFollowing = results[1]
     
     print("list of of followers", followers)
-    socketio.emit('emit follower data', {'followers': followers, 'isFollowing': isFollowing})
+    socketio.emit('emit follower data', {
+        'followers': followers,
+        'isFollowing': isFollowing})
     
 def emit_recommended():
     
@@ -224,7 +238,6 @@ def get_recommended( user_top_artists ):
     
     if len(user_top_artists) == 0:
         return None
-    
     # keep only spotify ID
     for i in range(len(user_top_artists)):
         user_top_artists[i] = user_top_artists[i].split(":")[2]
@@ -244,7 +257,7 @@ def get_trending():
     
     # if DB empty, get trending
     # TODO later add timestamp and check daily
-    if (models.Trending.query.count() == 0):
+    if (DB.session.query(models.Trending).count() == 0):
         data = spotify_get_trending()
         for item in data:
             track = item['track']['name']
@@ -369,7 +382,6 @@ def save_comment(data):
 
 @socketio.on("search ticketmaster")
 def get_ticketmaster_events(data):
-    print(data)
     zipcode = data['zipcode']
     artist = data['artist']
     page = str(data["page"])
@@ -404,4 +416,3 @@ if __name__ == '__main__':
         port=int(os.getenv('PORT', 8080)),
         debug=True
     )
-

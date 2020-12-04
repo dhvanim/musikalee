@@ -13,6 +13,12 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-loader": "^8.0.5",
     "css-loader": "^3.4.2",
+    "eslint": "^7.14.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.11.2",
     "jquery": "^3.2.1",
@@ -30,11 +36,32 @@
   },
   "dependencies": {
     "bootstrap": "^4.5.3",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-bootstrap": "^1.0.1",
     "react-bootstrap": "^1.4.0",
     "react-collapsible": "^2.8.1",
+    "react-dom": "^16.12.0",
     "react-router-dom": "^5.2.0",
     "react-spotify-login": "^0.9.1",
     "react-tabs": "^3.1.1",
     "socket.io-client": "^2.3.1"
-  }
+  },
+  "name": "project3-music-sprint2",
+  "description": "https://powerful-ravine-41625.herokuapp.com/",
+  "version": "1.0.0",
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhvanim/project3-music-sprint2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dhvanim/project3-music-sprint2/issues"
+  },
+  "homepage": "https://github.com/dhvanim/project3-music-sprint2#readme"
 }
