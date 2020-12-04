@@ -459,7 +459,7 @@ def send_user_profile(data):
     """
     sends the profile
     """
-    if data:
+    if (data == True):
         username = get_username(flask.request.sid)
     else:
         username = data
