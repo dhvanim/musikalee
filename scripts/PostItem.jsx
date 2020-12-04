@@ -72,19 +72,19 @@ export default function PostItem(props) {
         </span>
         {' '}
         <br />
-        <span className="username" onClick={goToUser} onKeyDown={goToUser}> 
+        <h4 className="username" onClick={goToUser} onKeyDown={goToUser}> 
           {' '}
           { username }
           {' '}
-        </span>
+        </h4>
         {' '}
         <div id="spacer5"></div>
         { hasMusic(musicType) }
-        <span className="text">
+        <div className="text">
           {' '}
           { text }
           {' '}
-        </span>
+        </div>
         {' '}
         <br />
         <span className="time">

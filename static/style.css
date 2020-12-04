@@ -16,6 +16,7 @@ h2, h4, h3 {
     margin:0;
     margin-left:8%;
     width:90%;
+    margin-top:20px;
 }
 
 #spacer20 {
@@ -25,7 +26,7 @@ h2, h4, h3 {
 
 #spacer5 {
     clear:both;
-    height:5px;
+    height:10px;
 }
 
 /* NAVIGATION */
@@ -145,7 +146,6 @@ h2, h4, h3 {
 .statusbar {
     margin:auto;
     width:95%;
-    margin-top:20px;
 }
 
 .middle {
@@ -208,17 +208,27 @@ h2, h4, h3 {
 
 .postmusic {
     background-color:#cee0c8;
-    width:100%;
+    width:95%;
     margin:auto;
     border-radius: 5px;
     overflow:visible;
     min-height:110px;
+    padding:10px;
+}
+
+.postmusic span {
+    font-size:1.1em;
+}
+
+.post .text {
+    padding: 0 10px;
 }
 
 
 audio {
-    width:70%;
+    width:100%;
     margin:auto;
+    margin-top:10px;
 }
 
 /* COMMENTS */
@@ -259,36 +269,72 @@ audio {
 
 /* TICKETS */
 
-.eventItem {
-    border-radius:20px;
-    border: 1px solid #476e3b;
-    background-color:#fff;
+.page {
+    text-align:center;
+    margin:auto;
 }
 
-.post .title{
+.page input[type=text] {
+    padding:5px;
+    margin:5px;
+}
+
+.page input[type=submit] {
+    background-color:#222;
+    color:#fff;
+    border:none;
+    padding:7px 10px;
+    cursor:pointer;
+    margin-left:5px;
+    border-radius:2px;
+}
+
+.page input[type=submit]:hover {
+    background-color:#bfcfba;
+}
+
+.eventItem {
+    width:80%;
+    margin:auto;
+    border-bottom: 1px solid #000;
+    background-color:#fff;
+    overflow:visible;
+    min-height:80px;
+    padding: 10px 0;
+    text-align:left;
+}
+
+.eventItem .title{
     font-weight:bold;
 }
 
-.post .location{
+.eventItem .location{
     opacity:0.7;
 }
 
-.post .datetime{
+.eventItem .datetime{
     opacity:0.7;
 }
 
-.post .image {
+.eventItem .image {
     float:left;
     width:110px;
-    padding-right:5px;
-    padding:5px;
+    padding:0px 5px;
 }
 
-.post .buyLink {
+.eventItem .buyLink {
+    background-color:#222;
+    color:#fff;
+    border:none;
+    padding:7px 10px;
+    cursor:pointer;
+    margin-left:5px;
+    border-radius:2px;
     float:right;
-    width:110px;
-    padding-right:25px;
-    padding:5px;
+}
+
+.eventItem .buyLink:hover {
+    background-color:#bfcfba;
 }
 
 .pageItem {
