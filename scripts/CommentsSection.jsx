@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import { Socket } from './Socket';
-import Comment from './Comment';
+import  Comment  from './Comment';
 
 export default function CommentsSection(props) {
     const comments= props.comments;
@@ -18,7 +18,7 @@ export default function CommentsSection(props) {
         let user = getUserInfo();
         Socket.emit('post comment', {
             comment: comment.value,
-            post_id: props.post_id,
+            post_id: post_id,
             'username':user['username']
         });
         
@@ -37,11 +37,6 @@ export default function CommentsSection(props) {
                     <Comment key = {index} comment={comment}> </Comment>
                 ))   
             }
-    </div>
-  );
+        </div>
+    );
 }
-
-CommentsSection.propTypes = {
-  postId: PropTypes.any,
-  comments: PropTypes.any,
-};
