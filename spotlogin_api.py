@@ -45,7 +45,6 @@ def get_top_call(username):
     response = requests.get(
         "https://api.spotify.com/v1/me/top/artists", headers=headers
     )
-    print(response.json())
     return response.json()
 
 
@@ -59,7 +58,6 @@ def get_current_call(username):
     url = "https://api.spotify.com/v1/me/player/currently-playing"
     header = {"Authorization": "Bearer " + auth}
     response = requests.get(url, headers=header)
-    print(response.json())
     return response.json()
 
 def get_artist_id(flaskid, name):

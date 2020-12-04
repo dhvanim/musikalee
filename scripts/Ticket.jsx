@@ -2,7 +2,7 @@ import React from 'react';
 import { Socket } from './Socket';
 import EventItem from './EventItem';
 import Pagination from 'react-bootstrap/Pagination';
-import Item from 'react-bootstrap/PageItem'
+import Item from 'react-bootstrap/PageItem';
 
 export default function Ticket(){
     const [events, setEvents] = React.useState([]);
@@ -11,7 +11,7 @@ export default function Ticket(){
     const [searchParams, setSearchParams] = React.useState({
         zipcode: "",
         artist:""
-    })
+    });
     
     function getEnteredValues(event){
         let entered_zipcode = document.getElementById("zip_code").value;
@@ -19,7 +19,7 @@ export default function Ticket(){
         
         setSearchParams({zipcode: entered_zipcode, artist:entered_artist});
         setPage(0);
-        setPageItems([])
+        setPageItems([]);
         
         Socket.emit('search ticketmaster', {"zipcode" :entered_zipcode,
                                             "artist": entered_artist,
@@ -32,7 +32,7 @@ export default function Ticket(){
         event.preventDefault();
     }
     function searchEvents(zipcode, artist, currPage) {
-        console.log("Searching for page", currPage)
+        console.log("Searching for page", currPage);
         Socket.emit('search ticketmaster', {"zipcode" :searchParams.zipcode,
                                             "artist": searchParams.artist,
                                             "page": currPage
@@ -73,7 +73,7 @@ export default function Ticket(){
         }
     }
     
-    getEvents()
+    getEvents();
     return (
        <div className="page">
           <h1>Discover events near you!</h1>
