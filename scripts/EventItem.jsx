@@ -1,25 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+
 export default function EventItem(props) {
   const { image, name, venue, date, url } = props;
 
-  return (
-    <div className="eventItem">
-      <img alt=".png" src={image} className="album_art" />
-      <p className="title">
-        {name}
-      </p>
-      <p className="location">
-        {venue}
-      </p>
-      <p className="datetime">
-        {date}
-      </p>
-      <button type="button" className="buyLink" onClick={() => window.open(url, '_blank')}> Buy Tickets</button>
-
-    </div>
-  );
+    return (
+       <div>
+       <div className="eventItem">
+            <button className="buyLink" onClick={()=> window.open(url, "_blank")}> Buy Tickets</button>
+            <img src={image} className="image" />
+            <span className="title"> {name} </span> <br />
+            <span className="location"> {venue} </span> <br />
+            <span className="datetime"> {date} </span> <br />
+       </div>
+       <div id="spacer5"></div>
+       </div>
+    );
 }
 
 EventItem.propTypes = {

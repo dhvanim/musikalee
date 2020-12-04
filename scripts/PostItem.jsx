@@ -63,15 +63,16 @@ export default function PostItem(props) {
           <img src={pfp} alt={username} />
         </span>
         <br />
-        <span className="username" onClick={goToUser} onKeyDown={goToUser}>
+        <h4 className="username" onClick={goToUser} onKeyDown={goToUser}>
           { username }
-        </span>
+        </h4>
         <br />
         <p> </p>
         { hasMusic(musicType) }
-        <span className="text">
+        <div className="text">
           { text }
-        </span>
+        </div>
+
         <br />
         <span className="time">
           { time }
@@ -90,25 +91,29 @@ export default function PostItem(props) {
             overflowWhenOpen="auto"
             triggerSibling={likeButton}
           >
-            <CommentsSection postId={id} comments={comments} />
+            <br/>
+            <CommentsSection post_id={id} comments={comments} />
+
           </Collapsible>
 
         </div>
+        <br />
       </li>
     </div>
   );
 }
 
 PostItem.propTypes = {
-  id: PropTypes.node.isRequired,
+  id: PropTypes.any.isRequired,
   username: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  time: PropTypes.node.isRequired,
-  likes: PropTypes.node.isRequired,
+  time: PropTypes.any.isRequired,
+  likes: PropTypes.number.isRequired,
   isLiked: PropTypes.any.isRequired,
   comments: PropTypes.any.isRequired,
   isCommentsOpen: PropTypes.any.isRequired,
   pfp: PropTypes.string.isRequired,
-  music: PropTypes.object.isRequired,
-  musicType: PropTypes.string.isRequired,
+  music: PropTypes.any.isRequired,
+  musicType: PropTypes.any.isRequired,
+
 };

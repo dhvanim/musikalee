@@ -2,18 +2,15 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 export default function Comment(props) {
-  const { comment } = props;
-
-  return (
-    <div className="comment">
-      <p>
-        {comment.username}
-        {comment.datetime}
-        <br />
-        {comment.text}
-      </p>
-    </div>
-  );
+    const comment= props.comment;
+    
+    return (
+        <div className="comment">
+            <p> <b>{comment.username}</b> <i>{comment.datetime}</i><br/>
+                {comment.text} 
+            </p>
+        </div>
+    );
 }
 
 Comment.propTypes = {

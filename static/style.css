@@ -1,56 +1,182 @@
 body {
-    background-color:#bfcfba;
+    background-color:#fff;
     font-family: Arial, Helvetica, sans-serif;
+    padding:0;
+    margin:0;
+    font-size:0.9em;
 }
 
-h4, h3 {
+h2, h4, h3 {
     padding:0;
     margin:0;
 }
+
+.content {
+    padding:0;
+    margin:0;
+    margin-left:8%;
+    width:90%;
+    margin-top:20px;
+}
+
+#spacer20 {
+    clear:both;
+    height:20px;
+}
+
+#spacer5 {
+    clear:both;
+    height:10px;
+}
+
+/* NAVIGATION */
+
+.navigation {
+    width:7%;
+    position:fixed;
+    top:0;
+    left:0;
+    height:100%;
+    background-color:#bfcfba;
+    vertical-align:middle;
+}
+
+
+.navigation ul {
+    list-style-type:none;
+    padding:0;
+    margin:0;
+    font-size:2.5em;
+    text-align:center;
+    margin-top:100%;
+}
+
+.navigation li {
+    padding: 10px 0;
+}
+
+.navigation a {
+    color:#222;
+}
+
+.navigation a:hover {
+    color:#fff;
+}
+
+.navigation a:active {
+    text-decoration:underline;
+}
+
+
+/* RIGHT SIDE BAR */
+
+.rightsidebar {
+    position:fixed;
+    right:0px;
+    top:0px;
+    width:20%;
+    height:100%;
+    background-color:#eee;
+}
+
+.innerrightsidebar {
+    margin-top:20%;
+    margin-left:10px;
+}
+
+.rightsidebar ul {
+    list-style:none;
+    padding:10px;
+    margin:0;
+}
+
+.rightsidebar li {
+    margin-bottom: 10px;
+    margin-left:5px
+} 
+
+.rightsidebar .artist {
+    font-style:italic;
+}
+
+.rightsidebar li i {
+    font-size:0.7em;
+}
+
+
+/* STATUS BAR */
+
 .statusbar input[type=submit] {
     background-color:#222;
     color:#fff;
     border:none;
-    margin:5px;
-    padding:5px 10px;
+    padding:7px 10px;
+    cursor:pointer;
+    margin-left:5px;
+    border-radius:2px;
 }
 
-.statusbar input[type=text] {
-    margin:5px;
+#text_status {
+    width:90%;
+    margin:5px 0;
     padding:5px;
-    width:50%;
+}
+
+.media_input input[type=text] {
+    padding:5px;
+    float:left;
+    margin-left:5px;
+}
+
+.statusbar select[name=option] {
+    padding:5px 0px;
+    cursor:pointer;
+    position:relative;
+    float:left;
+}
+
+.statusbar input[type=submit]:hover {
+    background-color:#bfcfba;
+}
+
+#song, #artist, #album, #playlist {
+    display:none;
 }
 
 .statusbar {
-    margin-left:25%;
+    margin:auto;
+    width:95%;
 }
 
+.middle {
+    width:75%;
+}
+
+/* TIMELINE */
+
 .timeline {
-    position:relative;
-    width:60%;
-    margin-left:10%;
+    padding:0;
+    margin:0;
 }
 
 .timeline ul {
-    list-style:none;
-    padding-left:0;
-    
+    width:100%;
+    list-style-type:none;
+    padding:0;
+    margin:0;
 }
 
 .timeline li {
-    padding:5px;
-    margin-bottom:20px;
     list-style-type:none;
 }
 
-h2 {
-    text-align:center;
-}
+/* POSTS */
 
 .post {
-    border-radius:20px;
-    border: 1px solid #476e3b;
     background-color:#fff;
+    padding:20px 10px;
+    margin:0;
+    border-bottom:1px solid #999;
 }
 
 .post .username {
@@ -59,73 +185,7 @@ h2 {
 
 .post .time {
     opacity:0.7;
-}
-
-.page {
-    padding-left: 50px;
-}
-
-.rightsidebar {
-    position:fixed;
-    right:10px;
-    top:40px;
-    width:20%;
-    background-color:#fff;
-    border: 1px solid #476e3b;
-    border-radius: 15px;
-}
-
-
-.rightsidebar ul {
-    list-style:none;
-    padding-left:10px;
-    max-width:100%;
-    text-align:center;
-}
-
-.rightsidebar li {
-    margin-bottom: 10px;
-} 
-
-.rightsidebar .artist {
-    font-style:italic;
-}
-
-.commentsSection {
-    max-height: 200px;
-    float: left;
-    min-width: 500px;
-    overflow: auto;
-    display: flex;
-    flex-direction: column-reverse;
-    background: white;
-}
-
-.iconsContainer {
-    display:flex; 
-    flex-direction: row; 
-    justify-content: center; 
-    align-items: center;
-}
-
-.comment {
-    border-bottom: 1px solid gray;
-    padding-left: 10px;
-}
-
-.loginpage {
-    margin:auto;
-    width:100%;
-}
-
-.spotifybutton {
-    margin:auto;
-    padding:20px;
-    background-color:green;
-    border-radius:15px;
-    border:2px solid #111;
-    color:#fff;
-    cursor:pointer;
+    float:left;
 }
 
 .pfp img {
@@ -148,18 +208,16 @@ h2 {
 
 .postmusic {
     background-color:#cee0c8;
-    width:75%;
+    width:95%;
     margin:auto;
     border-radius: 5px;
     overflow:visible;
     min-height:110px;
+    padding:10px;
 }
 
-.page {
-    position: absolute;
-    left: 150px;
-    width: 90%;
-}
+.postmusic span {
+    font-size:1.1em;
 
 .artistList li {
     display: inline;
@@ -167,10 +225,8 @@ h2 {
     padding:40px;
 }
 
-.trackList li {
-    display: inline;
-    float: left;
-    padding:40px;
+.post .text {
+    padding: 0 10px;
 }
 
 .tabsUser li{
@@ -196,50 +252,115 @@ h2 {
 }
 
 audio {
+    width:100%;
+    margin:auto;
+    margin-top:10px;
+}
+
+/* COMMENTS */
+
+.commentsSection {
+    clear:both;
+    max-height: 200px;
+    float: left;
+    width:100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    background: #fff;
+}
+
+.commentsSection input[type=submit] {
+    background-color:#222;
+    color:#fff;
+    border:none;
+    padding:7px 10px;
+    cursor:pointer;
+    margin-left:5px;
+    border-radius:2px;
+}
+
+.commentsSection input[type=text] {
+    margin:5px 0;
+    padding:5px;
     width:70%;
+}
+
+
+.comment {
+    border-bottom: 1px solid gray;
+    padding-left: 10px;
+}
+
+
+/* TICKETS */
+
+.page {
+    text-align:center;
     margin:auto;
 }
 
-.username:hover {
-    text-decoration: underline;
-    padding:0;
+.page input[type=text] {
+    padding:5px;
+    margin:5px;
 }
 
-#song, #artist, #album, #playlist {
-    display:none;
+.page input[type=submit] {
+    background-color:#222;
+    color:#fff;
+    border:none;
+    padding:7px 10px;
+    cursor:pointer;
+    margin-left:5px;
+    border-radius:2px;
 }
 
+.page input[type=submit]:hover {
+    background-color:#bfcfba;
+}
 
 .eventItem {
-    border-radius:20px;
-    border: 1px solid #476e3b;
+    width:80%;
+    margin:auto;
+    border-bottom: 1px solid #000;
     background-color:#fff;
+    overflow:visible;
+    min-height:80px;
+    padding: 10px 0;
+    text-align:left;
 }
 
-.post .title{
+.eventItem .title{
     font-weight:bold;
 }
 
-.post .location{
+.eventItem .location{
     opacity:0.7;
 }
 
-.post .datetime{
+.eventItem .datetime{
     opacity:0.7;
 }
 
-.post .image {
+.eventItem .image {
     float:left;
     width:110px;
-    padding-right:5px;
-    padding:5px;
+    padding:0px 5px;
 }
 
-.post .buyLink {
+.eventItem .buyLink {
+    background-color:#222;
+    color:#fff;
+    border:none;
+    padding:7px 10px;
+    cursor:pointer;
+    margin-left:5px;
+    border-radius:2px;
     float:right;
-    width:110px;
-    padding-right:25px;
-    padding:5px;
+}
+
+.eventItem .buyLink:hover {
+    background-color:#bfcfba;
 }
 
 .pageItem {
@@ -259,4 +380,35 @@ audio {
   overflow: hidden;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* PROFILE PAGE */
+
+.artistList li {
+    display: inline;
+    float: left;
+    padding:40px;
+}
+
+.trackList li {
+    display: inline;
+    float: left;
+    padding:40px;
+}
+
+/* LOGIN page */
+
+.loginpage {
+    margin:auto;
+    width:100%;
+}
+
+.spotifybutton {
+    margin:auto;
+    padding:20px;
+    background-color:green;
+    border-radius:15px;
+    border:2px solid #111;
+    color:#fff;
+    cursor:pointer;
 }

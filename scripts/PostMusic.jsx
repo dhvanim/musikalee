@@ -11,19 +11,24 @@ export default function PostMusic(props) {
           <a href={music.external_link} target="_blank" rel="noreferrer">
             <img src={music.album_art} className="album_art" alt={music.album} />
           </a>
-          <b>
+          <h3>
+            
             { music.song }
-          </b>
-          <br />
+            
+          </h3>
+          <span>
           { music.album }
+          
           <br />
           { music.artist }
-          <br />
+          </span> <br />
           { music.preview_url != null
             ? (
+              <div className="audio">
               <audio controls name="media">
                 <source src={music.preview_url} type="audio/mpeg" />
               </audio>
+              </div>
             )
             : <div />}
         </span>
@@ -38,9 +43,11 @@ export default function PostMusic(props) {
           <a href={music.external_link} target="_blank" rel="noreferrer">
             <img src={music.artist_icon} className="album_art" alt={music.artist_name} />
           </a>
-          <h3>
+          <h1>
+            
             { music.artist_name }
-          </h3>
+            
+          </h1>
         </span>
       </div>
     );
@@ -53,17 +60,15 @@ export default function PostMusic(props) {
           <a href={music.external_link} target="_blank" rel="noreferrer">
             <img src={music.album_art} className="album_art" alt={music.album} />
           </a>
-          <b>
+          <h4>
             { music.album_name }
-          </b>
+          </h4>
           <br />
           { music.artists }
           <br />
-          <br />
           { music.total_tracks }
-          
-          Tracks || Released:
-          { music.release_date }
+          Tracks || Released: { music.release_date }
+
         </span>
       </div>
     );
@@ -76,22 +81,15 @@ export default function PostMusic(props) {
           <a href={music.external_link} target="_blank" rel="noreferrer">
             <img src={music.playlist_art} className="album_art" alt={music.playlist_name} />
           </a>
-          <b>
+          <h3>
             { music.playlist_name }
-          </b>
-          
-          <br />
+          </h3>
           <i>
             { music.playlist_desc }
           </i>
-          
-          by
-          { music.playlist_owner }
-          
+          by { music.playlist_owner }
           <br />
-          <br />
-          { music.followers }
-          Followers
+          { music.followers } Followers
         </span>
       </div>
     );
@@ -103,6 +101,6 @@ export default function PostMusic(props) {
 }
 
 PostMusic.propTypes = {
-  music: PropTypes.node.isRequired,
-  musicType: PropTypes.string.isRequired,
+  music: PropTypes.any.isRequired,
+  musicType: PropTypes.any.isRequired,
 };
