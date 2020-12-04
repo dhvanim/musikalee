@@ -17,5 +17,5 @@ export default function Comment(props) {
 }
 
 Comment.propTypes = {
-  comment: PropTypes.node.isRequired,
+  comment: PropTypes.any.isRequired,
 };

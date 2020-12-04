@@ -5,8 +5,7 @@ import { Socket } from './Socket';
 import Comment from './Comment';
 
 export default function CommentsSection(props) {
-  const { comments } = props.comments;
-  const { postId } = props.postId;
+  const { comments, postId } = props;
 
   function getUserInfo() {
     const data = window.localStorage.getItem('userinfo');
@@ -43,5 +42,5 @@ export default function CommentsSection(props) {
 
 CommentsSection.propTypes = {
   postId: PropTypes.node.isRequired,
-  comments: PropTypes.node.isRequired,
+  comments: PropTypes.any.isRequired,
 };
