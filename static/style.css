@@ -4,6 +4,7 @@ body {
     padding:0;
     margin:0;
     font-size:0.9em;
+    width:100%;
 }
 
 h2, h4, h3 {
@@ -400,16 +401,47 @@ audio {
 /* LOGIN page */
 
 .loginpage {
+    margin:0;
+    text-align:center;
+    width:100%;
+    height:100%;
+    padding:0;
+    background-image:url('./background.jpeg');
+    background-size: cover;
+    opacity:0.75;
+}
+
+.loginblock {
+    position:absolute;
     margin:auto;
     width:100%;
+    height:100%;
+    color:#fff;
+    opacity:1;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.loginblock h1 {
+    font-family: 'Comfortaa', cursive;
+    font-weight:700;
+    font-size:4em;
+
 }
 
 .spotifybutton {
-    margin:auto;
+    margin:0;
     padding:20px;
-    background-color:green;
+    background-color:#1ED760;
     border-radius:15px;
-    border:2px solid #111;
     color:#fff;
     cursor:pointer;
+    text-align:center;
+    width:200px;
+    border:none;
+    font-size:1.3em;
+    font-weight:bold;
+}
+
+.spotifybutton:hover {
+    background-color:#86cc70;
 }
