@@ -4,6 +4,7 @@ import {
 } from 'react-tabs';
 import { Follow } from './Follow';
 import { Socket } from './Socket';
+import Navigation from './Navigation';
 // import 'react-tabs/style/react-tabs.css';
 
 export default function UserProfile() {
@@ -76,7 +77,9 @@ export default function UserProfile() {
   followerData();
 
   return (
-    <div className="page">
+    <div>
+    <Navigation />
+    <div className="page content">
       <div style={{
         display: 'flex',
         justifyContent: 'center',
@@ -200,6 +203,8 @@ export default function UserProfile() {
           </div>
         )
         : <div />}
+      
+    </div>
     </div>
   );
 }

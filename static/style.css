@@ -5,6 +5,7 @@ body {
     margin:0;
     font-size:0.9em;
     width:100%;
+    height:100%;
 }
 
 h2, h4, h3 {
@@ -68,6 +69,13 @@ h2, h4, h3 {
     text-decoration:underline;
 }
 
+.aboutlink {
+    position:fixed;
+    bottom:3%;
+    left: 3%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
 
 /* RIGHT SIDE BAR */
 
@@ -401,31 +409,29 @@ audio {
 /* LOGIN page */
 
 .loginpage {
-    margin:0;
-    text-align:center;
-    width:100%;
-    height:100%;
-    padding:0;
+    width:100vw;
+    height:100vh;
     background-image:url('./background.jpeg');
-    background-size: cover;
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     opacity:0.75;
 }
 
 .loginblock {
-    position:absolute;
-    margin:auto;
-    width:100%;
-    height:100%;
+    width:100vw;
+    height:100vh;
     color:#fff;
     opacity:1;
     background-color: rgba(0,0,0,0.2);
+    text-align:center;
 }
 
 .loginblock h1 {
     font-family: 'Comfortaa', cursive;
     font-weight:700;
     font-size:4em;
-
+    padding-top:10%;
 }
 
 .spotifybutton {
@@ -444,4 +450,97 @@ audio {
 
 .spotifybutton:hover {
     background-color:#86cc70;
+}
+
+.landinglink {
+    position:fixed;
+      bottom: 5%;
+      left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+.landinglink a {
+    font-size:1.5em;
+    color:#fff;
+    text-align:center;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.landinglink a:hover {
+    color:#1ED760;
+}
+
+
+/* LANDING */
+.landing {
+    width:100%;
+    margin:auto;
+    text-align:center;
+}
+
+.heading {
+    height: 100%;
+    width:100%;
+    background-color:#bfcfba;
+}
+
+.title {
+    font-family: 'Comfortaa', cursive;
+    font-weight:700;
+    font-size:6em;
+    padding-top:15%;
+}
+
+.heading ul {
+    font-size:1.5em;
+}
+
+.contentlanding {
+    height: 100%;
+    width:100%;
+    background-color:#fff;
+}
+
+.product {
+    padding-top:2%;
+}
+
+.landing .link {
+    margin-top:30px;
+}
+
+.landing .link a {
+    background-color:#111;
+    color:#fff;
+    padding:15px 15px;
+    width:200px;
+    margin:auto;
+    text-decoration:none;
+    font-size:1.3em;
+}
+
+.landing .link a:hover {
+    background-color:#1ED760;
+}
+
+.product {
+    font-size:1.2em;
+}
+
+.product ul li {
+    padding:10px 0px;
+    font-size:1.5em;
+}
+
+.tech ul li {
+    font-size:1.3em;
+}
+
+.landing ul, .landing li {
+    list-style-type:none;
+    padding:0;
+    margin:0;
+    text-align:center;
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import Pagination from 'react-bootstrap/Pagination';
 import { Socket } from './Socket';
 import EventItem from './EventItem';
+import Navigation from './Navigation';
 
 export default function Ticket() {
   const [events, setEvents] = React.useState([]);
@@ -73,7 +74,9 @@ export default function Ticket() {
 
   getEvents();
   return (
-    <div className="page">
+    <div>
+    <Navigation />
+    <div className="page content">
       <h1>Discover events near you!</h1>
       <form onSubmit={getEnteredValues}>
         <input type="text" id="zip_code" placeholder="Zipcode" maxLength="256" />
@@ -99,6 +102,8 @@ export default function Ticket() {
       <div className="eventsPages">
         <Pagination onClick={pageChanged}>{pageItems}</Pagination>
       </div>
+      
+    </div>
     </div>
   );
 }
