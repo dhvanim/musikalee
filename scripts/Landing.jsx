@@ -1,6 +1,27 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
+const down = React.createRef();
+const up = React.createRef();
+
+function handleScrollDown(event) {
+  if(down.current){
+    down.current.scrollIntoView({ 
+     behavior: "smooth", 
+     block: "nearest"
+    });
+  }
+}
+
+function handleScrollUp(event) {
+  if(up.current){
+    up.current.scrollIntoView({ 
+     behavior: "smooth", 
+     block: "nearest"
+    });
+  }
+}
+
 function Heading() {
   return (
     <div>
@@ -13,6 +34,8 @@ function Heading() {
         <li>Catarina DeMatos</li>
         <li>Dhvani Mistry</li>
       </ul>
+      
+      <button onClick={handleScrollDown}> <i class="fas fa-angle-down"></i> </button>
     </div>
   );
 }
@@ -24,10 +47,10 @@ function OurProduct() {
       <p>On our app you can:</p>
       <ul>
         <li>Share music (some of which can even be played), artists, albums or playlists</li>
-        <li>Interact with other people by liking or commenting on their post</li>
-        <li>Visit your profile page to see your current playing song</li>
+        <li>Interact with other users by liking or commenting on their post</li>
+        <li>Visit your profile page to see your current playing song and top artists</li>
         <li>
-          Get a list of currently trending songs, and even some reccomendations curated just for you
+          Get a list of currently trending songs, and some reccomendations curated just for you
         </li>
       </ul>
     </div>
@@ -66,11 +89,13 @@ export default function Landing() {
   return (
     <div className="landing">
 
-      <div className="heading">
+      <div ref={up} className="heading">
         { Heading() }
       </div>
 
-      <div className="contentlanding">
+      <div ref={down} className="contentlanding">
+      
+        <button onClick={handleScrollUp}> <i class="fas fa-angle-up"></i> </button>
 
         <div className="product">
           { OurProduct() }

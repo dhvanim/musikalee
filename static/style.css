@@ -499,6 +499,14 @@ audio {
     font-size:1.5em;
 }
 
+.landing button {
+    background-color:transparent;
+    border:none;
+    font-size:3em;
+    margin-top:50px;
+    cursor:pointer;
+}
+
 .contentlanding {
     height: 100%;
     width:100%;
@@ -514,7 +522,7 @@ audio {
 }
 
 .landing .link a {
-    background-color:#111;
+    background-color:#1ED760;
     color:#fff;
     padding:15px 15px;
     width:200px;
@@ -524,7 +532,7 @@ audio {
 }
 
 .landing .link a:hover {
-    background-color:#1ED760;
+    background-color:#111;
 }
 
 .product {
