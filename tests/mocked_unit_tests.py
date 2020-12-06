@@ -5,14 +5,11 @@ import sys
 from os.path import dirname, join
 import unittest
 import unittest.mock as mock
+from datetime import datetime
 from alchemy_mock.mocking import UnifiedAlchemyMagicMock
-import requests
-from flask import Flask, request, current_app
 
 sys.path.insert(1, join(dirname(__file__), "../"))
 import app
-import models
-from datetime import datetime
 import spotify_login
 import ticketmaster_api
 
@@ -20,6 +17,10 @@ import ticketmaster_api
 INPUT = ""
 EXPECT = ""
 
+#pylint: disable=unused-argument
+#pylint: disable=unused-variable
+#pylint: disable=no-self-use
+#pylint: disable=too-few-public-methods
 
 # for TicketmasterTest class
 KEY_INPUT = "input"
@@ -90,7 +91,6 @@ class SpotifyLoginTest(unittest.TestCase):
         with mock.patch("spotlogin_api.get_user_call", self.mock_nopfp):
             result = spotify_login.get_user(self.user[INPUT])
         self.assertEqual(result, expect)
-
 
     def mock_artist(self, auth):
         """
@@ -185,274 +185,371 @@ class SpotifyLoginTest(unittest.TestCase):
             result = spotify_login.get_current_song(self.user[INPUT])
         self.assertEqual(result, expect)
 
+
 class TicketmasterTest(unittest.TestCase):
+    """
+    TestCases for Ticketmaster
+    """
 
     def setUp(self):
-        self.request_ticketmaster_success_params=[
+        """
+        Setup
+        """
+        self.request_ticketmaster_success_params = [
             {
-                KEY_INPUT: {
-                        KEY_ZIPCODE: "07201",
-                        KEY_ARTIST: "Justin", 
-                        KEY_PAGE: "0"
-                    },
+                KEY_INPUT: {KEY_ZIPCODE: "07201", KEY_ARTIST: "Justin", KEY_PAGE: "0"},
                 KEY_EXPECTED: [
                     {
-                        "name": "Justin Bieber", 
-                        "url": "https://www.ticketmaster.com/justin-bieber-newark-new-jersey-07-09-2021/event/020058C5D7268823", 
-                        "image": "https://s1.ticketm.net/dam/a/582/baac6105-02db-4ef3-a037-a6974d110582_1290581_TABLET_LANDSCAPE_3_2.jpg", 
-                        "date": "July 09, 2021", 
-                        "venue": "Prudential Center", 
-                        "totalPages": 1, 
-                        "currPage": 0
+                        "name": "Justin Bieber",
+                        "url": "https://www.ticketmaster.com/justin-bieber-newark"
+                               + "-new-jersey-07-09-2021/event/020058C5D7268823",
+                        "image": "https://s1.ticketm.net/dam/a/582/baac6105-02db-4ef3-a037"
+                                 + "-a6974d110582_1290581_TABLET_LANDSCAPE_3_2.jpg",
+                        "date": "July 09, 2021",
+                        "venue": "Prudential Center",
+                        "totalPages": 1,
+                        "currPage": 0,
                     }
-                ]
-            }    
+                ],
+            }
         ]
-        self.get_ticketmaster_event_success_params=[
+        self.get_ticketmaster_event_success_params = [
             {
-                KEY_INPUT: {
-                        "zipcode": "07102",
-                        "artist": "Justin", 
-                        "page": 0
-                },
+                KEY_INPUT: {"zipcode": "07102", "artist": "Justin", "page": 0},
                 KEY_EXPECTED: {
                     DISPLAY_EVENTS_CHANNEL: "display events",
-                    EXPECTED_DATA: [{
-                        "name": "Justin Bieber", 
-                        "url": "https://www.ticketmaster.com/justin-bieber-newark-new-jersey-07-09-2021/event/020058C5D7268823", 
-                        "image": "https://s1.ticketm.net/dam/a/582/baac6105-02db-4ef3-a037-a6974d110582_1290581_TABLET_LANDSCAPE_3_2.jpg", 
-                        "date": "July 09, 2021", 
-                        "venue": "Prudential Center", 
-                        "totalPages": 1, 
-                        "currPage": 0
-                    }]
-                }
-            }    
+                    EXPECTED_DATA: [
+                        {
+                            "name": "Justin Bieber",
+                            "url": "https://www.ticketmaster.com/justin-bieber-newark"
+                                   + "-new-jersey-07-09-2021/event/020058C5D7268823",
+                            "image": "https://s1.ticketm.net/dam/a/582/baac6105-02db-4ef3-"
+                                     + "a037-a6974d110582_1290581_TABLET_LANDSCAPE_3_2.jpg",
+                            "date": "July 09, 2021",
+                            "venue": "Prudential Center",
+                            "totalPages": 1,
+                            "currPage": 0,
+                        }
+                    ],
+                },
+            }
         ]
-        
-        
+
     # This method will be used by the mock to replace requests.get
-    def mocked_search_event_response(self, url, headers={    
-        "Accept": "application/json",
-        "Content-Type": "application/json"}):
+    def mocked_search_event_response(
+            self,
+            url,
+            headers={"Accept": "application/json", "Content-Type": "application/json"},
+    ):
+        """
+        mock search_event
+        """
+
         class MockResponse:
+            """
+            Mocks a response for ticketmaster
+            """
+
             def __init__(self, json_data, status_code):
                 self.json_data = json_data
                 self.status_code = status_code
-    
+
             def json(self):
+                """
+                returns json
+                """
                 return self.json_data
-    
-        
-        return MockResponse({
-            "_embedded": {
-                "events": [{
-                    "name": "Justin Bieber",
-                    "type": "event",
-                    "url": "https://www.ticketmaster.com/justin-bieber-newark-new-jersey-07-09-2021/event/020058C5D7268823",
-                    "images": [
+
+        return MockResponse(
+            {
+                "_embedded": {
+                    "events": [
                         {
-                            "url": "https://s1.ticketm.net/dam/a/582/baac6105-02db-4ef3-a037-a6974d110582_1290581_TABLET_LANDSCAPE_3_2.jpg",
+                            "name": "Justin Bieber",
+                            "type": "event",
+                            "url": "https://www.ticketmaster.com/justin-bieber-newark-"
+                                   + "new-jersey-07-09-2021/event/020058C5D7268823",
+                            "images": [
+                                {
+                                    "url": "https://s1.ticketm.net/dam/a/582/baac6105-02db-4ef"
+                                           + "3-a037-a6974d110582_1290581_TABLET_LANDSCAPE_3_2.jpg",
+                                }
+                            ],
+                            "dates": {"start": {"dateTime": "2021-07-09T23:30:00Z"}},
+                            "_embedded": {"venues": [{"name": "Prudential Center"}]},
                         }
                     ],
-                    "dates": {
-                        "start": {
-                            "dateTime": "2021-07-09T23:30:00Z"
-                        }
-                    },
-                    "_embedded": {
-                        "venues": [
-                            {
-                                "name": "Prudential Center"
-                            }
-                        ]
-                    }
-                }],
+                },
+                "page": {"size": 20, "totalElements": 1, "totalPages": 1, "number": 0},
             },
-            "page": {
-                "size": 20,
-                "totalElements": 1,
-                "totalPages": 1,
-                "number": 0
-            }
-        }, 200)
-        
+            200,
+        )
 
     def test_search_events_success(self):
+        """
+        test search_events()
+        """
         for test_case in self.request_ticketmaster_success_params:
-            with mock.patch('requests.get', self.mocked_search_event_response):
+            with mock.patch("requests.get", self.mocked_search_event_response):
                 events = ticketmaster_api.search_events(
-                    zipcode = test_case[KEY_INPUT][KEY_ZIPCODE],
-                    artist = test_case[KEY_INPUT][KEY_ARTIST],
-                    page = test_case[KEY_INPUT][KEY_PAGE]
-                    )
-                
-                
-            expected = test_case[KEY_EXPECTED]
-            
-            self.assertEqual(events, expected)
-            
+                    zipcode=test_case[KEY_INPUT][KEY_ZIPCODE],
+                    artist=test_case[KEY_INPUT][KEY_ARTIST],
+                    page=test_case[KEY_INPUT][KEY_PAGE],
+                )
 
-    @mock.patch('app.SOCKETIO.emit')
-    def test_get_ticketmaster_events(self, mocked_socket):
-        for test_case in self.get_ticketmaster_event_success_params:
-            app.get_ticketmaster_events( 
-                data = test_case[KEY_INPUT]
-            )
             expected = test_case[KEY_EXPECTED]
-            mocked_socket.assert_called_once_with( expected[DISPLAY_EVENTS_CHANNEL], expected[EXPECTED_DATA] )
+
+            self.assertEqual(events, expected)
+
+    @mock.patch("app.SOCKETIO.emit")
+    def test_get_ticketmaster_events(self, mocked_socket):
+        """
+        test get_ticketmaster_events
+        """
+        for test_case in self.get_ticketmaster_event_success_params:
+            app.get_ticketmaster_events(data=test_case[KEY_INPUT])
+            expected = test_case[KEY_EXPECTED]
+            mocked_socket.assert_called_once_with(
+                expected[DISPLAY_EVENTS_CHANNEL], expected[EXPECTED_DATA]
+            )
+
 
 class TestCommentsAndLikes(unittest.TestCase):
-    
+    """
+    Tests all things related to Comments and Likes
+    """
+
     def test_add_or_remove_like_from_db(self):
-        session = UnifiedAlchemyMagicMock() 
-        with mock.patch("app.DB.session", session): 
-            app.add_or_remove_like_from_db("username", 0) 
-            is_liked = session.query(app.models.Likes.id).filter_by(username="username", post_id=0).scalar() is not None
+        """
+        tests adding or removing a like from Likes model
+        """
+        session = UnifiedAlchemyMagicMock()
+        with mock.patch("app.DB.session", session):
+            app.add_or_remove_like_from_db("username", 0)
+            is_liked = (
+                session.query(app.models.Likes.id)
+                .filter_by(username="username", post_id=0)
+                .scalar()
+                is not None
+            )
             session.commit()
             self.assertEqual(is_liked, True)
-    
+
     def test_save_comment(self):
-        session = UnifiedAlchemyMagicMock() 
-        data = {"username":"user", "comment": "comment", "post_id": "0000"};
-        with mock.patch("app.DB.session", session): #
-            app.save_comment(data) 
+        """
+        Tests saving comment to Comment model
+        """
+        session = UnifiedAlchemyMagicMock()
+        data = {"username": "user", "comment": "comment", "post_id": "0000"}
+        with mock.patch("app.DB.session", session):  #
+            app.save_comment(data)
             count = session.query(app.models.Comments).count()
             session.commit()
             self.assertEqual(count, 1)
-            
+
     def test_update_likes_on_post(self):
-        session = UnifiedAlchemyMagicMock() 
+        """
+        test updaing likes on Post model
+        """
+        session = UnifiedAlchemyMagicMock()
         data = {
-                    "user" : {
-                        "username" : "",
-                        "pfp" : ""
-                    },
-                    "text" : "",
-                    "type" : "",
-                    "music" : {
-                        "song" : "",
-                        "artist" : "",
-                        "album" : "",
-                        "playlist" : ""
-                    }
-                }
+            "user": {"username": "", "pfp": ""},
+            "text": "",
+            "type": "",
+            "music": {"song": "", "artist": "", "album": "", "playlist": ""},
+        }
         with mock.patch("app.DB.session", session):
-            #add post to db
+            # add post to db
             app.on_post_receive(data)
             count = session.query(app.models.Posts).count()
             self.assertEqual(count, 1)
-            
-            #change id to be 0
-            post = session.query(app.models.Posts).first() 
+
+            # change id to be 0
+            post = session.query(app.models.Posts).first()
             post.id = 0
             session.commit()
 
-            app.update_likes_on_post(0, 33) 
+            app.update_likes_on_post(0, 33)
             session.commit()
-            
+
             post = session.query(app.models.Posts).filter(app.models.Posts.id == 0)
             self.assertEqual(post.num_likes, 33)
-            
+
 
 class TestDatabase(unittest.TestCase):
+    """
+    Tests some common Database calls
+    """
 
     def test_get_username(self):
-        session = UnifiedAlchemyMagicMock() 
+        """
+        test get_username
+        """
+        session = UnifiedAlchemyMagicMock()
         with mock.patch("app.DB.session", session):
-            #add ActiveUser to get username of
-            activeUser = app.models.ActiveUsers("user" , "flaskid", "authtoken")
-            session.add(activeUser)
+            # add ActiveUser to get username of
+            active_user = app.models.ActiveUsers("user", "flaskid", "authtoken")
+            session.add(active_user)
             session.commit()
 
             app.get_username("flaskid")
             user = session.query(app.models.ActiveUsers).first()
             self.assertEqual(user.user, "user")
-            
+
     def test_query_user(self):
-        session = UnifiedAlchemyMagicMock() 
+        """
+        test query_user
+        """
+        session = UnifiedAlchemyMagicMock()
         with mock.patch("app.DB.session", session):
-            #add ActiveUser to get username of
-            activeUser = app.models.ActiveUsers("user" , "flaskid", "authtoken")
-            session.add(activeUser)
+            # add ActiveUser to get username of
+            active_user = app.models.ActiveUsers("user", "flaskid", "authtoken")
+            session.add(active_user)
             session.commit()
 
             app.query_user("user")
             user = session.query(app.models.ActiveUsers).first()
             self.assertEqual(user.user, "user")
-    
-    class mock_flask():
+
+    class MockFlask:
+        """
+        mocks flask sid
+        """
+
         def __init__(self):
-            self.sid="12345"
-    def mock_unam(self,sid):
+            self.sid = "12345"
+
+    def mock_unam(self, sid):
+        """
+        mocks get_user response
+        """
         return "username"
-    @mock.patch('app.SOCKETIO.emit')
+
+    @mock.patch("app.SOCKETIO.emit")
     def test_update_num_likes(self, mocked_socket):
+        """
+        test update_num_likes emit
+        """
         session = UnifiedAlchemyMagicMock()
-        fflask=self.mock_flask()
+        fflask = self.MockFlask()
         with mock.patch("app.DB.session", session):
-            with mock.patch("app.flask.request",fflask):
-                with mock.patch("app.get_username",self.mock_unam):
+            with mock.patch("app.flask.request", fflask):
+                with mock.patch("app.get_username", self.mock_unam):
                     app.update_num_likes({"num_likes": 13, "id": 0})
-        expected = {'post_id': 0, 'num_likes': 13, 'is_liked': False}
-        mocked_socket.assert_called_once_with( "like post channel", expected )
-    
-    @mock.patch('app.SOCKETIO.emit')
+        expected = {"post_id": 0, "num_likes": 13, "is_liked": False}
+        mocked_socket.assert_called_once_with("like post channel", expected)
+
+    @mock.patch("app.SOCKETIO.emit")
     def test_emit_posts(self, mocked_socket):
-        session = UnifiedAlchemyMagicMock() 
+        """
+        tests emit_posts
+        """
+        session = UnifiedAlchemyMagicMock()
         with mock.patch("app.DB.session", session):
-            #add post to db
-            session.add(app.models.Posts("username", "pfp", "music_type", "music", "message", 12, datetime.strptime('Jun 1 2005', '%b %d %Y')))
+            # add post to db
+            session.add(
+                app.models.Posts(
+                    "username",
+                    "pfp",
+                    "music_type",
+                    "music",
+                    "message",
+                    12,
+                    datetime.strptime("Jun 1 2005", "%b %d %Y"),
+                )
+            )
             session.commit()
-            post = session.query(app.models.Posts).first() 
+            post = session.query(app.models.Posts).first()
             post.id = 0
             session.commit()
-            
-            #add Like to db
+
+            # add Like to db
             session.add(app.models.Likes("cat", 0))
-            #add comment to db
-            session.app(app.models.Comments("tom", "comment", 0, datetime.strptime('Jun 1 2005', '%b %d %Y')))
+            # add comment to db
+            session.app(
+                app.models.Comments(
+                    "tom", "comment", 0, datetime.strptime("Jun 1 2005", "%b %d %Y")
+                )
+            )
             session.commit()
-            
+
             app.emit_posts()
-            expected = [{'id': 0, 'username': 'username', 'text': 'message', 'num_likes': 12, 'datetime': '06/01/2005, 00:00:00', 'pfp': 'pfp', 'isCommentsOpen': False, 'comments': [], 'is_liked': True, 'music_type': 'music_type', 'music': 'music'}]
-            mocked_socket.assert_called_once_with( "emit posts channel", expected )
-    
+            expected = [
+                {
+                    "id": 0,
+                    "username": "username",
+                    "text": "message",
+                    "num_likes": 12,
+                    "datetime": "06/01/2005, 00:00:00",
+                    "pfp": "pfp",
+                    "isCommentsOpen": False,
+                    "comments": [],
+                    "is_liked": True,
+                    "music_type": "music_type",
+                    "music": "music",
+                }
+            ]
+            mocked_socket.assert_called_once_with("emit posts channel", expected)
+
     def test_emit_posts_null(self):
-        session=UnifiedAlchemyMagicMock()
-        with mock.patch('app.DB.session',session):
-            result=app.emit_posts()
-        self.assertEqual(result,None)
-       
+        """
+        tests emit posts with null
+        """
+        session = UnifiedAlchemyMagicMock()
+        with mock.patch("app.DB.session", session):
+            result = app.emit_posts()
+        self.assertEqual(result, None)
 
     class MockedUser:
+        """
+        mocks query_user reponse
+        """
+
         def __init__(self, username):
             self.username = username
             self.top_artists = []
+
     def mock_rec(self, artists):
+        """
+        mocks get_recommended response
+        """
         return []
-    @mock.patch('app.SOCKETIO.emit')
+
+    @mock.patch("app.SOCKETIO.emit")
     def test_emit_recommended(self, mocked_socket):
+        """
+        test emit_recommended
+        """
         session = UnifiedAlchemyMagicMock()
-        fflask=self.mock_flask()
-        user=self.MockedUser("username")
-        with mock.patch("app.flask.request",fflask):
-            with mock.patch("app.get_username",self.mock_unam):
-                with mock.patch("app.query_user",self.MockedUser):
-                    with mock.patch("app.get_recommended",self.mock_rec):
+        fflask = self.MockFlask()
+        user = self.MockedUser("username")
+        with mock.patch("app.flask.request", fflask):
+            with mock.patch("app.get_username", self.mock_unam):
+                with mock.patch("app.query_user", self.MockedUser):
+                    with mock.patch("app.get_recommended", self.mock_rec):
                         app.emit_recommended()
         expected = []
-        mocked_socket.assert_called_once_with( "recommended channel", expected, room="12345" )
-        
+        mocked_socket.assert_called_once_with(
+            "recommended channel", expected, room="12345"
+        )
+
     def spot_user(self, token):
+        """
+        mocks spotify_login.get_user
+        """
+
         return {
             "username": "Bob",
             "profile-picture": "./static/defaultPfp.png",
             "user-type": "user",
         }
+
     def spot_artists(self, token):
+        """
+        mocks spotify_login.get_artists
+        """
         return ["1", "2", "3"]
-        
+
     def mock_nuser(self, auth):
         """
         Mocks the response of a user with pfp
@@ -463,20 +560,32 @@ class TestDatabase(unittest.TestCase):
             "type": "user",
         }
         return oput
-    @mock.patch('app.SOCKETIO.emit')
-    def test_on_spotlogin(self,mocked_socket):
-        session=UnifiedAlchemyMagicMock()
-        fflask=self.mock_flask()
+
+    @mock.patch("app.SOCKETIO.emit")
+    def test_on_spotlogin(self, mocked_socket):
+        """
+        test on_spotlogin
+        """
+        session = UnifiedAlchemyMagicMock()
+        fflask = self.MockFlask()
         with mock.patch("app.flask.request", fflask):
-            with mock.patch("app.DB.session",session):
+            with mock.patch("app.DB.session", session):
                 with mock.patch("spotlogin_api.get_user_call", self.mock_nuser):
-                    with mock.patch("spotify_login.get_user",self.spot_user):
-                        with mock.patch("spotify_login.get_artists",self.spot_artists):
+                    with mock.patch("spotify_login.get_user", self.spot_user):
+                        with mock.patch("spotify_login.get_artists", self.spot_artists):
                             with mock.patch("app.query_user", self.MockedUser):
                                 app.on_spotlogin({"token": "123"})
-                                expect = {"status": True, "userinfo": {"username": "Bob", "pfp": "./static/defaultPfp.png"}}
-                                mocked_socket.assert_called_once_with("login success",expect, room ="12345")
-                                
-                                
+                                expect = {
+                                    "status": True,
+                                    "userinfo": {
+                                        "username": "Bob",
+                                        "pfp": "./static/defaultPfp.png",
+                                    },
+                                }
+                                mocked_socket.assert_called_once_with(
+                                    "login success", expect, room="12345"
+                                )
+
+
 if __name__ == "__main__":
     unittest.main()
