@@ -292,7 +292,7 @@ class TicketmasterTest(unittest.TestCase):
             
             self.assertEqual(events, expected)
             
-    @mock.patch('app.socketio.emit')
+    @mock.patch('app.SOCKETIO.emit')
     def test_get_ticketmaster_events(self, mocked_socket):
         for test_case in self.get_ticketmaster_event_success_params:
             app.get_ticketmaster_events( 
@@ -383,7 +383,7 @@ class TestDatabase(unittest.TestCase):
     def mflask(self):
         return 12345
     
-    #@mock.patch('app.socketio.emit')
+    #@mock.patch('app.SOCKETIO.emit')
     #def test_update_num_likes(self, mocked_socket):
     #    session = UnifiedAlchemyMagicMock()
     #    with mock.patch("app.DB.session", session):
@@ -392,7 +392,7 @@ class TestDatabase(unittest.TestCase):
     #    expected = [{'id': 0, 'username': 'username', 'text': 'message', 'num_likes': 12, 'datetime': '06/01/2005, 00:00:00', 'pfp': 'pfp', 'isCommentsOpen': False, 'comments': [], 'is_liked': True, 'music_type': 'music_type', 'music': 'music'}]
     #    mocked_socket.assert_called_once_with( "like post channel", expected )
     
-    @mock.patch('app.socketio.emit')
+    @mock.patch('app.SOCKETIO.emit')
     def test_emit_posts(self, mocked_socket):
         session = UnifiedAlchemyMagicMock() 
         with mock.patch("app.DB.session", session):

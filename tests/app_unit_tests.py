@@ -163,7 +163,7 @@ class EmitUserOrArtistData(unittest.TestCase):
             },
         }
         
-    @mock.patch('app.socketio.emit')
+    @mock.patch('app.SOCKETIO.emit')
     def test_emituserdata(self,mocked_socket):
         app.emit_user_data(self.user["0"],
                         self.user["1"],
@@ -172,7 +172,7 @@ class EmitUserOrArtistData(unittest.TestCase):
                                 "emit user data",
                                 self.user[EXPECT])
     
-    @mock.patch('app.socketio.emit')
+    @mock.patch('app.SOCKETIO.emit')
     def test_emitartistdata(self,mocked_socket):
         app.emit_artist_data(self.artist["0"],
                         self.artist["1"],
@@ -259,12 +259,12 @@ class Lstorage(unittest.TestCase):
     """
     Tests get and emit local storage
     """
-    @mock.patch('app.socketio.emit')
+    @mock.patch('app.SOCKETIO.emit')
     def test_get_local_storage(self,mocked_socket):
         app.get_local_storage()
         mocked_socket.assert_called_once_with('navigation change', True)
         
-    @mock.patch('app.socketio.emit')
+    @mock.patch('app.SOCKETIO.emit')
     def test_emit_local_storage(self,mocked_socket):
         app.emit_local_storage(1)
         mocked_socket.assert_called_once_with('get posts from local storage', True)
