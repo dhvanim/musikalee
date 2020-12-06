@@ -37,7 +37,7 @@ def spotify_get_trending():
     tracks_data = spotmusic_api.trendcall(access_token, search_data)
     if tracks_data is not None:
         return tracks_data["items"]
-    return ["Trending","Machine","Broke"]
+    return ["Trending", "Machine", "Broke"]
 
 
 # returns recc songs
@@ -164,13 +164,13 @@ def spotify_search_playlist(url):
     search_data = spotmusic_api.search_playlist(access_token, playlist_id)
     if search_data is None:
         return {
-        "playlist_name": "",
-        "playlist_desc": "",
-        "playlist_art": "",
-        "playlist_owner": "",
-        "followers": "",
-        "external_link": "",
-    }
+            "playlist_name": "",
+            "playlist_desc": "",
+            "playlist_art": "",
+            "playlist_owner": "",
+            "followers": "",
+            "external_link": "",
+        }
     playlist_desc = search_data["description"]
     external_link = search_data["external_urls"]["spotify"]
     followers = search_data["followers"]["total"]
