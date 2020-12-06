@@ -444,7 +444,39 @@ class TestDatabase(unittest.TestCase):
         expected = []
         mocked_socket.assert_called_once_with( "recommended channel", expected, room="12345" )
         
-    
+    def spot_user(self, token):
+        return {
+            "username": "Bob",
+            "profile-picture": "./static/defaultPfp.png",
+            "user-type": "user",
+        }
+    def spot_artists(self, token):
+        return ["1", "2", "3"]
         
+    def mock_nuser(self, auth):
+        """
+        Mocks the response of a user with pfp
+        """
+        oput = {
+            "display_name": "Bob",
+            "images": [{"url": "./static/defaultPfp.png"}],
+            "type": "user",
+        }
+        return oput
+    @mock.patch('app.SOCKETIO.emit')
+    def test_on_spotlogin(self,mocked_socket):
+        session=UnifiedAlchemyMagicMock()
+        fflask=self.mock_flask()
+        with mock.patch("app.flask.request", fflask):
+            with mock.patch("app.DB.session",session):
+                with mock.patch("spotlogin_api.get_user_call", self.mock_nuser):
+                    with mock.patch("spotify_login.get_user",self.spot_user):
+                        with mock.patch("spotify_login.get_artists",self.spot_artists):
+                            with mock.patch("app.query_user", self.MockedUser):
+                                app.on_spotlogin({"token": "123"})
+                                expect = {"status": True, "userinfo": {"username": "Bob", "pfp": "./static/defaultPfp.png"}}
+                                mocked_socket.assert_called_once_with("login success",expect, room ="12345")
+                                
+                                
 if __name__ == "__main__":
     unittest.main()

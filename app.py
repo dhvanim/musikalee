@@ -54,7 +54,6 @@ def get_username(flask_id):
     """
     Gets users username from flaskid
     """
-    print(flask_id)
     user = (
         DB.session.query(models.ActiveUsers).filter_by(
             serverid=flask_id).first().user
@@ -540,7 +539,7 @@ def on_connect():
     Connect
     """
     join_room(flask.request.sid)
-
+    
     print("Someone connected!")
     SOCKETIO.emit("connected", {"test": "Connected"})
 

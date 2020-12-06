@@ -198,6 +198,18 @@ class EmitUserOrArtistData(unittest.TestCase):
                                 "emit user data",
                                 self.artist[EXPECT])
 
+
+    # def join_room(self, sid):
+    #     return
+    
+    # @mock.patch('app.SOCKETIO.emit')
+    # def test_on_connect(self,mocked_socket):
+    #     fflask=mock_flask()
+    #     with mock.patch("app.flask.request", fflask):
+    #         with mock.patch("flask_socketio.join_room", self.join_room):
+    #             app.on_connect()
+    #             mocked_socket.assert_called_once_with('connected', {"test": "Connected"})
+        
 class GetReccomendedAndTrending(unittest.TestCase):
     """
     Tests the Function Get Reccomended and Get Trending
@@ -287,6 +299,18 @@ class GetReccomendedAndTrending(unittest.TestCase):
                         result=app.get_trending()
         self.assertEqual(result,self.ten[EXPECT])
         
+    @mock.patch('app.SOCKETIO.emit')
+    def test_emit_trendgin(self,mocked_socket):
+        session=UnifiedAlchemyMagicMock()
+        fflask=mock_flask()
+        with mock.patch("app.flask.request", fflask):
+            with mock.patch("app.DB.session",session):
+                with mock.patch("app.spotify_get_trending",self.mocktcall):
+                    with mock.patch("app.random.sample",self.mockts):
+                        with mock.patch("app.parse_tracks", self.mockParse):
+                            app.emit_trending()
+                            mocked_socket.assert_called_once_with('trending channel',self.ten[EXPECT], room ="12345")
+
     class Song:
         def __init__(self, artists, track):
             self.artists = artists
@@ -302,7 +326,7 @@ class GetReccomendedAndTrending(unittest.TestCase):
             expected = self.sample[EXPECT]
             self.assertEqual(response, expected)    
             
-
+   
 class Lstorage(unittest.TestCase):
     """
     Tests get and emit local storage
