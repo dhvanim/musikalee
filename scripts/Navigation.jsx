@@ -22,6 +22,9 @@ export default function Navigation(){
           <li><NavLink to="/ticket"> <i className="fas fa-ticket-alt"></i> </NavLink></li>
         </ul>
        </div> 
+       <div className="aboutlink">
+       <NavLink to="/about"> About Us. </NavLink>
+       </div>
        </div>
     );
 }

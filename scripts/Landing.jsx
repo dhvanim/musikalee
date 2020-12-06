@@ -1,9 +1,42 @@
 import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 
-export function WhoAreWe() {
+export default function Landing() {
+  
+  return (
+    <div className="landing">
+      
+      <div className="heading">
+        { Heading() }
+      </div>
+      
+      <div className="contentlanding">
+      
+      <div className="product">
+        { OurProduct() }
+      </div>
+      <br />
+      <div className="tech">
+        { TechUsed() }
+      </div>
+
+      <div className="link">
+        { Link() }
+      </div>
+      
+      </div>
+    
+    </div>
+  );
+  
+}
+
+function Heading() {
   return (
     <div>
-      <h2>Who We Are:</h2>
+    
+      <h1 className="title"> Musikalee </h1>
+      <h4>Created by:</h4>
       <ul>
         <li>Joseph Cayemitte</li>
         <li>Justin Chow</li>
@@ -13,46 +46,46 @@ export function WhoAreWe() {
     </div>
   );
 }
-export function OurProduct() {
+function OurProduct() {
   return (
     <div>
-      <h2>About Our Product</h2>
-      <p>Our product, called Musikalee is a blog for all of your music needs.</p>
-      <p>On our App you Can:</p>
+      <h1>About Musikalee</h1>
+      <i>Our product, called Musikalee, is a blog for all of your music needs. </i>
+      <p>On our app you can:</p>
       <ul>
-        <li>Post music (some of whcich can even be played), albums or a playlist</li>
-        <li>Interact with other people&#39;s posts by liking or commenting on their post</li>
-        <li>Visit your profile pae to see your current songs</li>
-        <li>Get a list of currently trending songs, and even some reccomendations just for you</li>
+        <li>Share music (some of which can even be played), artists, albums or playlists</li>
+        <li>Interact with other people by liking or commenting on their post</li>
+        <li>Visit your profile page to see your current playing song</li>
+        <li>Get a list of currently trending songs, and even some reccomendations curated just for you</li>
       </ul>
     </div>
   );
 }
-export function TechUsed() {
+function TechUsed() {
   return (
     <div>
       <h2>Technologies Used</h2>
-      <p>In our product we used these technologies:</p>
+      <br />
       <ul>
         <li>React.js for our frontend</li>
         <li>Python for our webserver</li>
         <li>Flask to act as our webserver</li>
         <li>FlaskSqlAlchemy to manipulate our database</li>
-        <li>SocketIO to connect our react and python</li>
+        <li>SocketIO to connect our front and backend</li>
         <li>PostgresSQL to store our data</li>
         <li>Heroku to deploy our app</li>
         <li>CircleCI for continuous testing</li>
-        <li>Spotify API for login and also music functionality</li>
+        <li>Spotify API for login and music data/functionality</li>
         <li>Ticketmaster API to find shows near you</li>
       </ul>
     </div>
   );
 }
 
-export function Link() {
+function Link() {
   return (
-    <a href="https://musikalee.herokuapp.com/">
-      Link to our app, though you are already here
-    </a>
+    <NavLink to="/">
+      Back to Musikalee :-)
+    </NavLink>
   );
 }
