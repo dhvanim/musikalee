@@ -22,7 +22,7 @@ export default function PostMusic(props) {
             <br />
             { music.artist }
           </span>
-          {' '}
+
           <br />
           { music.preview_url != null
             ? (
@@ -70,7 +70,7 @@ export default function PostMusic(props) {
           <br />
           { music.total_tracks }
           Tracks || Released:
-          {' '}
+
           { music.release_date }
 
         </span>
@@ -92,11 +92,11 @@ export default function PostMusic(props) {
             { music.playlist_desc }
           </i>
           by
-          {' '}
+
           { music.playlist_owner }
           <br />
           { music.followers }
-          {' '}
+
           Followers
         </span>
       </div>

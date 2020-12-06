@@ -12,25 +12,25 @@ export default function EventItem(props) {
         <button className="buyLink" onClick={() => window.open(url, '_blank')} type="button"> Buy Tickets</button>
         <img src={image} className="image" alt={image} />
         <span className="title">
-          {' '}
+
           {name}
-          {' '}
+
         </span>
-        {' '}
+
         <br />
         <span className="location">
-          {' '}
+
           {venue}
-          {' '}
+
         </span>
-        {' '}
+
         <br />
         <span className="datetime">
-          {' '}
+
           {date}
-          {' '}
+
         </span>
-        {' '}
+
         <br />
       </div>
       <div id="spacer5" />

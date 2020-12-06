@@ -95,7 +95,7 @@ export default function UserProfile() {
               <h4>
                 @
                 {users}
-                {' '}
+
                 {profileType}
               </h4>
             </div>
@@ -124,11 +124,9 @@ export default function UserProfile() {
                         <img style={{ width: '90px', height: '90px', borderRadius: '45px' }} src="./static/defaultPfp.png" alt={artists} />
                         <br />
                         <span className="artists">
-                          {' '}
                           { artists }
-                          {' '}
                         </span>
-                        {' '}
+
                         <br />
                       </li>
                     ))}
@@ -140,11 +138,11 @@ export default function UserProfile() {
                     { followers.map((follower, index) => (
                       <li key={index} className="F">
                         <span className="followers">
-                          {' '}
+
                           { follower }
-                          {' '}
+
                         </span>
-                        {' '}
+
                         <br />
                       </li>
                     ))}
@@ -173,11 +171,11 @@ export default function UserProfile() {
                       <img style={{ width: '90px', height: '90px', borderRadius: '45px' }} src="./static/defaultCoverArt.png" alt={tracks} />
                       <br />
                       <span className="artists">
-                        {' '}
+
                         { tracks }
-                        {' '}
+
                       </span>
-                      {' '}
+
                       <br />
                     </li>
                   ))}
@@ -189,11 +187,11 @@ export default function UserProfile() {
                   { followers.map((follower, index) => (
                     <li key={index} className="F">
                       <span className="followers">
-                        {' '}
+
                         { follower }
-                        {' '}
+
                       </span>
-                      {' '}
+
                       <br />
                     </li>
                   ))}

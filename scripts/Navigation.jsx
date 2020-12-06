@@ -19,23 +19,23 @@ export default function Navigation() {
         <ul>
           <li>
             <NavLink to="/" onClick={getPosts}>
-              {' '}
+
               <i className="fas fa-home" />
-              {' '}
+
             </NavLink>
           </li>
           <li>
             <NavLink to="/profile" onClick={getProfile}>
-              {' '}
+
               <i className="fas fa-user-circle" />
-              {' '}
+
             </NavLink>
           </li>
           <li>
             <NavLink to="/ticket">
-              {' '}
+
               <i className="fas fa-ticket-alt" />
-              {' '}
+
             </NavLink>
           </li>
         </ul>

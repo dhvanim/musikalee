@@ -39,11 +39,11 @@ export default function PostItem(props) {
 
   const likeButton = () => (
     <span role="button" style={{ float: 'right' }} onClick={handleToggle} onKeyDown={handleToggle}>
-      {' '}
+
       <img style={icon} src={likeIcon} alt="" />
-      {' '}
+
       { likes }
-      {' '}
+
     </span>
   );
 
@@ -53,11 +53,11 @@ export default function PostItem(props) {
     }
     return (
       <div>
-        {' '}
+
         <PostMusic music={music} musicType={media} />
-        {' '}
+
         <br />
-        {' '}
+
       </div>
     );
   }
@@ -66,42 +66,42 @@ export default function PostItem(props) {
     <div>
       <li key={id} className="post">
         <span className="pfp">
-          {' '}
+
           <img src={pfp} alt={username} />
-          {' '}
+
         </span>
-        {' '}
+
         <br />
         <h4 className="username" onClick={goToUser} onKeyDown={goToUser}>
-          {' '}
+
           { username }
-          {' '}
+
         </h4>
-        {' '}
+
         <div id="spacer5" />
         { hasMusic(musicType) }
         <div className="text">
-          {' '}
+
           { text }
-          {' '}
+
         </div>
-        {' '}
+
         <br />
         <span className="time">
-          {' '}
+
           { time }
-          {' '}
+
         </span>
         <div className="iconsContainer">
 
           <Collapsible
             trigger={(
               <span>
-                {' '}
+
                 <img style={icon} src="./static/comments.png" alt="Comments" />
-                {' '}
+
                 { comments.length }
-                {' '}
+
               </span>
 )}
             triggerStyle={triggerStyle}

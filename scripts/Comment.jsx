@@ -7,9 +7,9 @@ export default function Comment(props) {
   return (
     <div className="comment">
       <p>
-        {' '}
+
         <b>{comment.username}</b>
-        {' '}
+
         <i>{comment.datetime}</i>
         <br />
         {comment.text}
