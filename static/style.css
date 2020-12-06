@@ -341,7 +341,9 @@ audio {
 }
 
 .eventItem .title{
-    font-weight:bold;
+    font-size:1em;
+    font-family: 'Comfortaa', cursive;
+    font-weight:700;
 }
 
 .eventItem .location{
@@ -486,7 +488,7 @@ audio {
     background-color:#bfcfba;
 }
 
-.title {
+.landing .title {
     font-family: 'Comfortaa', cursive;
     font-weight:700;
     font-size:6em;
