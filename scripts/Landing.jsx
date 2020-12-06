@@ -1,40 +1,10 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-export default function Landing() {
-  
-  return (
-    <div className="landing">
-      
-      <div className="heading">
-        { Heading() }
-      </div>
-      
-      <div className="contentlanding">
-      
-      <div className="product">
-        { OurProduct() }
-      </div>
-      <br />
-      <div className="tech">
-        { TechUsed() }
-      </div>
-
-      <div className="link">
-        { Link() }
-      </div>
-      
-      </div>
-    
-    </div>
-  );
-  
-}
-
 function Heading() {
   return (
     <div>
-    
+
       <h1 className="title"> Musikalee </h1>
       <h4>Created by:</h4>
       <ul>
@@ -56,7 +26,9 @@ function OurProduct() {
         <li>Share music (some of which can even be played), artists, albums or playlists</li>
         <li>Interact with other people by liking or commenting on their post</li>
         <li>Visit your profile page to see your current playing song</li>
-        <li>Get a list of currently trending songs, and even some reccomendations curated just for you</li>
+        <li>
+          Get a list of currently trending songs, and even some reccomendations curated just for you
+        </li>
       </ul>
     </div>
   );
@@ -87,5 +59,33 @@ function Link() {
     <NavLink to="/">
       Back to Musikalee :-)
     </NavLink>
+  );
+}
+
+export default function Landing() {
+  return (
+    <div className="landing">
+
+      <div className="heading">
+        { Heading() }
+      </div>
+
+      <div className="contentlanding">
+
+        <div className="product">
+          { OurProduct() }
+        </div>
+        <br />
+        <div className="tech">
+          { TechUsed() }
+        </div>
+
+        <div className="link">
+          { Link() }
+        </div>
+
+      </div>
+
+    </div>
   );
 }

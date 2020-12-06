@@ -109,6 +109,10 @@ def on_post_receive(data):
 
     music_type = data["type"]
     music_entry = get_post_music_data(music_type, data["music"])
+    
+    if music_entry == None:
+        music_type = "default"
+        music_entry = {}
 
     message = data["text"]
     num_likes = 0
@@ -496,7 +500,7 @@ def save_comment(data):
     """
     username = data["username"]
     time = datetime.now()
-    comment = models.Comments(username, data["comment"], data["post_id"], time)
+    comment = models.Comments(username, data["comment"], data["postId"], time)
     DB.session.add(comment)
     DB.session.commit()
 
@@ -506,7 +510,7 @@ def save_comment(data):
         "datetime": timeago.format(time, datetime.now()),
     }
     SOCKETIO.emit(
-        "NEW COMMENT ON POST", {"post_id": data["post_id"], "comment": comment}
+        "NEW COMMENT ON POST", {"post_id": data["postId"], "comment": comment}
     )
 
 

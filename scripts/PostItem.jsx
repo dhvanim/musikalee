@@ -9,7 +9,7 @@ import PostMusic from './PostMusic';
 
 export default function PostItem(props) {
   const {
-    id, username, text, time, likes, isLiked, comments, isCommentsOpen, pfp, music, musicType,
+    id, username, text, time, likes, isLiked, comments, pfp, music, musicType,
   } = props;
 
   const triggerStyle = {
@@ -38,7 +38,7 @@ export default function PostItem(props) {
   const likeIcon = (isLiked ? './static/heart-filled.png' : './static/heart-outline.png');
 
   const likeButton = () => (
-    <span style={{ float: 'right' }} onClick={handleToggle} onKeyDown={handleToggle}>
+    <span role="button" style={{ float: 'right' }} onClick={handleToggle} onKeyDown={handleToggle}>
       {' '}
       <img style={icon} src={likeIcon} alt="" />
       {' '}
@@ -72,13 +72,13 @@ export default function PostItem(props) {
         </span>
         {' '}
         <br />
-        <h4 className="username" onClick={goToUser} onKeyDown={goToUser}> 
+        <h4 className="username" onClick={goToUser} onKeyDown={goToUser}>
           {' '}
           { username }
           {' '}
         </h4>
         {' '}
-        <div id="spacer5"></div>
+        <div id="spacer5" />
         { hasMusic(musicType) }
         <div className="text">
           {' '}
@@ -94,8 +94,21 @@ export default function PostItem(props) {
         </span>
         <div className="iconsContainer">
 
-          <Collapsible trigger={<span> <img style={icon} src={"./static/comments.png"}/> { comments.length } </span>} triggerStyle={triggerStyle} overflowWhenOpen="auto" triggerSibling={likeButton}>
-                        <CommentsSection post_id={id} comments={comments}/>
+          <Collapsible
+            trigger={(
+              <span>
+                {' '}
+                <img style={icon} src="./static/comments.png" alt="Comments" />
+                {' '}
+                { comments.length }
+                {' '}
+              </span>
+)}
+            triggerStyle={triggerStyle}
+            overflowWhenOpen="auto"
+            triggerSibling={likeButton}
+          >
+            <CommentsSection postId={id} comments={comments} />
           </Collapsible>
 
         </div>
@@ -106,15 +119,18 @@ export default function PostItem(props) {
 }
 
 PostItem.propTypes = {
-  id: PropTypes.any.isRequired,
+  id: PropTypes.number.isRequired,
   username: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  time: PropTypes.any.isRequired,
+  time: PropTypes.string.isRequired,
   likes: PropTypes.number.isRequired,
-  isLiked: PropTypes.any.isRequired,
-  comments: PropTypes.any.isRequired,
-  isCommentsOpen: PropTypes.any.isRequired,
+  isLiked: PropTypes.bool.isRequired,
+  comments: PropTypes.arrayOf(PropTypes.shape({
+    username: PropTypes.string,
+    datetime: PropTypes.string,
+    text: PropTypes.string,
+  })).isRequired,
   pfp: PropTypes.string.isRequired,
   music: PropTypes.any.isRequired,
-  musicType: PropTypes.any.isRequired,
+  musicType: PropTypes.string.isRequired,
 };
