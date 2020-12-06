@@ -78,18 +78,18 @@ class SpotifyLoginTest(unittest.TestCase):
         }
         return oput
 
-#    def test_user_no_pfp(self):
-#        """
-#        Tests a User That has no pfp
-#        """
-#        expect = {
-#            "username": "Bob",
-#            "profile-picture": "./static/defaultPfp.png",
-#            "user-type": "user",
-#        }
-#        with mock.patch("spotlogin_api.get_user_call", self.mock_nopfp):
-#            result = spotify_login.get_user(self.user[INPUT])
-#        self.assertEqual(result, expect)
+    def test_user_no_pfp(self):
+        """
+        Tests a User That has no pfp
+        """
+        expect = {
+            "username": "Bob",
+            "profile-picture": "./static/defaultPfp.png",
+            "user-type": "user",
+        }
+        with mock.patch("spotlogin_api.get_user_call", self.mock_nopfp):
+            result = spotify_login.get_user(self.user[INPUT])
+        self.assertEqual(result, expect)
 
 
     def mock_artist(self, auth):
@@ -423,5 +423,28 @@ class TestDatabase(unittest.TestCase):
         with mock.patch('app.DB.session',session):
             result=app.emit_posts()
         self.assertEqual(result,None)
+       
+
+    class MockedUser:
+        def __init__(self, username):
+            self.username = username
+            self.top_artists = []
+    def mock_rec(self, artists):
+        return []
+    @mock.patch('app.SOCKETIO.emit')
+    def test_emit_recommended(self, mocked_socket):
+        session = UnifiedAlchemyMagicMock()
+        fflask=self.mock_flask()
+        user=self.MockedUser("username")
+        with mock.patch("app.flask.request",fflask):
+            with mock.patch("app.get_username",self.mock_unam):
+                with mock.patch("app.query_user",self.MockedUser):
+                    with mock.patch("app.get_recommended",self.mock_rec):
+                        app.emit_recommended()
+        expected = []
+        mocked_socket.assert_called_once_with( "recommended channel", expected, room="12345" )
+        
+    
+        
 if __name__ == "__main__":
     unittest.main()

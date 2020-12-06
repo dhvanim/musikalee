@@ -206,16 +206,21 @@ class GetReccomendedAndTrending(unittest.TestCase):
         """
         Initializes the variables
         """
+        self.sample = {
+            EXPECT: [
+                    {'artist': 'a1, a2', 'song': 's1'}, {'artist': 'a3', 'song': 's2'}
+            ]
+        } 
         self.rec={
             EXPECT: ["cheese","woohoo","teehee"],
         }
         self.ten={
-            EXPECT: [{'track': {'name': 'chungy',
-                        'artists': [{'name': 'bob'}]}},
-                    {'track': {'name': 'chun',
-                        'artists': [{'name': 'bob'}]}},
-                    {'track': {'name': 'Big',
-                        'artists': [{'name': 'Biff'}]}}
+            EXPECT: [{'song': 'chungy',
+                        'artists':  'bob'},
+                    {'song': 'chun',
+                        'artists': 'bob'},
+                    {'song': 'Big',
+                        'artists': 'Biff'}
                     ]
         }
     def test_empty_recommended(self):
@@ -262,16 +267,42 @@ class GetReccomendedAndTrending(unittest.TestCase):
                 {"track": {"name": "chun","artists":[{"name": "bob"}]}},
                 {"track": {"name": "Big","artists":[{"name": "Biff"}]}},
             ]
+            
+    def mockParse(self, songs):
+        return [
+                {"artists": "bob", "song": "chungy"}, 
+                {"artists": "bob", "song":"chun"},
+                {"artists": "Biff", "song": "Big"}
+            ]
+    
     def test_trending(self):
         """
         Tests trending
         """
         session=UnifiedAlchemyMagicMock()
         with mock.patch("app.DB.session",session):
-            with mock.patch("app.get_trending",self.mocktcall):
+            with mock.patch("app.spotify_get_trending",self.mocktcall):
                 with mock.patch("app.random.sample",self.mockts):
-                    result=app.get_trending()
+                    with mock.patch("app.parse_tracks", self.mockParse):
+                        result=app.get_trending()
         self.assertEqual(result,self.ten[EXPECT])
+        
+    class Song:
+        def __init__(self, artists, track):
+            self.artists = artists
+            self.track = track
+
+    def test_parse_tracks_success(self):
+            songs = []
+            s1 = self.Song(["a1", "a2"], "s1")
+            s2 = self.Song(["a3"], "s2")
+            songs.append(s1)
+            songs.append(s2)
+            response = app.parse_tracks(songs)
+            expected = self.sample[EXPECT]
+            self.assertEqual(response, expected)    
+            
+
 class Lstorage(unittest.TestCase):
     """
     Tests get and emit local storage

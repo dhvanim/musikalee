@@ -54,6 +54,7 @@ def get_username(flask_id):
     """
     Gets users username from flaskid
     """
+    print(flask_id)
     user = (
         DB.session.query(models.ActiveUsers).filter_by(
             serverid=flask_id).first().user
@@ -353,7 +354,7 @@ def emit_trending():
     trending = get_trending()
     SOCKETIO.emit("trending channel", trending, room=flask.request.sid)
 
-
+        
 def get_trending():
     """
     Gets trending from spotify
@@ -375,17 +376,17 @@ def get_trending():
     DB.session.commit()
     sample = random.sample(trending_query, 3)
 
+    return parse_tracks(sample)
+
+def parse_tracks(sample):
+    
     trending = []
     for song in sample:
         track = {}
-
         track["artist"] = ", ".join(song.artists)
         track["song"] = song.track
-
         trending.append(track)
-
     return trending
-
 
 @SOCKETIO.on("get local storage")
 def get_local_storage():
