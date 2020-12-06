@@ -15,6 +15,10 @@ import app
 INPUT = ""
 EXPECT = ""
 
+class mock_flask():
+    def __init__(self):
+        self.sid="12345"
+
 class Post_music(unittest.TestCase):
     """
     This is the test for the function
@@ -162,21 +166,34 @@ class EmitUserOrArtistData(unittest.TestCase):
                 'following': ['Cat', 'Dhvani','Justin'],
             },
         }
+    def mock_get_foll(self,user):
+        return ['Cat', 'Dhvani','Justin']
+        
+    def mock_username(self,sid):
+        return "Spl33nMq33n"
         
     @mock.patch('app.SOCKETIO.emit')
     def test_emituserdata(self,mocked_socket):
-        app.emit_user_data(self.user["0"],
-                        self.user["1"],
-                        self.user["2"])
+        fflask=mock_flask()
+        with mock.patch("app.flask.request", fflask):
+            with mock.patch('app.get_followers_db', self.mock_get_foll):
+                with mock.patch("app.get_username",self.mock_username):
+                    app.emit_user_data(self.user["0"],
+                            self.user["1"],
+                            self.user["2"])
         mocked_socket.assert_called_once_with(
                                 "emit user data",
                                 self.user[EXPECT])
     
     @mock.patch('app.SOCKETIO.emit')
     def test_emitartistdata(self,mocked_socket):
-        app.emit_artist_data(self.artist["0"],
-                        self.artist["1"],
-                        self.artist["2"])
+        fflask=mock_flask()
+        with mock.patch("app.flask.request", fflask):
+            with mock.patch('app.get_followers_db', self.mock_get_foll):
+                with mock.patch("app.get_username",self.mock_username):
+                    app.emit_artist_data(self.artist["0"],
+                                self.artist["1"],
+                                self.artist["2"])
         mocked_socket.assert_called_once_with(
                                 "emit user data",
                                 self.artist[EXPECT])
