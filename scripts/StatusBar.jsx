@@ -9,15 +9,17 @@ export default function StatusBar() {
 
   function display(list) {
     for (let i = 0; i < list.length; i += 1) {
-      list[i].style.display = 'block';
-      list[i].required = true;
+      const item = list[i];
+      item.style.display = 'block';
+      item.required = true;
     }
   }
 
   function hide(list) {
     for (let i = 0; i < list.length; i += 1) {
-      list[i].style.display = 'none';
-      list[i].required = false;
+      const item = list[i];
+      item.style.display = 'none';
+      item.required = false;
     }
   }
 
@@ -83,11 +85,11 @@ export default function StatusBar() {
     <div className="statusbar">
       <form onSubmit={submitPost}>
         <input type="text" id="text_status" placeholder="What are you listening to?" maxLength="256" required />
-        
+
         <input type="submit" name="Share" value="Share" />
-        
-        <br/>
-        
+
+        <br />
+
         <select id="option" name="option" onClick={dropdownselect}>
           <option value="default"> Attach Media </option>
           <option value="song"> Song </option>
@@ -95,14 +97,14 @@ export default function StatusBar() {
           <option value="album"> Album </option>
           <option value="playlist"> Playlist </option>
         </select>
-        
+
         <div className="media_input">
-        <input type="text" id="song" placeholder="Song" maxLength="500" />
-        <input type="text" id="artist" placeholder="Artist" maxLength="500" />
-        <input type="text" id="album" placeholder="Album" maxLength="500" />
-        <input type="text" id="playlist" placeholder="Spotify Playlist Link" maxLength="500" />
+          <input type="text" id="song" placeholder="Song" maxLength="500" />
+          <input type="text" id="artist" placeholder="Artist" maxLength="500" />
+          <input type="text" id="album" placeholder="Album" maxLength="500" />
+          <input type="text" id="playlist" placeholder="Spotify Playlist Link" maxLength="500" />
         </div>
-        
+
       </form>
     </div>
   );

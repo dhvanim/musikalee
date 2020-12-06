@@ -42,12 +42,12 @@ export default function Ticket() {
 
   function getEvents() {
     React.useEffect(() => {
-      Socket.on('display events', (events) => {
-        setEvents(events);
-        if (events.length !== 0) {
+      Socket.on('display events', (data) => {
+        setEvents(data);
+        if (data.length !== 0) {
           const active = page;
           const items = [];
-          for (let number = 1; number <= events[0].totalPages; number += 1) {
+          for (let number = 1; number <= data[0].totalPages; number += 1) {
             items.push(
               <Pagination.Item className="pageItem" key={number} active={number === active}>
                 {number}
@@ -75,17 +75,17 @@ export default function Ticket() {
   getEvents();
   return (
     <div>
-    <Navigation />
-    <div className="page content">
-      <h1>Discover events near you!</h1>
-      <form onSubmit={getEnteredValues}>
-        <input type="text" id="zip_code" placeholder="Zipcode" maxLength="256" />
-        <input type="text" id="artist_search" placeholder="Artist" maxLength="256" />
-        <input type="submit" name="Search" />
-      </form>
+      <Navigation />
+      <div className="page content">
+        <h1>Discover events near you!</h1>
+        <form onSubmit={getEnteredValues}>
+          <input type="text" id="zip_code" placeholder="Zipcode" maxLength="256" />
+          <input type="text" id="artist_search" placeholder="Artist" maxLength="256" />
+          <input type="submit" name="Search" />
+        </form>
 
-      <ul className="events">
-        {
+        <ul className="events">
+          {
                 events.map((event, index) => (
                   <EventItem
                     key={index}
@@ -97,13 +97,13 @@ export default function Ticket() {
                   />
                 ))
             }
-      </ul>
+        </ul>
 
-      <div className="eventsPages">
-        <Pagination onClick={pageChanged}>{pageItems}</Pagination>
+        <div className="eventsPages">
+          <Pagination onClick={pageChanged}>{pageItems}</Pagination>
+        </div>
+
       </div>
-      
-    </div>
     </div>
   );
 }

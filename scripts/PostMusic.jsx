@@ -12,22 +12,24 @@ export default function PostMusic(props) {
             <img src={music.album_art} className="album_art" alt={music.album} />
           </a>
           <h3>
-            
+
             { music.song }
-            
+
           </h3>
           <span>
-          { music.album }
-          
+            { music.album }
+
+            <br />
+            { music.artist }
+          </span>
+
           <br />
-          { music.artist }
-          </span> <br />
           { music.preview_url != null
             ? (
               <div className="audio">
-              <audio controls name="media">
-                <source src={music.preview_url} type="audio/mpeg" />
-              </audio>
+                <audio controls name="media">
+                  <source src={music.preview_url} type="audio/mpeg" />
+                </audio>
               </div>
             )
             : <div />}
@@ -44,9 +46,9 @@ export default function PostMusic(props) {
             <img src={music.artist_icon} className="album_art" alt={music.artist_name} />
           </a>
           <h1>
-            
+
             { music.artist_name }
-            
+
           </h1>
         </span>
       </div>
@@ -67,7 +69,9 @@ export default function PostMusic(props) {
           { music.artists }
           <br />
           { music.total_tracks }
-          Tracks || Released: { music.release_date }
+          Tracks || Released:
+
+          { music.release_date }
 
         </span>
       </div>
@@ -87,9 +91,13 @@ export default function PostMusic(props) {
           <i>
             { music.playlist_desc }
           </i>
-          by { music.playlist_owner }
+          by
+
+          { music.playlist_owner }
           <br />
-          { music.followers } Followers
+          { music.followers }
+
+          Followers
         </span>
       </div>
     );
@@ -102,5 +110,5 @@ export default function PostMusic(props) {
 
 PostMusic.propTypes = {
   music: PropTypes.any.isRequired,
-  musicType: PropTypes.any.isRequired,
+  musicType: PropTypes.string.isRequired,
 };

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import { Socket } from './Socket';
 
-export function Follow(props) {
+export default function Follow(props) {
   const { isFollowed } = props;
 
   function handleSubmit(event) {
@@ -23,7 +24,11 @@ export function Follow(props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <button id="f-button"> follow </button>
+      <button id="f-button" type="button"> follow </button>
     </form>
   );
 }
+
+Follow.propTypes = {
+  isFollowed: PropTypes.bool.isRequired,
+};

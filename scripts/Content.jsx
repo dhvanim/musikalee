@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import { Socket } from './Socket';
 
-import { HashRouter, Route, Switch } from 'react-router-dom';
 import SpotifyButton from './SpotifyButton';
 import Home from './Home';
 import UserProfile from './UserProfile';
@@ -9,7 +9,7 @@ import Ticket from './Ticket';
 
 import Landing from './Landing';
 
-export function Content() {
+export default function Content() {
   const [loggedIn, setLoggedIn] = React.useState(false);
 
   function getLoggedStatus() {
@@ -31,26 +31,25 @@ export function Content() {
       };
     });
   }
-    
+
   getLoggedStatus();
-  console.log(loggedIn);
 
   return (
     <div>
-    <HashRouter>
-    <Switch>
-        <div>
-         <Route exact path="/">
-            {loggedIn ? <Home /> : <SpotifyButton />}
-          </Route>
-          <Route path="/about" component={Landing}/>
-          <div class="content">
-             <Route path="/profile" component={UserProfile}/>
-             <Route path="/ticket" component={Ticket}/>
-           </div>
-        </div>
-    </Switch>
-    </HashRouter>
+      <HashRouter>
+        <Switch>
+          <div>
+            <Route exact path="/">
+              {loggedIn ? <Home /> : <SpotifyButton />}
+            </Route>
+            <Route path="/about" component={Landing} />
+            <div className="content">
+              <Route path="/profile" component={UserProfile} />
+              <Route path="/ticket" component={Ticket} />
+            </div>
+          </div>
+        </Switch>
+      </HashRouter>
     </div>
   );
 }
