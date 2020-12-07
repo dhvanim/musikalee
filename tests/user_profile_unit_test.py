@@ -104,11 +104,8 @@ class getUserProfile(unittest.TestCase):
     """
     def setUp(self):
         self.user = {
-            INPUT: {
-                "0":["Singer 1", "Singer 2", "Singer 3"],
-                "1":"A song",
-                "2":{"username":"aUsername", "user_type":"user"},
-                },
+            INPUT: True,
+
             EXPECTED:{ 
                 'username': 'aUsername', 
                 'profileType': 'user', 
@@ -118,19 +115,6 @@ class getUserProfile(unittest.TestCase):
                 }
         }
         
-        self.artist = { 
-            INPUT:{
-                "topTracks":["Track 1","Track 2","Track 3"],
-                "numListeners" : 12345,
-                "userInfo":{"username":"aUsername", "user_type":"artist"}
-            },
-            EXPECTED:{
-                "username":"aUsername",
-                "user_type":"artist",
-                "topTracks":["Track 1","Track 2","Track 3"],
-                "numListeners":12345,
-            },
-        }
         
     def mock_get_top_art(self, user):
         """
@@ -183,7 +167,7 @@ class getUserProfile(unittest.TestCase):
                         with mock.patch("app.get_current_song", self.mock_get_curr_song):
                             with mock.patch("app.query_user", MockedUser):
                                 with mock.patch("app.get_followers_db", self.mock_get_foll):
-                                    app.send_user_profile(self.user[INPUT])
+                                    app.send_user_profile(True)
         mocked_socket.assert_called_once_with("emit user data",
                                               self.user[EXPECTED])
                                               
