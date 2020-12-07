@@ -31,6 +31,20 @@ KEY_PAGE = ""
 DISPLAY_EVENTS_CHANNEL = "display_events"
 EXPECTED_DATA = ""
 
+class MockResponse:
+            """
+            Mocks a response for ticketmaster
+            """
+
+            def __init__(self, json_data, status_code):
+                self.json_data = json_data
+                self.status_code = status_code
+
+            def json(self):
+                """
+                returns json
+                """
+                return self.json_data
 
 class SpotifyLoginTest(unittest.TestCase):
     """
@@ -55,6 +69,17 @@ class SpotifyLoginTest(unittest.TestCase):
             "type": "user",
         }
         return oput
+        
+    def mock_top_tracks(self, auth):
+        """
+        Mocks artist's top tracks
+        """
+        oput = { "artists":{ "items":[ {"name": 's1'}, {"name":'s2'},{"name": 's3'}]}}
+        
+        # mock = MockResponse(oput, 200)
+        return oput
+
+        
 
     def test_user_normal(self):
         """
@@ -67,6 +92,15 @@ class SpotifyLoginTest(unittest.TestCase):
         }
         with mock.patch("spotlogin_api.get_user_call", self.mock_nuser):
             result = spotify_login.get_user(self.user[INPUT])
+        self.assertEqual(result, expect)
+        
+    def test_top_tracks(self):
+        """
+        Tests a User That has a pfp
+        """
+        expect = ['s1','s2','s3']
+        with mock.patch("spotlogin_api.get_artist_top_tracks_call", self.mock_top_tracks):
+            result = spotify_login.get_top_tracks(self.user[INPUT])
         self.assertEqual(result, expect)
 
     def mock_nopfp(self, auth):
@@ -340,7 +374,7 @@ class TestCommentsAndLikes(unittest.TestCase):
         Tests saving comment to Comment model
         """
         session = UnifiedAlchemyMagicMock()
-        data = {"username": "user", "comment": "comment", "post_id": "0000"}
+        data = {"username": "user", "comment": "comment", "postId": "0000"}
         with mock.patch("app.DB.session", session):  #
             app.save_comment(data)
             count = session.query(app.models.Comments).count()

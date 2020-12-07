@@ -278,6 +278,7 @@ def emit_user_data(user_info, top_artists, curr_song):
         artist_list.append(top_artists[1])
         artist_list.append(top_artists[2])
     followers_list = get_followers_db(get_username(flask.request.sid))
+    print("here is userInfo: ", user_info)
     SOCKETIO.emit(
         "emit user data",
         {
@@ -471,11 +472,12 @@ def send_user_profile(data):
     """
     sends the profile
     """
-    if (data == True):
-        username = get_username(flask.request.sid)
-    else:
-        username = data
-
+    # if (data == True):
+    #     username = get_username(flask.request.sid)
+    # else:
+    #     username = data
+    username = get_username(flask.request.sid)
+    
     top_artists = get_top_artists(username)
 
     curr_song = get_current_song(username)
