@@ -10,7 +10,7 @@ export default function Follow(props) {
     if (isFollowed) {
       const element = 'Follow';
       ReactDOM.render(element, document.getElementById('f-button'));
-
+      
       Socket.emit('recieve follower data');
     } else {
       const element = 'Unfollow';
@@ -24,7 +24,7 @@ export default function Follow(props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <button id="f-button" type="button"> follow </button>
+      <button id="f-button" type="button"> Follow </button>
     </form>
   );
 }

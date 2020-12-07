@@ -94,9 +94,7 @@ export default function UserProfile() {
             <div>
               <h4>
                 @
-                {users}
-
-                {profileType}
+                {users} {profileType}
               </h4>
             </div>
           </div>
