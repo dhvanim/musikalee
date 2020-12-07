@@ -167,18 +167,6 @@ class EmitUserOrArtistData(unittest.TestCase):
                 "currentSong": "Musikalee",
             },
         }
-        self.artist = {
-            "0": {"username": "Spl33nMq33n", "user_type": "artist"},
-            "1": ["1", "2", "3"],
-            "2": 1000,
-            EXPECT: {
-                "username": "Spl33nMq33n",
-                "profileType": "artist",
-                "topTracks": ["1", "2", "3"],
-                "numListeners": 1000,
-                "following": ["Cat", "Dhvani", "Justin"],
-            },
-        }
 
     def mock_get_foll(self, user):
         """
@@ -207,20 +195,6 @@ class EmitUserOrArtistData(unittest.TestCase):
         mocked_socket.assert_called_once_with("emit user data",
                                               self.user[EXPECT])
 
-    @mock.patch("app.SOCKETIO.emit")
-    def test_emitartistdata(self, mocked_socket):
-        """
-        tesrs function emit artist data
-        """
-        fflask = MockFlask()
-        with mock.patch("app.flask.request", fflask):
-            with mock.patch("app.get_followers_db", self.mock_get_foll):
-                with mock.patch("app.get_username", self.mock_username):
-                    app.emit_artist_data(
-                        self.artist["0"], self.artist["1"], self.artist["2"]
-                    )
-        mocked_socket.assert_called_once_with("emit user data",
-                                              self.artist[EXPECT])
 
 
 class GetReccomendedAndTrending(unittest.TestCase):

@@ -291,22 +291,6 @@ def emit_user_data(user_info, top_artists, curr_song):
     )
 
 
-def emit_artist_data(user_info, top_tracks, num_listeners):
-    """
-    Sends artist profile
-    """
-    followers_list = get_followers_db(get_username(flask.request.sid))
-    SOCKETIO.emit(
-        "emit user data",
-        {
-            "username": user_info["username"],
-            "profileType": user_info["user_type"],
-            "topTracks": top_tracks,
-            "numListeners": num_listeners,
-            "following": followers_list,
-        },
-    )
-
 @SOCKETIO.on("recieve follower data")
 def update_follower_info():
     """
@@ -472,26 +456,17 @@ def send_user_profile(data):
     """
     sends the profile
     """
-    # if (data == True):
-    #     username = get_username(flask.request.sid)
-    # else:
-    #     username = data
-    username = get_username(flask.request.sid)
+    if (data == True):
+         username = get_username(flask.request.sid)
+    else:
+         username = data
     
     top_artists = get_top_artists(username)
-
     curr_song = get_current_song(username)
 
     usertype = query_user(username)
     userinfo = {"username": username, "user_type": usertype.user_type}
-
-    if usertype == "artist":
-        top_tracks = get_top_tracks(flask.request.sid)
-        num_listeners = get_num_listeners(flask.request.sid)
-        emit_artist_data(userinfo, top_tracks, num_listeners)
-
-    else:
-        emit_user_data(userinfo, top_artists, curr_song)
+    emit_user_data(userinfo, top_artists, curr_song)
 
 
 @SOCKETIO.on("post comment")
