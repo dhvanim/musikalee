@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
-import Follow from './Follow';
+import {Follow} from './Follow';
 import { Socket } from './Socket';
 import Navigation from './Navigation';
 // import 'react-tabs/style/react-tabs.css';

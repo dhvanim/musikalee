@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { Socket } from './Socket';
 
-export default function Follow(props) {
+export function Follow(props) {
   const { isFollowed } = props;
 
   function handleSubmit(event) {
@@ -24,7 +24,7 @@ export default function Follow(props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <button id="f-button" type="button"> Follow </button>
+      <button id="f-button" > Follow </button>
     </form>
   );
 }

@@ -73,12 +73,12 @@ def get_top_tracks(flaskid):
         top_tracks = []
 
         for i in range(3):
-            top_tracks.append(json.dumps(response.json()["tracks"][i]["name"], indent=2))
+            top_tracks.append(response["artists"]["items"][i]["name"])
 
         return top_tracks
 
     except KeyError:
-        return ["no tracks", "no tracks", "no tracks"]
+         return ["no tracks", "no tracks", "no tracks"]
 
 
 def get_num_listeners(flaskid):
@@ -87,7 +87,7 @@ def get_num_listeners(flaskid):
     """
     try:
         response = spotlogin_api.get_artist_num_listeners(flaskid)
-        return json.dumps(response.json()["artists"]["items"][0]["name"], indent=2)
+        return response
 
     except Exception:
         return 0
