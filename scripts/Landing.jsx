@@ -1,6 +1,27 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
+const down = React.createRef();
+const up = React.createRef();
+
+function handleScrollDown(event) {
+  if(down.current){
+    down.current.scrollIntoView({ 
+     behavior: "smooth", 
+     block: "nearest"
+    });
+  }
+}
+
+function handleScrollUp(event) {
+  if(up.current){
+    up.current.scrollIntoView({ 
+     behavior: "smooth", 
+     block: "nearest"
+    });
+  }
+}
+
 function Heading() {
   return (
     <div>
@@ -8,11 +29,29 @@ function Heading() {
       <h1 className="title"> Musikalee </h1>
       <h4>Created by:</h4>
       <ul>
-        <li>Joseph Cayemitte</li>
-        <li>Justin Chow</li>
-        <li>Catarina DeMatos</li>
-        <li>Dhvani Mistry</li>
+        <li> 
+          Joseph Cayemitte 
+          <a href="https://github.com/reo464" target="_blank"> <i class="fab fa-github"></i> </a> 
+          <a href="https://www.linkedin.com/in/joseph-cayemitte-04638b1a1/" target="_blank"> <i class="fab fa-linkedin"></i> </a>
+        </li>
+        <li>
+          Justin Chow
+          <a href="https://github.com/Ju3T1N" target="_blank"> <i class="fab fa-github"></i> </a> 
+          <a href="https://www.linkedin.com/in/justin-chow-721066127/" target="_blank"> <i class="fab fa-linkedin"></i> </a>
+        </li>
+        <li>
+          Catarina DeMatos
+          <a href="https://github.com/catdematos98" target="_blank"> <i class="fab fa-github"></i> </a> 
+          <a href="https://www.linkedin.com/in/dematoscatarina/" target="_blank"> <i class="fab fa-linkedin"></i> </a>
+        </li>
+        <li>
+          Dhvani Mistry
+          <a href="https://github.com/dhvanim" target="_blank"> <i class="fab fa-github"></i> </a> 
+          <a href="https://www.linkedin.com/in/dhvanimistry/" target="_blank"> <i class="fab fa-linkedin"></i> </a>
+        </li>
       </ul>
+      
+      <button onClick={handleScrollDown}> <i class="fas fa-angle-down"></i> </button>
     </div>
   );
 }
@@ -20,14 +59,14 @@ function OurProduct() {
   return (
     <div>
       <h1>About Musikalee</h1>
-      <i>Our product, called Musikalee, is a blog for all of your music needs. </i>
-      <p>On our app you can:</p>
+      <i>Our product, called Musikalee, is a blog for all of your music needs. On our app, you can...</i>
+      <br /><br />
       <ul>
         <li>Share music (some of which can even be played), artists, albums or playlists</li>
-        <li>Interact with other people by liking or commenting on their post</li>
-        <li>Visit your profile page to see your current playing song</li>
+        <li>Interact with other users by liking or commenting on their post</li>
+        <li>Visit your profile page to see your current playing song and top artists</li>
         <li>
-          Get a list of currently trending songs, and even some reccomendations curated just for you
+          Get a list of currently trending songs, and some reccomendations curated just for you
         </li>
       </ul>
     </div>
@@ -66,11 +105,13 @@ export default function Landing() {
   return (
     <div className="landing">
 
-      <div className="heading">
+      <div ref={up} className="heading">
         { Heading() }
       </div>
 
-      <div className="contentlanding">
+      <div ref={down} className="contentlanding">
+      
+        <button onClick={handleScrollUp}> <i class="fas fa-angle-up"></i> </button>
 
         <div className="product">
           { OurProduct() }
