@@ -31,23 +31,23 @@ function Heading() {
       <ul>
         <li> 
           Joseph Cayemitte 
-          <a href="https://github.com/reo464" target="_blank"><i class="fab fa-github"></i></a> 
-          <a href="https://www.linkedin.com/in/joseph-cayemitte-04638b1a1/" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://github.com/reo464" target="_blank"> <i class="fab fa-github"></i> </a> 
+          <a href="https://www.linkedin.com/in/joseph-cayemitte-04638b1a1/" target="_blank"> <i class="fab fa-linkedin"></i> </a>
         </li>
         <li>
           Justin Chow
-          <a href="https://github.com/Ju3T1N" target="_blank"><i class="fab fa-github"></i></a> 
-          <a href="https://www.linkedin.com/in/justin-chow-721066127/" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://github.com/Ju3T1N" target="_blank"> <i class="fab fa-github"></i> </a> 
+          <a href="https://www.linkedin.com/in/justin-chow-721066127/" target="_blank"> <i class="fab fa-linkedin"></i> </a>
         </li>
         <li>
           Catarina DeMatos
-          <a href="https://github.com/catdematos98" target="_blank"><i class="fab fa-github"></i></a> 
-          <a href="https://www.linkedin.com/in/dematoscatarina/" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://github.com/catdematos98" target="_blank"> <i class="fab fa-github"></i> </a> 
+          <a href="https://www.linkedin.com/in/dematoscatarina/" target="_blank"> <i class="fab fa-linkedin"></i> </a>
         </li>
         <li>
           Dhvani Mistry
-          <a href="https://github.com/dhvanim" target="_blank"><i class="fab fa-github"></i></a> 
-          <a href="https://www.linkedin.com/in/dhvanimistry/" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://github.com/dhvanim" target="_blank"> <i class="fab fa-github"></i> </a> 
+          <a href="https://www.linkedin.com/in/dhvanimistry/" target="_blank"> <i class="fab fa-linkedin"></i> </a>
         </li>
       </ul>
       
@@ -59,8 +59,8 @@ function OurProduct() {
   return (
     <div>
       <h1>About Musikalee</h1>
-      <i>Our product, called Musikalee, is a blog for all of your music needs. </i>
-      <p>On our app you can:</p>
+      <i>Our product, called Musikalee, is a blog for all of your music needs. On our app, you can...</i>
+      <br /><br />
       <ul>
         <li>Share music (some of which can even be played), artists, albums or playlists</li>
         <li>Interact with other users by liking or commenting on their post</li>
