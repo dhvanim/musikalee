@@ -60,10 +60,13 @@ def parse_events(events_json):
         images = e["images"][0]["url"]
         try:
             date = datetime.strptime(e["dates"]["start"]["dateTime"], "%Y-%m-%dT%XZ")
+            date = date.strftime("%B %d, %Y")
         except KeyError:
-            date = ""
-        date = date.strftime("%B %d, %Y")
-        venue = e["_embedded"]["venues"][0]["name"]
+            date = "To be announced"
+        try:
+            venue = e["_embedded"]["venues"][0]["name"]
+        except KeyError:
+            venue = "To be announced"
         all_events.append(
             {
                 "name": name,
