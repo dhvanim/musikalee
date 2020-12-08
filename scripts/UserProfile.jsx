@@ -113,7 +113,11 @@ export default function UserProfile() {
 
                 <TabPanel>
                   <h1>Currently listening to:</h1>
-                  <p>{currSong}</p>
+                    <img style={{ width: '90px', height: '90px', borderRadius: '45px' }} src={currSong[3]} className="song_art"/>
+                    <p> {currSong[1]} by {currSong[0]} </p>
+                    <audio controls name="media">
+                      <source src={currSong[2]} type="audio/mpeg" />
+                    </audio>
                   <h1> Top artists:</h1>
 
                   <ul className="artistList">
