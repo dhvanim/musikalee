@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
-import {Follow} from './Follow';
+import { Follow } from './Follow';
 import { Socket } from './Socket';
 import Navigation from './Navigation';
 // import 'react-tabs/style/react-tabs.css';
@@ -94,7 +94,9 @@ export default function UserProfile() {
             <div>
               <h4>
                 @
-                {users} {profileType}
+                {users}
+                {' '}
+                {profileType}
               </h4>
             </div>
           </div>
@@ -113,11 +115,19 @@ export default function UserProfile() {
 
                 <TabPanel>
                   <h1>Currently listening to:</h1>
-                    <img style={{ width: '90px', height: '90px', borderRadius: '45px' }} src={currSong[3]} className="song_art"/>
-                    <p> {currSong[1]} by {currSong[0]} </p>
-                    <audio controls name="media">
-                      <source src={currSong[2]} type="audio/mpeg" />
-                    </audio>
+                  <img style={{ width: '90px', height: '90px', borderRadius: '45px' }} src={currSong[3]} className="song_art" />
+                  <p>
+                    {' '}
+                    {currSong[1]}
+                    {' '}
+                    by
+                    {' '}
+                    {currSong[0]}
+                    {' '}
+                  </p>
+                  <audio controls name="media">
+                    <source src={currSong[2]} type="audio/mpeg" />
+                  </audio>
                   <h1> Top artists:</h1>
 
                   <ul className="artistList">
