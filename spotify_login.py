@@ -57,11 +57,16 @@ def get_current_song(username):
     try:
         response = spotlogin_api.get_current_call(username)
         try:
-            return response["item"]["name"]
+            return [response["item"]["album"]["artists"][0]["name"],
+            response["item"]["name"], 
+            response["item"]["preview_url"], 
+            response["item"]["album"]["images"][0]["url"]]
+            
         except KeyError:
-            return "nothing is playing"
+            return ["nobody","nothing","no preview_url","./static/defaultCoverArt.png"]
+            
     except Exception:
-        return "nothing is playing"
+        return ["nobody","nothing","no preview_url","./static/defaultCoverArt.png"]
 
 
 def get_top_tracks(flaskid):
