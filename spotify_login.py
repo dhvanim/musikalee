@@ -40,12 +40,14 @@ def get_top_artists(username):
     Aquire the name of favorite artists
     """
     uris = []
+    artistPic = []
     try:
         response = spotlogin_api.get_top_call(username)
         for item in response["items"]:
             uris.append(item["name"])
-        return uris
-
+            artistPic.append(item["images"][0]["url"])
+        return [uris, artistPic]
+        
     except KeyError:
         return uris
 
