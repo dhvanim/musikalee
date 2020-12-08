@@ -17,10 +17,6 @@ import ticketmaster_api
 INPUT = ""
 EXPECT = ""
 
-#pylint: disable=unused-argument
-#pylint: disable=unused-variable
-#pylint: disable=no-self-use
-#pylint: disable=too-few-public-methods
 
 # for TicketmasterTest class
 KEY_INPUT = "input"
@@ -31,20 +27,22 @@ KEY_PAGE = ""
 DISPLAY_EVENTS_CHANNEL = "display_events"
 EXPECTED_DATA = ""
 
+
 class MockResponse:
-            """
-            Mocks a response for ticketmaster
-            """
+    """
+    Mocks a response for ticketmaster
+    """
 
-            def __init__(self, json_data, status_code):
-                self.json_data = json_data
-                self.status_code = status_code
+    def __init__(self, json_data, status_code):
+        self.json_data = json_data
+        self.status_code = status_code
 
-            def json(self):
-                """
-                returns json
-                """
-                return self.json_data
+    def json(self):
+        """
+        returns json
+        """
+        return self.json_data
+
 
 class SpotifyLoginTest(unittest.TestCase):
     """
@@ -69,17 +67,15 @@ class SpotifyLoginTest(unittest.TestCase):
             "type": "user",
         }
         return oput
-        
+
     def mock_top_tracks(self, auth):
         """
         Mocks artist's top tracks
         """
-        oput = { "artists":{ "items":[ {"name": 's1'}, {"name":'s2'},{"name": 's3'}]}}
-        
+        oput = {"artists": {"items": [{"name": "s1"}, {"name": "s2"}, {"name": "s3"}]}}
+
         # mock = MockResponse(oput, 200)
         return oput
-
-        
 
     def test_user_normal(self):
         """
@@ -93,13 +89,15 @@ class SpotifyLoginTest(unittest.TestCase):
         with mock.patch("spotlogin_api.get_user_call", self.mock_nuser):
             result = spotify_login.get_user(self.user[INPUT])
         self.assertEqual(result, expect)
-        
+
     def test_top_tracks(self):
         """
         Tests a User That has a pfp
         """
-        expect = ['s1','s2','s3']
-        with mock.patch("spotlogin_api.get_artist_top_tracks_call", self.mock_top_tracks):
+        expect = ["s1", "s2", "s3"]
+        with mock.patch(
+                "spotlogin_api.get_artist_top_tracks_call", self.mock_top_tracks
+        ):
             result = spotify_login.get_top_tracks(self.user[INPUT])
         self.assertEqual(result, expect)
 
@@ -279,21 +277,6 @@ class TicketmasterTest(unittest.TestCase):
         mock search_event
         """
 
-        class MockResponse:
-            """
-            Mocks a response for ticketmaster
-            """
-
-            def __init__(self, json_data, status_code):
-                self.json_data = json_data
-                self.status_code = status_code
-
-            def json(self):
-                """
-                returns json
-                """
-                return self.json_data
-
         return MockResponse(
             {
                 "_embedded": {
@@ -386,27 +369,35 @@ class TestCommentsAndLikes(unittest.TestCase):
         test updaing likes on Post model
         """
         session = UnifiedAlchemyMagicMock()
-        data = {
-            "user": {"username": "", "pfp": ""},
-            "text": "",
-            "type": "",
-            "music": {"song": "", "artist": "", "album": "", "playlist": ""},
-        }
+        session.add(
+            app.models.Posts(
+                username="username", 
+                pfp="profilepic", 
+                music_type = "music_type", 
+                music = {}, 
+                message ="message", 
+                num_likes =12, 
+                datetime =datetime.now()
+            )
+        )
+        session.commit()
+         # change id to be 0
+        post = session.query(app.models.Posts).first()
+        post.id = 0
+        session.commit()     
+
+        post = mock.MagicMock()
+        post.id = 0
+        post.num_likes = 33
+        session.query.return_value.filter.return_value.first.return_value  = post
+        print(session.query.first)
+        
         with mock.patch("app.DB.session", session):
-            # add post to db
-            app.on_post_receive(data)
-            count = session.query(app.models.Posts).count()
-            self.assertEqual(count, 1)
-
-            # change id to be 0
-            post = session.query(app.models.Posts).first()
-            post.id = 0
-            session.commit()
-
             app.update_likes_on_post(0, 33)
             session.commit()
 
-            post = session.query(app.models.Posts).filter(app.models.Posts.id == 0)
+            expected = session.query(app.models.Posts).filter(app.models.Posts.id == 0).first()
+            print(expected)
             self.assertEqual(post.num_likes, 33)
 
 
@@ -459,6 +450,8 @@ class TestDatabase(unittest.TestCase):
         """
         return "username"
 
+    def mock_update_likes(self, post_id, num_likes):
+        return 
     @mock.patch("app.SOCKETIO.emit")
     def test_update_num_likes(self, mocked_socket):
         """
@@ -469,7 +462,8 @@ class TestDatabase(unittest.TestCase):
         with mock.patch("app.DB.session", session):
             with mock.patch("app.flask.request", fflask):
                 with mock.patch("app.get_username", self.mock_unam):
-                    app.update_num_likes({"num_likes": 13, "id": 0})
+                    with mock.patch("app.update_likes_on_post", self.mock_update_likes):
+                        app.update_num_likes({"num_likes": 13, "id": 0})
         expected = {"post_id": 0, "num_likes": 13, "is_liked": False}
         mocked_socket.assert_called_once_with("like post channel", expected)
 

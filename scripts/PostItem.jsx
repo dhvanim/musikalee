@@ -38,7 +38,7 @@ export default function PostItem(props) {
   const likeIcon = (isLiked ? './static/heart-filled.png' : './static/heart-outline.png');
 
   const likeButton = () => (
-    <span role="button" style={{ float: 'right' }} onClick={handleToggle} onKeyDown={handleToggle}>
+    <span role="button" style={{ float: 'right' }} onClick={handleToggle}>
 
       <img style={icon} src={likeIcon} alt="" />
 
