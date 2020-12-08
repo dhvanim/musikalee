@@ -152,6 +152,7 @@ def emit_posts():
     )
     DB.session.commit()
     for post in all_posts:
+        print(post.num_likes)
         entry = {
             "id": post.id,
             "username": post.username,
@@ -236,6 +237,7 @@ def add_or_remove_like_from_db(user, liked_post_id):
     else:
         DB.session.add(models.Likes(user, liked_post_id))
     DB.session.commit()
+    
     return not is_liked
 
 
@@ -244,7 +246,7 @@ def update_likes_on_post(post_id, num_likes):
     changes like number in query
     """
     post = DB.session.query(models.Posts).filter(models.Posts.id == post_id)
-    post.num_likes = num_likes
+    post.first().num_likes = num_likes
     DB.session.commit()
 
 

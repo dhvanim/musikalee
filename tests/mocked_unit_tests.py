@@ -369,27 +369,35 @@ class TestCommentsAndLikes(unittest.TestCase):
         test updaing likes on Post model
         """
         session = UnifiedAlchemyMagicMock()
-        data = {
-            "user": {"username": "", "pfp": ""},
-            "text": "",
-            "type": "",
-            "music": {"song": "", "artist": "", "album": "", "playlist": ""},
-        }
+        session.add(
+            app.models.Posts(
+                username="username", 
+                pfp="profilepic", 
+                music_type = "music_type", 
+                music = {}, 
+                message ="message", 
+                num_likes =12, 
+                datetime =datetime.now()
+            )
+        )
+        session.commit()
+         # change id to be 0
+        post = session.query(app.models.Posts).first()
+        post.id = 0
+        session.commit()     
+
+        post = mock.MagicMock()
+        post.id = 0
+        post.num_likes = 33
+        session.query.return_value.filter.return_value.first.return_value  = post
+        print(session.query.first)
+        
         with mock.patch("app.DB.session", session):
-            # add post to db
-            app.on_post_receive(data)
-            count = session.query(app.models.Posts).count()
-            self.assertEqual(count, 1)
-
-            # change id to be 0
-            post = session.query(app.models.Posts).first()
-            post.id = 0
-            session.commit()
-
             app.update_likes_on_post(0, 33)
             session.commit()
 
-            post = session.query(app.models.Posts).filter(app.models.Posts.id == 0)
+            expected = session.query(app.models.Posts).filter(app.models.Posts.id == 0).first()
+            print(expected)
             self.assertEqual(post.num_likes, 33)
 
 
@@ -442,6 +450,8 @@ class TestDatabase(unittest.TestCase):
         """
         return "username"
 
+    def mock_update_likes(self, post_id, num_likes):
+        return 
     @mock.patch("app.SOCKETIO.emit")
     def test_update_num_likes(self, mocked_socket):
         """
@@ -452,7 +462,8 @@ class TestDatabase(unittest.TestCase):
         with mock.patch("app.DB.session", session):
             with mock.patch("app.flask.request", fflask):
                 with mock.patch("app.get_username", self.mock_unam):
-                    app.update_num_likes({"num_likes": 13, "id": 0})
+                    with mock.patch("app.update_likes_on_post", self.mock_update_likes):
+                        app.update_num_likes({"num_likes": 13, "id": 0})
         expected = {"post_id": 0, "num_likes": 13, "is_liked": False}
         mocked_socket.assert_called_once_with("like post channel", expected)
 
