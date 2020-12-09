@@ -277,16 +277,18 @@ def emit_user_data(user_info, top_artists, curr_song):
     
     artist_list = []
     artist_photo = []
-    if len(top_artists[0]) >= 3:
-        artist_list.append(top_artists[0][0])
-        artist_list.append(top_artists[0][1])
-        artist_list.append(top_artists[0][2])
-        
-    if len(top_artists[1]) >= 3:
-        artist_photo.append(top_artists[1][0])
-        artist_photo.append(top_artists[1][1])
-        artist_photo.append(top_artists[1][2])
-        
+    
+    if len(top_artists) != 0:
+        if len(top_artists[0]) >= 3:
+            artist_list.append(top_artists[0][0])
+            artist_list.append(top_artists[0][1])
+            artist_list.append(top_artists[0][2])
+            
+        if len(top_artists[1]) >= 3:
+            artist_photo.append(top_artists[1][0])
+            artist_photo.append(top_artists[1][1])
+            artist_photo.append(top_artists[1][2])
+    
     followers_list = get_followers_db(get_username(flask.request.sid))
     SOCKETIO.emit(
         "emit user data",
