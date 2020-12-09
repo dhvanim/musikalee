@@ -90,17 +90,6 @@ class SpotifyLoginTest(unittest.TestCase):
             result = spotify_login.get_user(self.user[INPUT])
         self.assertEqual(result, expect)
 
-    def test_top_tracks(self):
-        """
-        Tests a User That has a pfp
-        """
-        expect = ["s1", "s2", "s3"]
-        with mock.patch(
-                "spotlogin_api.get_artist_top_tracks_call", self.mock_top_tracks
-        ):
-            result = spotify_login.get_top_tracks(self.user[INPUT])
-        self.assertEqual(result, expect)
-
     def mock_nopfp(self, auth):
         """
         Mocks the response of a user with no pfp
@@ -181,14 +170,20 @@ class SpotifyLoginTest(unittest.TestCase):
         """
         Tests current song
         """
-        oput = {"item": {"name": "Bob sings"}}
+        oput = {
+            "item": {
+                "name": "Bob sings",
+                "preview_url": "123",
+                "album": {"artist": [{"name": "Bob"}], "images": [{"url": "1234"}]},
+            }
+        }
         return oput
 
     def test_curr_song(self):
         """
         Tests the returning of songs playing
         """
-        expect = "Bob sings"
+        expect = ["nobody", "nothing", "no preview_url", "./static/defaultCoverArt.png"]
         with mock.patch("spotlogin_api.get_current_call", self.mock_curr_song):
             result = spotify_login.get_current_song(self.user[INPUT])
         self.assertEqual(result, expect)
@@ -203,7 +198,7 @@ class SpotifyLoginTest(unittest.TestCase):
         """
         Tests when no song is playing
         """
-        expect = ['nobody', 'nothing', 'no preview_url', './static/defaultCoverArt.png']
+        expect = ["nobody", "nothing", "no preview_url", "./static/defaultCoverArt.png"]
         with mock.patch("spotlogin_api.get_current_call", self.mock_no_song):
             result = spotify_login.get_current_song(self.user[INPUT])
         self.assertEqual(result, expect)
@@ -212,7 +207,7 @@ class SpotifyLoginTest(unittest.TestCase):
         """
         Tests an exception occuring
         """
-        expect = ['nobody', 'nothing', 'no preview_url', './static/defaultCoverArt.png']
+        expect = ["nobody", "nothing", "no preview_url", "./static/defaultCoverArt.png"]
         with mock.patch("spotlogin_api.get_current_call", self.mock_key):
             result = spotify_login.get_current_song(self.user[INPUT])
         self.assertEqual(result, expect)
@@ -271,7 +266,8 @@ class TicketmasterTest(unittest.TestCase):
     def mocked_search_event_response(
             self,
             url,
-            headers={"Accept": "application/json", "Content-Type": "application/json"},
+            headers={"Accept": "application/json",
+                     "Content-Type": "application/json"},
     ):
         """
         mock search_event
@@ -371,32 +367,34 @@ class TestCommentsAndLikes(unittest.TestCase):
         session = UnifiedAlchemyMagicMock()
         session.add(
             app.models.Posts(
-                username="username", 
-                pfp="profilepic", 
-                music_type = "music_type", 
-                music = {}, 
-                message ="message", 
-                num_likes =12, 
-                datetime =datetime.now()
+                username="username",
+                pfp="profilepic",
+                music_type="music_type",
+                music={},
+                message="message",
+                num_likes=12,
+                datetime=datetime.now(),
             )
         )
         session.commit()
-         # change id to be 0
+        # change id to be 0
         post = session.query(app.models.Posts).first()
         post.id = 0
-        session.commit()     
+        session.commit()
 
         post = mock.MagicMock()
         post.id = 0
         post.num_likes = 33
-        session.query.return_value.filter.return_value.first.return_value  = post
+        session.query.return_value.filter.return_value.first.return_value = post
         print(session.query.first)
-        
+
         with mock.patch("app.DB.session", session):
             app.update_likes_on_post(0, 33)
             session.commit()
 
-            expected = session.query(app.models.Posts).filter(app.models.Posts.id == 0).first()
+            expected = (
+                session.query(app.models.Posts).filter(app.models.Posts.id == 0).first()
+            )
             print(expected)
             self.assertEqual(post.num_likes, 33)
 
@@ -451,7 +449,8 @@ class TestDatabase(unittest.TestCase):
         return "username"
 
     def mock_update_likes(self, post_id, num_likes):
-        return 
+        return
+
     @mock.patch("app.SOCKETIO.emit")
     def test_update_num_likes(self, mocked_socket):
         """

@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 import flask
 import flask_socketio
 import flask_sqlalchemy
-from sqlalchemy import asc, desc
+from sqlalchemy import desc
 import timeago
 from flask_socketio import join_room, leave_room
 
@@ -31,8 +31,6 @@ from spotify_login import (
     get_artists,
     get_top_artists,
     get_current_song,
-    get_num_listeners,
-    get_top_tracks,
 )
 from spotify_music import (
     spotify_get_trending,
@@ -55,8 +53,7 @@ def get_username(flask_id):
     Gets users username from flaskid
     """
     user = (
-        DB.session.query(models.ActiveUsers).filter_by(
-            serverid=flask_id).first().user
+        DB.session.query(models.ActiveUsers).filter_by(serverid=flask_id).first().user
     )
     DB.session.commit()
     return user
@@ -108,8 +105,8 @@ def on_post_receive(data):
 
     music_type = data["type"]
     music_entry = get_post_music_data(music_type, data["music"])
-    
-    if music_entry == None:
+
+    if music_entry is None:
         music_type = "default"
         music_entry = {}
 
@@ -147,8 +144,7 @@ def emit_posts():
     """
     posts = []
     all_posts = (
-        DB.session.query(models.Posts).order_by(
-            desc(models.Posts.datetime)).all()
+        DB.session.query(models.Posts).order_by(desc(models.Posts.datetime)).all()
     )
     DB.session.commit()
     for post in all_posts:
@@ -165,17 +161,19 @@ def emit_posts():
                 {
                     "text": comment.text,
                     "username": comment.username,
-                    "datetime": timeago.format(comment.datetime,
-                                               datetime.now()),
+                    "datetime": timeago.format(comment.datetime, datetime.now()),
                 }
                 for comment in DB.session.query(models.Comments)
                 .filter(models.Comments.post_id == post.id)
                 .order_by(desc(models.Comments.datetime))
                 .all()
             ],
-            "is_liked": DB.session.query(models.Likes).filter(
-                models.Likes.username == post.username,
-                models.Likes.post_id == post.id).scalar() is not None,
+            "is_liked": DB.session.query(models.Likes)
+            .filter(
+                models.Likes.username == post.username, models.Likes.post_id == post.id
+            )
+            .scalar()
+            is not None,
             "music_type": post.music_type,
             "music": post.music,
         }
@@ -183,41 +181,42 @@ def emit_posts():
         posts.append(entry)
     SOCKETIO.emit("emit posts channel", posts)
 
+
 def get_followers_db(user):
     """
     Gets list of Followers
     """
-    followers_list = DB.session.query(
-        models.Users.following).filter_by(
-            username=user).scalar()
+    followers_list = (
+        DB.session.query(models.Users.following).filter_by(username=user).scalar()
+    )
     DB.session.commit()
     return followers_list
+
 
 def follower_update_db(user):
     """
     Get List of followers
     """
-    followers_list = DB.session.query(
-        models.Users.following).filter_by(
-            username=user).scalar()
+    followers_list = (
+        DB.session.query(models.Users.following).filter_by(username=user).scalar()
+    )
     new_followers_list = followers_list
     DB.session.commit()
     if user not in followers_list:
         new_followers_list.append(user)
         is_followed = True
-        DB.session.query(models.Users).filter(
-            models.Users.username == user).update(
-                {models.Users.following: new_followers_list},
-                synchronize_session="fetch")
+        DB.session.query(models.Users).filter(models.Users.username == user).update(
+            {models.Users.following: new_followers_list}, synchronize_session="fetch"
+        )
     else:
         new_followers_list.remove(user)
         is_followed = False
-        DB.session.query(models.Users).filter(
-            models.Users.username == user).update(
-                {models.Users.following: new_followers_list},
-                synchronize_session="fetch")
+        DB.session.query(models.Users).filter(models.Users.username == user).update(
+            {models.Users.following: new_followers_list}, synchronize_session="fetch"
+        )
     DB.session.commit()
     return [new_followers_list, is_followed]
+
 
 def add_or_remove_like_from_db(user, liked_post_id):
     """
@@ -237,7 +236,7 @@ def add_or_remove_like_from_db(user, liked_post_id):
     else:
         DB.session.add(models.Likes(user, liked_post_id))
     DB.session.commit()
-    
+
     return not is_liked
 
 
@@ -263,7 +262,6 @@ def update_num_likes(data):
     username = get_username(flask.request.sid)
     is_liked = add_or_remove_like_from_db(username, post_id)
 
-
     SOCKETIO.emit(
         "like post channel",
         {"post_id": post_id, "num_likes": num_likes, "is_liked": is_liked},
@@ -274,19 +272,21 @@ def emit_user_data(user_info, top_artists, curr_song):
     """
     Sends user profile
     """
-    
+
     artist_list = []
     artist_photo = []
-    if len(top_artists[0]) >= 3:
-        artist_list.append(top_artists[0][0])
-        artist_list.append(top_artists[0][1])
-        artist_list.append(top_artists[0][2])
-        
-    if len(top_artists[1]) >= 3:
-        artist_photo.append(top_artists[1][0])
-        artist_photo.append(top_artists[1][1])
-        artist_photo.append(top_artists[1][2])
-        
+
+    if len(top_artists) != 0:
+        if len(top_artists[0]) >= 3:
+            artist_list.append(top_artists[0][0])
+            artist_list.append(top_artists[0][1])
+            artist_list.append(top_artists[0][2])
+
+        if len(top_artists[1]) >= 3:
+            artist_photo.append(top_artists[1][0])
+            artist_photo.append(top_artists[1][1])
+            artist_photo.append(top_artists[1][2])
+
     followers_list = get_followers_db(get_username(flask.request.sid))
     SOCKETIO.emit(
         "emit user data",
@@ -294,7 +294,7 @@ def emit_user_data(user_info, top_artists, curr_song):
             "username": user_info["username"],
             "profileType": user_info["user_type"],
             "topArtists": artist_list,
-            "artistPics":artist_photo,
+            "artistPics": artist_photo,
             "following": followers_list,
             "currentSong": curr_song,
         },
@@ -311,8 +311,10 @@ def update_follower_info():
     followers = results[0]
     is_following = results[1]
     print("list of of followers", followers)
-    SOCKETIO.emit('emit follower data',
-                  {'followers': followers, 'isFollowing': is_following})
+    SOCKETIO.emit(
+        "emit follower data", {"followers": followers, "isFollowing": is_following}
+    )
+
 
 def emit_recommended():
     """
@@ -352,7 +354,7 @@ def emit_trending():
     trending = get_trending()
     SOCKETIO.emit("trending channel", trending, room=flask.request.sid)
 
-        
+
 def get_trending():
     """
     Gets trending from spotify
@@ -376,8 +378,9 @@ def get_trending():
 
     return parse_tracks(sample)
 
+
 def parse_tracks(sample):
-    
+
     trending = []
     for song in sample:
         track = {}
@@ -385,6 +388,7 @@ def parse_tracks(sample):
         track["song"] = song.track
         trending.append(track)
     return trending
+
 
 @SOCKETIO.on("get local storage")
 def get_local_storage():
@@ -423,8 +427,7 @@ def on_spotlogin(data):
         "login success",
         {
             "status": True,
-            "userinfo": {"username": user["username"],
-                         "pfp": user["profile-picture"]},
+            "userinfo": {"username": user["username"], "pfp": user["profile-picture"]},
         },
         room=flask.request.sid,
     )
@@ -466,11 +469,11 @@ def send_user_profile(data):
     """
     sends the profile
     """
-    if (data == True):
-         username = get_username(flask.request.sid)
+    if data:
+        username = get_username(flask.request.sid)
     else:
-         username = data
-    
+        username = data
+
     top_artists = get_top_artists(username)
     curr_song = get_current_song(username)
 
@@ -530,7 +533,7 @@ def on_connect():
     Connect
     """
     join_room(flask.request.sid)
-    
+
     print("Someone connected!")
     SOCKETIO.emit("connected", {"test": "Connected"})
 
@@ -540,6 +543,7 @@ def on_disconnect():
     """
     Disconect
     """
+    leave_room(flask.request.sid)
     print("Someone disconnected!")
 
 

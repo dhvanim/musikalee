@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
-import { Follow } from './Follow';
+import Follow from './Follow';
 import { Socket } from './Socket';
 import Navigation from './Navigation';
 // import 'react-tabs/style/react-tabs.css';
@@ -118,7 +118,7 @@ export default function UserProfile() {
 
                 <TabPanel>
                   <h3 className="curr_song">Currently listening to:</h3>
-                  <img style={{ width: '90px', height: '90px' }} src={currSong[3]} className="song_art" />
+                  <img style={{ width: '90px', height: '90px' }} src={currSong[3]} className="song_art" alt="album art" />
                   <p className="song_info">
                     {' '}
                     {currSong[1]}
