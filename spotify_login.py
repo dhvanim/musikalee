@@ -50,13 +50,14 @@ def get_top_artists(username):
     except KeyError:
         return uris
 
-
+      
 def get_current_song(username):
     """
     Getting what's currently being played by user
     """
     try:
         response = spotlogin_api.get_current_call(username)
+
         return [
             response["item"]["album"]["artists"][0]["name"],
             response["item"]["name"],
