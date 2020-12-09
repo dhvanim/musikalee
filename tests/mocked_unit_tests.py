@@ -164,7 +164,7 @@ class SpotifyLoginTest(unittest.TestCase):
         """
         Tests a working artist link
         """
-        expect = ["Bob", "Jack", "Jill"]
+        expect = ["Bob"]
         with mock.patch("spotlogin_api.get_top_call", self.mock_artist):
             result = spotify_login.get_top_artists(self.user[INPUT])
         self.assertEqual(result, expect)
@@ -212,7 +212,7 @@ class SpotifyLoginTest(unittest.TestCase):
         """
         Tests an exception occuring
         """
-        expect = "nothing is playing"
+        expect = ['nobody', 'nothing', 'no preview_url', './static/defaultCoverArt.png']
         with mock.patch("spotlogin_api.get_current_call", self.mock_key):
             result = spotify_login.get_current_song(self.user[INPUT])
         self.assertEqual(result, expect)
