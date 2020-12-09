@@ -13,7 +13,7 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
-          command: python ./tests/mocked_unit_tests.py && python ./tests/spotify_music_tests.py && python ./tests/app_unit_tests.py && ./tests/app_unit_tests.py
+          command: python ./tests/mocked_unit_tests.py && python ./tests/spotify_music_tests.py && python ./tests/app_unit_tests.py && ./tests/mocked_unit_tests.py
           name: Test
 
 workflows:
