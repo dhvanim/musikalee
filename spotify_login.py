@@ -1,6 +1,7 @@
 """
 Python Code to parse spotify requests
 """
+import json
 import spotlogin_api
 
 
@@ -66,4 +67,7 @@ def get_current_song(username):
         ]
 
     except KeyError:
+        return ["nobody", "nothing", "no preview_url", "./static/defaultCoverArt.png"]
+    
+    except json.JSONDecodeError:
         return ["nobody", "nothing", "no preview_url", "./static/defaultCoverArt.png"]
