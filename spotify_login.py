@@ -50,7 +50,7 @@ def get_top_artists(username):
     except KeyError:
         return uris
 
-      
+
 def get_current_song(username):
     """
     Getting what's currently being played by user

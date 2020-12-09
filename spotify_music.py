@@ -158,7 +158,7 @@ def spotify_search_playlist(url):
         playlist_id = parsed_url.path.split("/")[2]
         if len(playlist_id) == 0:
             return None
-    except:
+    except Exception:
         return None
     access_token = spotify_get_access_token()
     search_data = spotmusic_api.search_playlist(access_token, playlist_id)
