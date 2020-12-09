@@ -18,6 +18,7 @@ export default function UserProfile() {
   const [currSong, setCurrSong] = React.useState('');
   const [topTracks, setTopTracks] = React.useState([]);
   const [numListeners, setNumListeners] = React.useState(0);
+  const [artistPic, setArtistPic] = React.useState([]);
 
   function updateUserData(data) {
     if (data.profileType === 'artist') {
@@ -36,6 +37,7 @@ export default function UserProfile() {
     setTopArtists(data.topArtists);
     setFollowers(data.following);
     setCurrSong(data.currentSong);
+    setArtistPic(data.artistPics);
     window.localStorage.setItem('User Data', JSON.stringify(data));
   }
 
@@ -90,7 +92,7 @@ export default function UserProfile() {
             <img style={{ width: '120px', height: '120px', borderRadius: '60px' }} src={getProfilePic()} alt="user" />
           </div>
           <div>
-            <h1 id="test">{users}</h1>
+            <h1 className="user_info">{users}</h1>
             <div>
               <h4>
                 @
@@ -109,14 +111,15 @@ export default function UserProfile() {
             <div>
               <Tabs>
                 <TabList className="tabsUser">
+                  <br />
                   <Tab>User Info</Tab>
                   <Tab>Followers</Tab>
                 </TabList>
 
                 <TabPanel>
-                  <h1>Currently listening to:</h1>
-                  <img style={{ width: '90px', height: '90px', borderRadius: '45px' }} src={currSong[3]} className="song_art" />
-                  <p>
+                  <h3 className="curr_song">Currently listening to:</h3>
+                  <img style={{ width: '90px', height: '90px' }} src={currSong[3]} className="song_art" />
+                  <p className="song_info">
                     {' '}
                     {currSong[1]}
                     {' '}
@@ -128,35 +131,40 @@ export default function UserProfile() {
                   <audio controls name="media">
                     <source src={currSong[2]} type="audio/mpeg" />
                   </audio>
-                  <h1> Top artists:</h1>
+                  <h3 className="top_artist_title"> Top artists:</h3>
+                  <br />
+                  <div>
+                    <ul className="artList">
+                      { topArtists.map((artists, index) => (
+                        <li key={index} className="AL">
+                          <img style={{ width: '90px', height: '90px', borderRadius: '45px' }} src={artistPic[index]} alt={artistPic} />
+                          <br />
+                          <br />
+                          <span className="artists">
+                            { artists }
+                          </span>
 
-                  <ul className="artistList">
-                    { topArtists.map((artists, index) => (
-                      <li key={index} className="AL">
-                        <img style={{ width: '90px', height: '90px', borderRadius: '45px' }} src="./static/defaultPfp.png" alt={artists} />
-                        <br />
-                        <span className="artists">
-                          { artists }
-                        </span>
-
-                        <br />
-                      </li>
-                    ))}
-                  </ul>
+                          <br />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </TabPanel>
 
                 <TabPanel>
-                  <ul>
+                  <ul className="followers">
                     { followers.map((follower, index) => (
-                      <li key={index} className="F">
-                        <span className="followers">
+                      <div>
+                        <li key={index} className="F">
+                          <span>
 
-                          { follower }
+                            { follower }
 
-                        </span>
+                          </span>
 
-                        <br />
-                      </li>
+                          <br />
+                        </li>
+                      </div>
                     ))}
                   </ul>
                 </TabPanel>
