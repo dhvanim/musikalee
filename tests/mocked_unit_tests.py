@@ -203,7 +203,7 @@ class SpotifyLoginTest(unittest.TestCase):
         """
         Tests when no song is playing
         """
-        expect = "nothing is playing"
+        expect = ['nobody', 'nothing', 'no preview_url', './static/defaultCoverArt.png']
         with mock.patch("spotlogin_api.get_current_call", self.mock_no_song):
             result = spotify_login.get_current_song(self.user[INPUT])
         self.assertEqual(result, expect)
