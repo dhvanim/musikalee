@@ -157,12 +157,13 @@ class EmitUserOrArtistData(unittest.TestCase):
     def setUp(self):
         self.user = {
             "0": {"username": "Spl33nMq33n", "user_type": "user"},
-            "1": ["1", "2", "3"],
+            "1": [["1", "2", "3"], ["a","b","c"]],
             "2": "Musikalee",
             EXPECT: {
                 "username": "Spl33nMq33n",
                 "profileType": "user",
                 "topArtists": ["1", "2", "3"],
+                "artistPics": ["a","b","c"],
                 "following": ["Cat", "Dhvani", "Justin"],
                 "currentSong": "Musikalee",
             },
