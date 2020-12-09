@@ -90,18 +90,6 @@ class SpotifyLoginTest(unittest.TestCase):
             result = spotify_login.get_user(self.user[INPUT])
         self.assertEqual(result, expect)
 
-    def test_top_tracks(self):
-        """
-        Tests a User That has a pfp
-        """
-        expect = ["s1", "s2", "s3"]
-        with mock.patch(
-                "spotlogin_api.get_artist_top_tracks_call",
-                self.mock_top_tracks
-        ):
-            result = spotify_login.get_top_tracks(self.user[INPUT])
-        self.assertEqual(result, expect)
-
     def mock_nopfp(self, auth):
         """
         Mocks the response of a user with no pfp
