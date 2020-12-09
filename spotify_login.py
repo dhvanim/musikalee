@@ -50,28 +50,20 @@ def get_top_artists(username):
     except KeyError:
         return uris
 
-
+      
 def get_current_song(username):
     """
     Getting what's currently being played by user
     """
     try:
         response = spotlogin_api.get_current_call(username)
-        try:
-            return [
-                response["item"]["album"]["artists"][0]["name"],
-                response["item"]["name"],
-                response["item"]["preview_url"],
-                response["item"]["album"]["images"][0]["url"],
-            ]
 
-        except KeyError:
-            return [
-                "nobody",
-                "nothing",
-                "no preview_url",
-                "./static/defaultCoverArt.png",
-            ]
+        return [
+            response["item"]["album"]["artists"][0]["name"],
+            response["item"]["name"],
+            response["item"]["preview_url"],
+            response["item"]["album"]["images"][0]["url"],
+        ]
 
-    except Exception:
+    except KeyError:
         return ["nobody", "nothing", "no preview_url", "./static/defaultCoverArt.png"]

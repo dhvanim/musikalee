@@ -112,6 +112,7 @@ class GetUserProfile(unittest.TestCase):
                 "username": "aUsername",
                 "profileType": "user",
                 "topArtists": ["Singer 1", "Singer 2", "Singer 3"],
+                "artistPics": [],
                 "following": ["Cat", "Dhvani", "Justin"],
                 "currentSong": "A song",
             },
@@ -121,7 +122,7 @@ class GetUserProfile(unittest.TestCase):
         """
         mocks results of get_top_artists
         """
-        return ["Singer 1", "Singer 2", "Singer 3"]
+        return [["Singer 1", "Singer 2", "Singer 3"], ["1,2,3"]]
 
     def mock_get_curr_song(self, user):
         """
