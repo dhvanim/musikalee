@@ -1,7 +1,6 @@
 """
 Python Code to parse spotify requests
 """
-import json
 import spotlogin_api
 
 
@@ -40,14 +39,14 @@ def get_top_artists(username):
     Aquire the name of favorite artists
     """
     uris = []
-    artistPic = []
+    artist_pic = []
     try:
         response = spotlogin_api.get_top_call(username)
         for item in response["items"]:
             uris.append(item["name"])
-            artistPic.append(item["images"][0]["url"])
-        return [uris, artistPic]
-        
+            artist_pic.append(item["images"][0]["url"])
+        return [uris, artist_pic]
+
     except KeyError:
         return uris
 
@@ -59,42 +58,20 @@ def get_current_song(username):
     try:
         response = spotlogin_api.get_current_call(username)
         try:
-            return [response["item"]["album"]["artists"][0]["name"],
-            response["item"]["name"], 
-            response["item"]["preview_url"], 
-            response["item"]["album"]["images"][0]["url"]]
-            
+            return [
+                response["item"]["album"]["artists"][0]["name"],
+                response["item"]["name"],
+                response["item"]["preview_url"],
+                response["item"]["album"]["images"][0]["url"],
+            ]
+
         except KeyError:
-            return ["nobody","nothing","no preview_url","./static/defaultCoverArt.png"]
-            
-    except Exception:
-        return ["nobody","nothing","no preview_url","./static/defaultCoverArt.png"]
-
-
-def get_top_tracks(flaskid):
-    """
-    Getting Artist's top tracks
-    """
-    try:
-        response = spotlogin_api.get_artist_top_tracks_call(flaskid)
-        top_tracks = []
-
-        for i in range(3):
-            top_tracks.append(response["artists"]["items"][i]["name"])
-
-        return top_tracks
-
-    except KeyError:
-         return ["no tracks", "no tracks", "no tracks"]
-
-
-def get_num_listeners(flaskid):
-    """
-    Get the number of listeners
-    """
-    try:
-        response = spotlogin_api.get_artist_num_listeners(flaskid)
-        return response
+            return [
+                "nobody",
+                "nothing",
+                "no preview_url",
+                "./static/defaultCoverArt.png",
+            ]
 
     except Exception:
-        return 0
+        return ["nobody", "nothing", "no preview_url", "./static/defaultCoverArt.png"]

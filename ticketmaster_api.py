@@ -54,17 +54,17 @@ def parse_events(events_json):
     num_pages = events_json["page"]["totalPages"]
     curr_page = events_json["page"]["number"]
     all_events = []
-    for e in events:
-        name = e["name"]
-        url = e["url"]
-        images = e["images"][0]["url"]
+    for event_info in events:
+        name = event_info["name"]
+        url = event_info["url"]
+        images = event_info["images"][0]["url"]
         try:
-            date = datetime.strptime(e["dates"]["start"]["dateTime"], "%Y-%m-%dT%XZ")
+            date = datetime.strptime(event_info["dates"]["start"]["dateTime"], "%Y-%m-%dT%XZ")
             date = date.strftime("%B %d, %Y")
         except KeyError:
             date = "To be announced"
         try:
-            venue = e["_embedded"]["venues"][0]["name"]
+            venue = event_info["_embedded"]["venues"][0]["name"]
         except KeyError:
             venue = "To be announced"
         all_events.append(

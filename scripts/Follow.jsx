@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { Socket } from './Socket';
 
-export function Follow(props) {
+export default function Follow(props) {
   const { isFollowed } = props;
 
   function handleSubmit(event) {
     if (isFollowed) {
       const element = 'Follow';
       ReactDOM.render(element, document.getElementById('f-button'));
-      
+
       Socket.emit('recieve follower data');
     } else {
       const element = 'Unfollow';
@@ -24,7 +24,7 @@ export function Follow(props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <button id="f-button" > Follow </button>
+      <button id="f-button"> Follow </button>
     </form>
   );
 }
