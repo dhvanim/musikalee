@@ -1,5 +1,5 @@
 ## Heroku Link
-https://powerful-ravine-41625.herokuapp.com/ 
+https://musikalee.herokuapp.com/
 
 # Set up React  
 0. `cd ~/environment && git clone https://github.com/NJIT-CS490/musikalee && cd musikalee`    
